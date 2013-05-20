@@ -10,6 +10,7 @@ import com.bytepoxic.core.model.IdentificationType;
 import com.bytepoxic.core.model.NationalityDataOnDemand;
 import com.bytepoxic.core.model.PlaceDataOnDemand;
 import com.bytepoxic.core.model.UserStatus;
+import com.bytepoxic.core.service.UserService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +37,9 @@ privileged aspect AppUserDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     NationalityDataOnDemand AppUserDataOnDemand.nationalityDataOnDemand;
+    
+    @Autowired
+    UserService AppUserDataOnDemand.userService;
     
     public AppUser AppUserDataOnDemand.getNewTransientAppUser(int index) {
         AppUser obj = new AppUser();
@@ -157,14 +161,14 @@ privileged aspect AppUserDataOnDemand_Roo_DataOnDemand {
         }
         AppUser obj = data.get(index);
         Long id = obj.getId();
-        return AppUser.findAppUser(id);
+        return userService.findAppUser(id);
     }
     
     public AppUser AppUserDataOnDemand.getRandomAppUser() {
         init();
         AppUser obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return AppUser.findAppUser(id);
+        return userService.findAppUser(id);
     }
     
     public boolean AppUserDataOnDemand.modifyAppUser(AppUser obj) {
@@ -174,7 +178,7 @@ privileged aspect AppUserDataOnDemand_Roo_DataOnDemand {
     public void AppUserDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = AppUser.findAppUserEntries(from, to);
+        data = userService.findAppUserEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'AppUser' illegally returned null");
         }
@@ -186,7 +190,7 @@ privileged aspect AppUserDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             AppUser obj = getNewTransientAppUser(i);
             try {
-                obj.persist();
+                userService.saveAppUser(obj);
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

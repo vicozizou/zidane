@@ -3,9 +3,9 @@
 
 package com.bytepoxic.core.model;
 
-import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppRoleDataOnDemand;
 import com.bytepoxic.core.model.AppRoleIntegrationTest;
+import com.bytepoxic.core.service.UserService;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,10 +26,13 @@ privileged aspect AppRoleIntegrationTest_Roo_IntegrationTest {
     @Autowired
     AppRoleDataOnDemand AppRoleIntegrationTest.dod;
     
+    @Autowired
+    UserService AppRoleIntegrationTest.userService;
+    
     @Test
-    public void AppRoleIntegrationTest.testCountAppRoles() {
+    public void AppRoleIntegrationTest.testCountAllAppRoles() {
         Assert.assertNotNull("Data on demand for 'AppRole' failed to initialize correctly", dod.getRandomAppRole());
-        long count = AppRole.countAppRoles();
+        long count = userService.countAllAppRoles();
         Assert.assertTrue("Counter for 'AppRole' incorrectly reported there were no entries", count > 0);
     }
     
@@ -39,7 +42,7 @@ privileged aspect AppRoleIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'AppRole' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'AppRole' failed to provide an identifier", id);
-        obj = AppRole.findAppRole(id);
+        obj = userService.findAppRole(id);
         Assert.assertNotNull("Find method for 'AppRole' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'AppRole' returned the incorrect identifier", id, obj.getId());
     }
@@ -47,9 +50,9 @@ privileged aspect AppRoleIntegrationTest_Roo_IntegrationTest {
     @Test
     public void AppRoleIntegrationTest.testFindAllAppRoles() {
         Assert.assertNotNull("Data on demand for 'AppRole' failed to initialize correctly", dod.getRandomAppRole());
-        long count = AppRole.countAppRoles();
+        long count = userService.countAllAppRoles();
         Assert.assertTrue("Too expensive to perform a find all test for 'AppRole', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<AppRole> result = AppRole.findAllAppRoles();
+        List<AppRole> result = userService.findAllAppRoles();
         Assert.assertNotNull("Find all method for 'AppRole' illegally returned null", result);
         Assert.assertTrue("Find all method for 'AppRole' failed to return any data", result.size() > 0);
     }
@@ -57,11 +60,11 @@ privileged aspect AppRoleIntegrationTest_Roo_IntegrationTest {
     @Test
     public void AppRoleIntegrationTest.testFindAppRoleEntries() {
         Assert.assertNotNull("Data on demand for 'AppRole' failed to initialize correctly", dod.getRandomAppRole());
-        long count = AppRole.countAppRoles();
+        long count = userService.countAllAppRoles();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<AppRole> result = AppRole.findAppRoleEntries(firstResult, maxResults);
+        List<AppRole> result = userService.findAppRoleEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'AppRole' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'AppRole' returned an incorrect number of entries", count, result.size());
     }
@@ -72,7 +75,7 @@ privileged aspect AppRoleIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'AppRole' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'AppRole' failed to provide an identifier", id);
-        obj = AppRole.findAppRole(id);
+        obj = userService.findAppRole(id);
         Assert.assertNotNull("Find method for 'AppRole' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyAppRole(obj);
         Integer currentVersion = obj.getVersion();
@@ -81,41 +84,41 @@ privileged aspect AppRoleIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void AppRoleIntegrationTest.testMergeUpdate() {
+    public void AppRoleIntegrationTest.testUpdateAppRoleUpdate() {
         AppRole obj = dod.getRandomAppRole();
         Assert.assertNotNull("Data on demand for 'AppRole' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'AppRole' failed to provide an identifier", id);
-        obj = AppRole.findAppRole(id);
+        obj = userService.findAppRole(id);
         boolean modified =  dod.modifyAppRole(obj);
         Integer currentVersion = obj.getVersion();
-        AppRole merged = (AppRole)obj.merge();
+        AppRole merged = (AppRole)userService.updateAppRole(obj);
         obj.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'AppRole' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void AppRoleIntegrationTest.testPersist() {
+    public void AppRoleIntegrationTest.testSaveAppRole() {
         Assert.assertNotNull("Data on demand for 'AppRole' failed to initialize correctly", dod.getRandomAppRole());
         AppRole obj = dod.getNewTransientAppRole(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'AppRole' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'AppRole' identifier to be null", obj.getId());
-        obj.persist();
+        userService.saveAppRole(obj);
         obj.flush();
         Assert.assertNotNull("Expected 'AppRole' identifier to no longer be null", obj.getId());
     }
     
     @Test
-    public void AppRoleIntegrationTest.testRemove() {
+    public void AppRoleIntegrationTest.testDeleteAppRole() {
         AppRole obj = dod.getRandomAppRole();
         Assert.assertNotNull("Data on demand for 'AppRole' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'AppRole' failed to provide an identifier", id);
-        obj = AppRole.findAppRole(id);
-        obj.remove();
+        obj = userService.findAppRole(id);
+        userService.deleteAppRole(obj);
         obj.flush();
-        Assert.assertNull("Failed to remove 'AppRole' with identifier '" + id + "'", AppRole.findAppRole(id));
+        Assert.assertNull("Failed to remove 'AppRole' with identifier '" + id + "'", userService.findAppRole(id));
     }
     
 }
