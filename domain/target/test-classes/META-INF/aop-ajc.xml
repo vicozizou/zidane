@@ -1,0 +1,37 @@
+<aspectj>
+<aspects>
+<aspect name="com.bytepoxic.core.model.EmailIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="com.bytepoxic.core.model.PhoneIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="com.bytepoxic.core.model.LocationIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="com.bytepoxic.core.model.AppUserIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="com.bytepoxic.core.model.UserTrackIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="com.bytepoxic.core.model.NationalityDataOnDemand_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.NationalityIntegrationTest_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.EmailDataOnDemand_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.PlaceDataOnDemand_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.PhoneDataOnDemand_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.NationalityIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="com.bytepoxic.core.model.UserTrackIntegrationTest_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.PlaceDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="com.bytepoxic.core.model.NationalityDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="com.bytepoxic.core.model.AppRoleIntegrationTest_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.PhoneDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="com.bytepoxic.core.model.AppUserIntegrationTest_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.LocationIntegrationTest_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.LocationDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="com.bytepoxic.core.model.EmailIntegrationTest_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.AppRoleDataOnDemand_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.PhoneIntegrationTest_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.UserTrackDataOnDemand_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.LocationDataOnDemand_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.AppRoleIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="com.bytepoxic.core.model.AppUserDataOnDemand_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.EmailDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="com.bytepoxic.core.model.AppUserDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="com.bytepoxic.core.model.AppRoleDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="com.bytepoxic.core.model.PlaceIntegrationTest_Roo_Configurable"/>
+<aspect name="com.bytepoxic.core.model.UserTrackDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="com.bytepoxic.core.model.PlaceIntegrationTest_Roo_IntegrationTest"/>
+</aspects>
+</aspectj>
+
