@@ -11,10 +11,6 @@ privileged aspect AppRole_Roo_JavaBean {
         return this.name;
     }
     
-    public void AppRole.setName(String name) {
-        this.name = name;
-    }
-    
     public String AppRole.getDescription() {
         return this.description;
     }
