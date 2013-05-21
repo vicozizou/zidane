@@ -8,5 +8,7 @@
   <modules>
   	<module>domain</module>
   	<module>biz</module>
+        <module>Foo</module>
+        <module>Bar</module>
   </modules>
 </project>
