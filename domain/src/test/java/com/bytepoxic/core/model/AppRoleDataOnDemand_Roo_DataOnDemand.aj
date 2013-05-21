@@ -5,7 +5,6 @@ package com.bytepoxic.core.model;
 
 import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppRoleDataOnDemand;
-import com.bytepoxic.core.service.UserService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect AppRoleDataOnDemand_Roo_DataOnDemand {
@@ -23,9 +21,6 @@ privileged aspect AppRoleDataOnDemand_Roo_DataOnDemand {
     private Random AppRoleDataOnDemand.rnd = new SecureRandom();
     
     private List<AppRole> AppRoleDataOnDemand.data;
-    
-    @Autowired
-    UserService AppRoleDataOnDemand.userService;
     
     public AppRole AppRoleDataOnDemand.getNewTransientAppRole(int index) {
         AppRole obj = new AppRole();
@@ -69,14 +64,14 @@ privileged aspect AppRoleDataOnDemand_Roo_DataOnDemand {
         }
         AppRole obj = data.get(index);
         Long id = obj.getId();
-        return userService.findAppRole(id);
+        return AppRole.findAppRole(id);
     }
     
     public AppRole AppRoleDataOnDemand.getRandomAppRole() {
         init();
         AppRole obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return userService.findAppRole(id);
+        return AppRole.findAppRole(id);
     }
     
     public boolean AppRoleDataOnDemand.modifyAppRole(AppRole obj) {
@@ -86,7 +81,7 @@ privileged aspect AppRoleDataOnDemand_Roo_DataOnDemand {
     public void AppRoleDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = userService.findAppRoleEntries(from, to);
+        data = AppRole.findAppRoleEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'AppRole' illegally returned null");
         }
@@ -98,7 +93,7 @@ privileged aspect AppRoleDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             AppRole obj = getNewTransientAppRole(i);
             try {
-                userService.saveAppRole(obj);
+                obj.persist();
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
