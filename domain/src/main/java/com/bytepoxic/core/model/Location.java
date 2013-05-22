@@ -52,7 +52,6 @@ public class Location extends BaseEntity implements Comparable<Location> {
 
     /*@ManyToOne
     @JoinColumn(name = "country")*/
-
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "country", optional = true)
     @JoinColumn(name = "country", nullable = true)
     @Fetch(FetchMode.SELECT)
@@ -178,7 +177,6 @@ public class Location extends BaseEntity implements Comparable<Location> {
             }
             parent = null;
         }
-
     }
 
     public List<Location> getChildrenAsList() {
