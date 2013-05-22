@@ -23,6 +23,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @RooToString
 @RooJpaActiveRecord(finders = { "findAppUsersByUsername" })
 public class AppUser extends Person implements UserDetails {
+	private static final long serialVersionUID = 1L;
+
 	@NotNull
     @Column(unique = true)
     @Size(max = 32)

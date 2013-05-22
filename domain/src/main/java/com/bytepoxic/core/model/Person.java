@@ -24,11 +24,11 @@ public abstract class Person extends BaseEntity {
 
     @NotNull
     @Size(max = 128)
-    private String firstnames;
+    private String names;
 
     @NotNull
     @Size(max = 128)
-    private String lastnames;
+    private String surnames;
 
     @NotNull
     @Enumerated

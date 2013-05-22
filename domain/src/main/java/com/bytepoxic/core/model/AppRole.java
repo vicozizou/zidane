@@ -12,7 +12,9 @@ import org.springframework.security.core.GrantedAuthority;
 @RooToString
 @RooJpaActiveRecord(finders = { "findAppRolesByName" })
 public class AppRole extends I18NableEntity implements GrantedAuthority {
-    @NotNull
+	private static final long serialVersionUID = 1L;
+
+	@NotNull
     @Column(unique = true)
     @Size(max = 32)
     private String name;

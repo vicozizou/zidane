@@ -6,17 +6,287 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.security.access.annotation.Secured;
 
+import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppUser;
 import com.bytepoxic.core.model.TrackingType;
 import com.bytepoxic.core.model.UserTrack;
 import com.bytepoxic.core.throwing.ServiceCoreException;
 import com.bytepoxic.core.util.LogUtils;
 
+@Service(value = "userService")
 public class UserServiceImpl implements UserService {
-	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 			
+	@Override
+	@Transactional
+	@Secured({"ROLE_ADMIN"})
+	public void createAppRole(AppRole appRole) throws ServiceCoreException {
+		if (appRole == null) {
+			throw new ServiceCoreException("AppRole is null, cannot create it");
+		}
+		try {
+			appRole.persist();
+		} catch (Exception e) {
+			throw new ServiceCoreException(String.format("Error persisting appRole %s", appRole), e);
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug(String.format("AppRole persisted with id %s", appRole.getId()));
+		}
+	}
+
+	@Override
+	public AppRole findAppRole(Long id) throws ServiceCoreException {
+		try {
+			AppRole appRole = AppRole.findAppRole(id);
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("AppRole with id %s%sfound", id, appRole == null ? " was not " : ""));
+			}
+			return appRole;
+		} catch (Exception e) {
+			throw new ServiceCoreException(String.format("Error finding appRole with %s", id), e);
+		}
+	}
+
+	@Override
+	public List<AppRole> listAppRoles() throws ServiceCoreException {
+		try {
+			List<AppRole> appRoles = AppRole.findAllAppRoles();
+			if (logger.isDebugEnabled()) {
+				logger.debug("AppRoles found:" + LogUtils.formatCollection(appRoles));
+			}
+			return appRoles;
+		} catch (Exception e) {
+			throw new ServiceCoreException("Error listing appRoles", e);
+		}
+	}
+
+	@Override
+	public List<AppRole> listAppRoles(int firstResult, int maxResults) throws ServiceCoreException {
+		try {
+			List<AppRole> appRoles = AppRole.findAppRoleEntries(firstResult, maxResults);
+			if (logger.isDebugEnabled()) {
+				logger.debug("AppRoles found:" + LogUtils.formatCollection(appRoles));
+			}
+			return appRoles;
+		} catch (Exception e) {
+			throw new ServiceCoreException("Error listing appRoles", e);
+		}
+	}
+
+	@Override
+	@Transactional
+	@Secured({"ROLE_ADMIN"})
+	public void updateAppRole(AppRole appRole) throws ServiceCoreException {
+		if (appRole == null) {
+			throw new ServiceCoreException("AppRole is null, cannot update it");
+		}
+		try {
+			appRole.merge();
+		} catch (Exception e) {
+			throw new ServiceCoreException(String.format("Error updating appRole %s", appRole), e);
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug(String.format("AppRole updated: %s", appRole));
+		}
+	}
+
+	@Override
+	@Transactional
+	@Secured({"ROLE_ADMIN"})
+	public void deleteAppRole(Long id) throws ServiceCoreException {
+		if (id == null) {
+			throw new ServiceCoreException("AppRole id is null, cannot delete it");
+		}
+		AppRole appRole = findAppRole(id);
+		if (appRole != null) {
+			try {
+				appRole.remove();
+			} catch (Exception e) {
+				throw new ServiceCoreException(String.format("Error updating appRole with id %s", id), e);
+			}
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug(String.format("AppRole with id %s%sdeleted", id, appRole == null ? " was not " : ""));
+		}
+	}
+
+	@Override
+	@Transactional
+	@Secured({"ROLE_ADMIN"})
+	public void deleteAppRoles(List<AppRole> roles) throws ServiceCoreException {
+		if (roles == null) {
+			throw new ServiceCoreException("AppRole ids are null, cannot delete them");
+		}
+		for (AppRole role : roles) {
+			deleteAppRole(role.getId());
+		}
+	}
+
+	@Override
+	public List<AppRole> findAppRolesByName(String name) throws ServiceCoreException {
+		if (!StringUtils.hasText(name)) {
+			logger.warn("AppRole name is empty, cannot find appRoles");
+			return null;
+		}
+		try {
+			List<AppRole> appRoles = AppRole.findAppRolesByName(name).getResultList();
+			if (logger.isDebugEnabled()) {
+				logger.debug("AppRoles found:" + LogUtils.formatCollection(appRoles, "\n"));
+			}
+			return appRoles;
+		} catch (Exception e) {
+			throw new ServiceCoreException(String.format("Error finding appRoles with name %s", name), e);
+		}
+	}
+
+	@Override
+	public AppRole findAppRoleByName(String name) throws ServiceCoreException {
+		if (!StringUtils.hasText(name)) {
+			logger.warn("AppRole name is empty, cannot find appRole");
+			return null;
+		}
+		try {
+			List<AppRole> appRoles = findAppRolesByName(name);
+			AppRole appRole = null;
+			if (appRoles != null && !appRoles.isEmpty()) {
+				appRole = appRoles.get(0);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("AppRole found: %s", appRole != null ? appRole : "none"));
+			}
+			return appRole;
+		} catch (Exception e) {
+			throw new ServiceCoreException(String.format("Error finding appRole with name %s", name), e);
+		}
+	}
+
+	@Override
+	public long countAppRoles() throws ServiceCoreException {
+		try {
+			long count = AppRole.countAppRoles();
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("Found %s appRoles", count));
+			}
+			return count;
+		} catch (Exception e) {
+			throw new ServiceCoreException("Error counting appRoles", e);
+		}
+	}
+
+	@Override
+	@Transactional
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
+	public void createAppUser(AppUser appUser) throws ServiceCoreException {
+		if (appUser == null) {
+			throw new ServiceCoreException("AppUser is null, cannot create it");
+		}
+		try {
+			appUser.persist();
+		} catch (Exception e) {
+			throw new ServiceCoreException(String.format("Error persisting appUser %s", appUser), e);
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug(String.format("AppUser persisted with id %s", appUser.getId()));
+		}
+	}
+
+	@Override
+	public AppUser findAppUser(Long id) throws ServiceCoreException {
+		try {
+			AppUser appUser = AppUser.findAppUser(id);
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("AppUser with id %s%sfound", id, appUser == null ? " was not " : ""));
+			}
+			return appUser;
+		} catch (Exception e) {
+			throw new ServiceCoreException(String.format("Error finding appUser with %s", id), e);
+		}
+	}
+
+	@Override
+	public List<AppUser> listAppUsers() throws ServiceCoreException {
+		try {
+			List<AppUser> appUsers = AppUser.findAllAppUsers();
+			if (logger.isDebugEnabled()) {
+				logger.debug("AppUsers found:" + LogUtils.formatCollection(appUsers));
+			}
+			return appUsers;
+		} catch (Exception e) {
+			throw new ServiceCoreException("Error listing appUsers", e);
+		}
+	}
+
+	@Override
+	public List<AppUser> listAppUsers(int firstResult, int maxResults) throws ServiceCoreException {
+		try {
+			List<AppUser> appUsers = AppUser.findAppUserEntries(firstResult, maxResults);
+			if (logger.isDebugEnabled()) {
+				logger.debug("AppUsers found:" + LogUtils.formatCollection(appUsers));
+			}
+			return appUsers;
+		} catch (Exception e) {
+			throw new ServiceCoreException("Error listing appUsers", e);
+		}
+	}
+
+	@Override
+	@Transactional
+	@Secured({"ROLE_ADMIN"})
+	public void updateAppUser(AppUser appUser) throws ServiceCoreException {
+		if (appUser == null) {
+			throw new ServiceCoreException("AppUser is null, cannot update it");
+		}
+		try {
+			appUser.merge();
+		} catch (Exception e) {
+			throw new ServiceCoreException(String.format("Error updating appUser %s", appUser), e);
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug(String.format("AppUser updated: %s", appUser));
+		}
+	}
+
+	@Override
+	@Transactional
+	@Secured({"ROLE_ADMIN"})
+	public void deleteAppUser(Long id) throws ServiceCoreException {
+		if (id == null) {
+			throw new ServiceCoreException("AppUser id is null, cannot delete it");
+		}
+		AppUser appUser = findAppUser(id);
+		if (appUser != null) {
+			try {
+				appUser.remove();
+			} catch (Exception e) {
+				throw new ServiceCoreException(String.format("Error updating appUser with id %s", id), e);
+			}
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug(String.format("AppUser with id %s%sdeleted", id, appUser == null ? " was not " : ""));
+		}
+	}
+
+	@Override
+	public List<AppUser> findAppUsersByUsername(String username) throws ServiceCoreException {
+		if (!StringUtils.hasText(username)) {
+			logger.warn("AppUser username is empty, cannot find appUsers");
+			return null;
+		}
+		try {
+			List<AppUser> appUsers = AppUser.findAppUsersByUsername(username).getResultList();
+			if (logger.isDebugEnabled()) {
+				logger.debug("AppUsers found:" + LogUtils.formatCollection(appUsers, "\n"));
+			}
+			return appUsers;
+		} catch (Exception e) {
+			throw new ServiceCoreException(String.format("Error finding appUsers with username %s", username), e);
+		}
+	}
+
 	@Override
 	public AppUser findAppUserByUsername(String username) throws ServiceCoreException {
 		if (!StringUtils.hasText(username)) {
@@ -39,19 +309,15 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public List<AppUser> findAppUsersByUsername(String username) throws ServiceCoreException {
-		if (!StringUtils.hasText(username)) {
-			logger.warn("AppUser username is empty, cannot find appUsers");
-			return null;
-		}
+	public long countAppUsers() throws ServiceCoreException {
 		try {
-			List<AppUser> appUsers = AppUser.findAppUsersByUsername(username).getResultList();
+			long count = AppUser.countAppUsers();
 			if (logger.isDebugEnabled()) {
-				logger.debug("AppUsers found:" + LogUtils.formatCollection(appUsers, "\n"));
+				logger.debug(String.format("Found %s appUsers", count));
 			}
-			return appUsers;
+			return count;
 		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error finding appUsers with username %s", username), e);
+			throw new ServiceCoreException("Error counting appUsers", e);
 		}
 	}
 	

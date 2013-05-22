@@ -4,6 +4,7 @@
 package com.bytepoxic.core.model;
 
 import com.bytepoxic.core.model.Location;
+import com.bytepoxic.core.model.LocationDataOnDemand;
 import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.model.NationalityDataOnDemand;
 import java.security.SecureRandom;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect NationalityDataOnDemand_Roo_DataOnDemand {
@@ -23,6 +25,9 @@ privileged aspect NationalityDataOnDemand_Roo_DataOnDemand {
     
     private List<Nationality> NationalityDataOnDemand.data;
     
+    @Autowired
+    LocationDataOnDemand NationalityDataOnDemand.locationDataOnDemand;
+    
     public Nationality NationalityDataOnDemand.getNewTransientNationality(int index) {
         Nationality obj = new Nationality();
         setCountry(obj, index);
@@ -32,7 +37,7 @@ privileged aspect NationalityDataOnDemand_Roo_DataOnDemand {
     }
     
     public void NationalityDataOnDemand.setCountry(Nationality obj, int index) {
-        Location country = null;
+        Location country = locationDataOnDemand.getRandomLocation();
         obj.setCountry(country);
     }
     

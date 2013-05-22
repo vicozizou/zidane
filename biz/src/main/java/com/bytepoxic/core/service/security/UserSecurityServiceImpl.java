@@ -14,7 +14,7 @@ import com.bytepoxic.core.throwing.ServiceCoreException;
 
 @Service(value = "userSecurityService")
 public class UserSecurityServiceImpl implements UserDetailsService {
-	private static Logger logger = LoggerFactory.getLogger(UserDetailsService.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(UserSecurityServiceImpl.class);
 
 	@Autowired
 	UserService userService;
