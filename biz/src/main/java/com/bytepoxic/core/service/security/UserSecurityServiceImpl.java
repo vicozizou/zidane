@@ -24,6 +24,7 @@ public class UserSecurityServiceImpl implements UserDetailsService {
 		if (logger.isDebugEnabled()) {
 			logger.debug(String.format("Attempting to load user with username %s", username));
 		}
+		
 		UserDetails userDetails = null;
 		try {
 			userDetails = userService.findAppUserByUsername(username);

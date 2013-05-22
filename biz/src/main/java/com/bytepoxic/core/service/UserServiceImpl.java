@@ -14,7 +14,6 @@ import com.bytepoxic.core.model.UserTrack;
 import com.bytepoxic.core.throwing.ServiceCoreException;
 import com.bytepoxic.core.util.LogUtils;
 
-
 public class UserServiceImpl implements UserService {
 	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class.getName());
 			

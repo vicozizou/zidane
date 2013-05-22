@@ -15,7 +15,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaActiveRecord(finders = { "findUserTracksByTracked", "findUserTracksByTrackingDate", "findUserTracksByTrackedAndTrackingDate" })
 public class UserTrack {
-
     @ManyToOne
     private AppUser tracked;
 

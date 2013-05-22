@@ -97,7 +97,7 @@ field boolean --fieldName appCurrent --notNull
 field number --fieldName latitude --type java.lang.Double
 field number --fieldName longitude --type java.lang.Double
 field number --fieldName zoom --type java.lang.Integer
-field set --fieldName children --type ~.model.Location --cardinality ONE_TO_MANY --mappedBy country
+field set --fieldName children --type ~.model.Location --cardinality ONE_TO_MANY --mappedBy parent
 finder add --finderName findLocationsByParent
 finder add --finderName findLocationsByName
 finder add --finderName findLocationsByCode
