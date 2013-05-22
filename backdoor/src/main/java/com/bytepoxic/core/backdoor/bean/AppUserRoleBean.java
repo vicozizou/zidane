@@ -5,11 +5,10 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
-import com.bytepoxic.core.backdoor.bean.AbstractBackDoor;
-import com.bytepoxic.core.throwing.ServiceCoreException;
 import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppUser;
 import com.bytepoxic.core.service.UserService;
+import com.bytepoxic.core.throwing.ServiceCoreException;
 
 public class AppUserRoleBean extends AbstractBackDoor {
 	@Autowired

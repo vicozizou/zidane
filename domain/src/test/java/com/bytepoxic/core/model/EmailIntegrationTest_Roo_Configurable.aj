@@ -3,7 +3,6 @@
 
 package com.bytepoxic.core.model;
 
-import com.bytepoxic.core.model.EmailIntegrationTest;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect EmailIntegrationTest_Roo_Configurable {

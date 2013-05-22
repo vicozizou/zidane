@@ -3,7 +3,6 @@
 
 package com.bytepoxic.core.model;
 
-import com.bytepoxic.core.model.UserTrackIntegrationTest;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect UserTrackIntegrationTest_Roo_Configurable {

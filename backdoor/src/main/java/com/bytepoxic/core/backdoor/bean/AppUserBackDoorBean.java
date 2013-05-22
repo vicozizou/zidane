@@ -4,12 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
-import com.bytepoxic.core.backdoor.bean.AbstractBackDoor;
-import com.bytepoxic.core.backdoor.bean.BackDoorBean;
-import com.bytepoxic.core.throwing.ServiceCoreException;
 import com.bytepoxic.core.model.AppUser;
 import com.bytepoxic.core.model.UserStatus;
 import com.bytepoxic.core.service.UserService;
+import com.bytepoxic.core.throwing.ServiceCoreException;
 
 public class AppUserBackDoorBean extends AbstractBackDoor {
 	@Autowired

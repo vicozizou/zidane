@@ -3,17 +3,15 @@
 
 package com.bytepoxic.core.model;
 
-import com.bytepoxic.core.model.Email;
-import com.bytepoxic.core.model.EmailDataOnDemand;
-import com.bytepoxic.core.model.EmailType;
-import com.bytepoxic.core.model.Person;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+
 import org.springframework.stereotype.Component;
 
 privileged aspect EmailDataOnDemand_Roo_DataOnDemand {
