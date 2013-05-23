@@ -11,10 +11,12 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.util.StringUtils;
 
 import com.bytepoxic.core.throwing.ServiceCoreException;
 
+@Configurable
 public abstract class AbstractBackDoor implements BackDoorBean {
 	protected static Logger logger = LoggerFactory.getLogger(AbstractBackDoor.class);
 	protected static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
