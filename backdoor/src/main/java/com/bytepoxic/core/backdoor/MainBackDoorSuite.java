@@ -31,7 +31,7 @@ public class MainBackDoorSuite {
 
 		inputDataLocation = new File(argMap.get(INPUT_DATA_LOCATION));
 		backDoors = new ArrayList<BackDoorBean>();
-		String[] locations = new String[] { "classpath:backdoor/backDoorContext.xml" };
+		String[] locations = new String[] { "classpath:spring/applicationContext.xml" };
 		logger.info(String.format("Loading Spring context at %s", locations[0]));
 		context = new ClassPathXmlApplicationContext(locations);
 	}

@@ -65,7 +65,7 @@
     </bean>
     <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>
     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
-        <property name="persistenceUnitName" value="persistenceUnit"/>
+        <property name="persistenceUnitName" value="bizPersistenceUnit"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean autowire="byType" class="com.bytepoxic.core.service.security.UserSecurityServiceImpl" id="userSecurityService"/>
