@@ -43,7 +43,7 @@ public class MainBackDoorSuite {
 	}
 
 	private void loadBackDoors() {
-		ResourceBundle bundle = PropertyResourceBundle.getBundle("backdoor.backDoor");
+		ResourceBundle bundle = PropertyResourceBundle.getBundle("backDoor.backDoor");
 		String[] backDoorBeans = StringUtils.tokenizeToStringArray(bundle.getString("backDoor.beans"), BackDoorBean.DELIMITER_CHAR);
 
 		if (backDoorBeans != null && backDoorBeans.length > 0) {

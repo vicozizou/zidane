@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -14,6 +15,7 @@ import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.throwing.ServiceCoreException;
 import com.bytepoxic.core.util.LogUtils;
 
+@Service(value = "locationService")
 public class LocationServiceImpl implements LocationService {
 	private static Logger logger = LoggerFactory.getLogger(LocationServiceImpl.class);
 	
