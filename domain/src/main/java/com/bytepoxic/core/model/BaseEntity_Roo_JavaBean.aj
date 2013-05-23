@@ -8,11 +8,11 @@ import java.util.Date;
 
 privileged aspect BaseEntity_Roo_JavaBean {
     
-    public Boolean BaseEntity.getDeleted() {
+    public boolean BaseEntity.isDeleted() {
         return this.deleted;
     }
     
-    public void BaseEntity.setDeleted(Boolean deleted) {
+    public void BaseEntity.setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
     

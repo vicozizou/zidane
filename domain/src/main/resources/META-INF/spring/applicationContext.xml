@@ -48,7 +48,6 @@
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
         <context:exclude-filter expression=".util.*" type="regex"/>
         <context:exclude-filter expression=".throwing.*" type="regex"/>
-        <context:exclude-filter expression=".backdoor.*" type="regex"/>
     </context:component-scan>
     <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource">
         <property name="driverClassName" value="${database.driverClassName}"/>

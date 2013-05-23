@@ -3,6 +3,7 @@
 
 package com.bytepoxic.core.model;
 
+import com.bytepoxic.core.model.PhoneDataOnDemand;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect PhoneDataOnDemand_Roo_Configurable {

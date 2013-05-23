@@ -3,6 +3,7 @@
 
 package com.bytepoxic.core.model;
 
+import com.bytepoxic.core.model.LocationIntegrationTest;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect LocationIntegrationTest_Roo_Configurable {

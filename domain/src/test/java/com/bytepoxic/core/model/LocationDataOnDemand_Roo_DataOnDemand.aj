@@ -64,7 +64,7 @@ privileged aspect LocationDataOnDemand_Roo_DataOnDemand {
     }
     
     public void LocationDataOnDemand.setDeleted(Location obj, int index) {
-        Boolean deleted = Boolean.TRUE;
+        Boolean deleted = true;
         obj.setDeleted(deleted);
     }
     

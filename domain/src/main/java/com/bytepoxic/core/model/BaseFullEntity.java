@@ -11,5 +11,5 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaActiveRecord(inheritanceType = "TABLE_PER_CLASS")
 public abstract class BaseFullEntity extends BaseEntity implements Enable {
     @NotNull
-    private Boolean enabled;
+    private boolean enabled;
 }

@@ -3,6 +3,7 @@
 
 package com.bytepoxic.core.model;
 
+import com.bytepoxic.core.model.PhoneIntegrationTest;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect PhoneIntegrationTest_Roo_Configurable {

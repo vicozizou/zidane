@@ -15,19 +15,14 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaActiveRecord(inheritanceType = "TABLE_PER_CLASS")
 public abstract class BaseEntity implements SoftDeleteable, DateTrackable {
-    @NotNull
-    private Boolean deleted;
+    private boolean deleted;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
-    private Date creationDate;
+    private Date creationDate = new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date updateDate;
-
-    public Boolean isDeleted() {
-		return deleted;
-	}
 }

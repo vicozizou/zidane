@@ -3,6 +3,7 @@
 
 package com.bytepoxic.core.model;
 
+import com.bytepoxic.core.model.NationalityDataOnDemand;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect NationalityDataOnDemand_Roo_Configurable {

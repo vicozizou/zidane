@@ -3,6 +3,9 @@
 
 package com.bytepoxic.core.model;
 
+import com.bytepoxic.core.model.Email;
+import com.bytepoxic.core.model.EmailType;
+import com.bytepoxic.core.model.Person;
 
 privileged aspect Email_Roo_JavaBean {
     

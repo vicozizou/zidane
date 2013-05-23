@@ -76,7 +76,7 @@ public class AppUser extends Person implements UserDetails {
 	}
 
 	public boolean isEnabled() {
-		return userStatus.equals(UserStatus.ACTIVE) && !getDeleted();
+		return userStatus.equals(UserStatus.ACTIVE) && !isDeleted();
 	}
 
 	public String getStatus() {

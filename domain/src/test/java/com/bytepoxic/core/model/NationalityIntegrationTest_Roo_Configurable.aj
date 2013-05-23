@@ -3,6 +3,7 @@
 
 package com.bytepoxic.core.model;
 
+import com.bytepoxic.core.model.NationalityIntegrationTest;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect NationalityIntegrationTest_Roo_Configurable {

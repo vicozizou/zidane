@@ -73,7 +73,7 @@ privileged aspect AppUserDataOnDemand_Roo_DataOnDemand {
     }
     
     public void AppUserDataOnDemand.setDeleted(AppUser obj, int index) {
-        Boolean deleted = Boolean.TRUE;
+        Boolean deleted = true;
         obj.setDeleted(deleted);
     }
     

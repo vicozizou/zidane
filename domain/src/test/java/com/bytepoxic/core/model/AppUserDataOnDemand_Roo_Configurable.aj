@@ -3,6 +3,7 @@
 
 package com.bytepoxic.core.model;
 
+import com.bytepoxic.core.model.AppUserDataOnDemand;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect AppUserDataOnDemand_Roo_Configurable {
