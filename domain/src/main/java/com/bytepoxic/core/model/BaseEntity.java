@@ -1,9 +1,11 @@
 package com.bytepoxic.core.model;
 
 import java.util.Date;
+
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -13,19 +15,14 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaActiveRecord(inheritanceType = "TABLE_PER_CLASS")
 public abstract class BaseEntity implements SoftDeleteable, DateTrackable {
-    @NotNull
-    private Boolean deleted;
+    private boolean deleted;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
-    private Date creationDate;
+    private Date creationDate = new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date updateDate;
-
-    public Boolean isDeleted() {
-		return deleted;
-	}
 }

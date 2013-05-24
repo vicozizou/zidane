@@ -15,20 +15,20 @@ import java.util.Set;
 
 privileged aspect Person_Roo_JavaBean {
     
-    public String Person.getFirstnames() {
-        return this.firstnames;
+    public String Person.getNames() {
+        return this.names;
     }
     
-    public void Person.setFirstnames(String firstnames) {
-        this.firstnames = firstnames;
+    public void Person.setNames(String names) {
+        this.names = names;
     }
     
-    public String Person.getLastnames() {
-        return this.lastnames;
+    public String Person.getSurnames() {
+        return this.surnames;
     }
     
-    public void Person.setLastnames(String lastnames) {
-        this.lastnames = lastnames;
+    public void Person.setSurnames(String surnames) {
+        this.surnames = surnames;
     }
     
     public Gender Person.getGender() {

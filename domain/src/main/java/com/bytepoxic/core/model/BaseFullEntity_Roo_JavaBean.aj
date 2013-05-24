@@ -7,11 +7,11 @@ import com.bytepoxic.core.model.BaseFullEntity;
 
 privileged aspect BaseFullEntity_Roo_JavaBean {
     
-    public Boolean BaseFullEntity.getEnabled() {
+    public boolean BaseFullEntity.isEnabled() {
         return this.enabled;
     }
     
-    public void BaseFullEntity.setEnabled(Boolean enabled) {
+    public void BaseFullEntity.setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
     

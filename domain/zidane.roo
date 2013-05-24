@@ -96,8 +96,8 @@ field string --fieldName code --sizeMax 2 --unique
 field boolean --fieldName appCurrent --notNull
 field number --fieldName latitude --type java.lang.Double
 field number --fieldName longitude --type java.lang.Double
-field number --fieldName zoom --type java.lang.Integer
-field set --fieldName children --type ~.model.Location --cardinality ONE_TO_MANY --mappedBy country
+//field number --fieldName zoom --type java.lang.Integer
+field set --fieldName children --type ~.model.Location --cardinality ONE_TO_MANY --mappedBy parent
 finder add --finderName findLocationsByParent
 finder add --finderName findLocationsByName
 finder add --finderName findLocationsByCode
@@ -128,8 +128,8 @@ field string --fieldName emailAddress --notNull --unique --sizeMax 64
 field enum --fieldName type --type ~.model.EmailType --notNull
 
 entity jpa --class ~.model.Person --abstract --extends ~.model.BaseEntity --inheritanceType JOINED
-field string --fieldName firstnames --notNull --sizeMax 128
-field string --fieldName lastnames --notNull --sizeMax 128
+field string --fieldName names --notNull --sizeMax 128
+field string --fieldName surnames --notNull --sizeMax 128
 field enum --fieldName gender --type ~.model.Gender --notNull
 field date --fieldName birthday --type java.util.Date --notNull
 field string --fieldName identification --notNull --unique --sizeMax 64

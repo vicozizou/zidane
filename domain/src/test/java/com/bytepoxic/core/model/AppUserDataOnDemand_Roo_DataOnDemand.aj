@@ -43,14 +43,14 @@ privileged aspect AppUserDataOnDemand_Roo_DataOnDemand {
         setCreationDate(obj, index);
         setDaysToExpire(obj, index);
         setDeleted(obj, index);
-        setFirstnames(obj, index);
         setGender(obj, index);
         setIdentification(obj, index);
         setIdentificationType(obj, index);
         setLastLoginDate(obj, index);
-        setLastnames(obj, index);
         setLoginAttempts(obj, index);
+        setNames(obj, index);
         setPassword(obj, index);
+        setSurnames(obj, index);
         setUpdateDate(obj, index);
         setUserStatus(obj, index);
         setUsername(obj, index);
@@ -73,16 +73,8 @@ privileged aspect AppUserDataOnDemand_Roo_DataOnDemand {
     }
     
     public void AppUserDataOnDemand.setDeleted(AppUser obj, int index) {
-        Boolean deleted = Boolean.TRUE;
+        Boolean deleted = true;
         obj.setDeleted(deleted);
-    }
-    
-    public void AppUserDataOnDemand.setFirstnames(AppUser obj, int index) {
-        String firstnames = "firstnames_" + index;
-        if (firstnames.length() > 128) {
-            firstnames = firstnames.substring(0, 128);
-        }
-        obj.setFirstnames(firstnames);
     }
     
     public void AppUserDataOnDemand.setGender(AppUser obj, int index) {
@@ -108,17 +100,17 @@ privileged aspect AppUserDataOnDemand_Roo_DataOnDemand {
         obj.setLastLoginDate(lastLoginDate);
     }
     
-    public void AppUserDataOnDemand.setLastnames(AppUser obj, int index) {
-        String lastnames = "lastnames_" + index;
-        if (lastnames.length() > 128) {
-            lastnames = lastnames.substring(0, 128);
-        }
-        obj.setLastnames(lastnames);
-    }
-    
     public void AppUserDataOnDemand.setLoginAttempts(AppUser obj, int index) {
         Integer loginAttempts = new Integer(index);
         obj.setLoginAttempts(loginAttempts);
+    }
+    
+    public void AppUserDataOnDemand.setNames(AppUser obj, int index) {
+        String names = "names_" + index;
+        if (names.length() > 128) {
+            names = names.substring(0, 128);
+        }
+        obj.setNames(names);
     }
     
     public void AppUserDataOnDemand.setPassword(AppUser obj, int index) {
@@ -127,6 +119,14 @@ privileged aspect AppUserDataOnDemand_Roo_DataOnDemand {
             password = password.substring(0, 64);
         }
         obj.setPassword(password);
+    }
+    
+    public void AppUserDataOnDemand.setSurnames(AppUser obj, int index) {
+        String surnames = "surnames_" + index;
+        if (surnames.length() > 128) {
+            surnames = surnames.substring(0, 128);
+        }
+        obj.setSurnames(surnames);
     }
     
     public void AppUserDataOnDemand.setUpdateDate(AppUser obj, int index) {

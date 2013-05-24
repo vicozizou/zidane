@@ -36,12 +36,12 @@ privileged aspect LocationDataOnDemand_Roo_DataOnDemand {
         setCode(obj, index);
         setCreationDate(obj, index);
         setDeleted(obj, index);
+        setLabelKey(obj, index);
         setLatitude(obj, index);
         setLongitude(obj, index);
         setName(obj, index);
         setParent(obj, index);
         setUpdateDate(obj, index);
-        setZoom(obj, index);
         return obj;
     }
     
@@ -64,8 +64,16 @@ privileged aspect LocationDataOnDemand_Roo_DataOnDemand {
     }
     
     public void LocationDataOnDemand.setDeleted(Location obj, int index) {
-        Boolean deleted = Boolean.TRUE;
+        Boolean deleted = true;
         obj.setDeleted(deleted);
+    }
+    
+    public void LocationDataOnDemand.setLabelKey(Location obj, int index) {
+        String labelKey = "labelKey_" + index;
+        if (labelKey.length() > 128) {
+            labelKey = labelKey.substring(0, 128);
+        }
+        obj.setLabelKey(labelKey);
     }
     
     public void LocationDataOnDemand.setLatitude(Location obj, int index) {
@@ -94,11 +102,6 @@ privileged aspect LocationDataOnDemand_Roo_DataOnDemand {
     public void LocationDataOnDemand.setUpdateDate(Location obj, int index) {
         Date updateDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setUpdateDate(updateDate);
-    }
-    
-    public void LocationDataOnDemand.setZoom(Location obj, int index) {
-        Integer zoom = new Integer(index);
-        obj.setZoom(zoom);
     }
     
     public Location LocationDataOnDemand.getSpecificLocation(int index) {
