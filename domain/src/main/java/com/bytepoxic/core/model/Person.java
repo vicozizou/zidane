@@ -22,8 +22,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord(inheritanceType = "JOINED")
-public abstract class Person extends BaseEntity {
-
+public class Person extends BaseEntity {
     @NotNull
     @Size(max = 128)
     private String names;
