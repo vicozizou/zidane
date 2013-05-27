@@ -220,18 +220,6 @@
 			<artifactId>spring-security-taglibs</artifactId>
 			<version>${spring-security.version}</version>
 		</dependency>
-	<dependency>
-            <groupId>com.bytepoxic.example</groupId>
-            <artifactId>Foo</artifactId>
-            <version>0.1.0.BUILD-SNAPSHOT</version>
-            <type>war</type>
-        </dependency>
-    <dependency>
-            <groupId>com.bytepoxic.example</groupId>
-            <artifactId>Bar</artifactId>
-            <version>0.1.0.BUILD-SNAPSHOT</version>
-            <type>war</type>
-        </dependency>
     </dependencies>
 	<build>
 		<plugins>
