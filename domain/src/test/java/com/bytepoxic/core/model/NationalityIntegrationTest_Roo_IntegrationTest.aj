@@ -3,9 +3,9 @@
 
 package com.bytepoxic.core.model;
 
-import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.model.NationalityDataOnDemand;
 import com.bytepoxic.core.model.NationalityIntegrationTest;
+import com.bytepoxic.core.service.LocationService;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,10 +26,13 @@ privileged aspect NationalityIntegrationTest_Roo_IntegrationTest {
     @Autowired
     NationalityDataOnDemand NationalityIntegrationTest.dod;
     
+    @Autowired
+    LocationService NationalityIntegrationTest.locationService;
+    
     @Test
-    public void NationalityIntegrationTest.testCountNationalitys() {
+    public void NationalityIntegrationTest.testCountAllNationalitys() {
         Assert.assertNotNull("Data on demand for 'Nationality' failed to initialize correctly", dod.getRandomNationality());
-        long count = Nationality.countNationalitys();
+        long count = locationService.countAllNationalitys();
         Assert.assertTrue("Counter for 'Nationality' incorrectly reported there were no entries", count > 0);
     }
     
@@ -39,7 +42,7 @@ privileged aspect NationalityIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Nationality' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Nationality' failed to provide an identifier", id);
-        obj = Nationality.findNationality(id);
+        obj = locationService.findNationality(id);
         Assert.assertNotNull("Find method for 'Nationality' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'Nationality' returned the incorrect identifier", id, obj.getId());
     }
@@ -47,9 +50,9 @@ privileged aspect NationalityIntegrationTest_Roo_IntegrationTest {
     @Test
     public void NationalityIntegrationTest.testFindAllNationalitys() {
         Assert.assertNotNull("Data on demand for 'Nationality' failed to initialize correctly", dod.getRandomNationality());
-        long count = Nationality.countNationalitys();
+        long count = locationService.countAllNationalitys();
         Assert.assertTrue("Too expensive to perform a find all test for 'Nationality', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<Nationality> result = Nationality.findAllNationalitys();
+        List<Nationality> result = locationService.findAllNationalitys();
         Assert.assertNotNull("Find all method for 'Nationality' illegally returned null", result);
         Assert.assertTrue("Find all method for 'Nationality' failed to return any data", result.size() > 0);
     }
@@ -57,11 +60,11 @@ privileged aspect NationalityIntegrationTest_Roo_IntegrationTest {
     @Test
     public void NationalityIntegrationTest.testFindNationalityEntries() {
         Assert.assertNotNull("Data on demand for 'Nationality' failed to initialize correctly", dod.getRandomNationality());
-        long count = Nationality.countNationalitys();
+        long count = locationService.countAllNationalitys();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<Nationality> result = Nationality.findNationalityEntries(firstResult, maxResults);
+        List<Nationality> result = locationService.findNationalityEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'Nationality' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'Nationality' returned an incorrect number of entries", count, result.size());
     }
@@ -72,7 +75,7 @@ privileged aspect NationalityIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Nationality' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Nationality' failed to provide an identifier", id);
-        obj = Nationality.findNationality(id);
+        obj = locationService.findNationality(id);
         Assert.assertNotNull("Find method for 'Nationality' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyNationality(obj);
         Integer currentVersion = obj.getVersion();
@@ -81,41 +84,41 @@ privileged aspect NationalityIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void NationalityIntegrationTest.testMergeUpdate() {
+    public void NationalityIntegrationTest.testUpdateNationalityUpdate() {
         Nationality obj = dod.getRandomNationality();
         Assert.assertNotNull("Data on demand for 'Nationality' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Nationality' failed to provide an identifier", id);
-        obj = Nationality.findNationality(id);
+        obj = locationService.findNationality(id);
         boolean modified =  dod.modifyNationality(obj);
         Integer currentVersion = obj.getVersion();
-        Nationality merged = (Nationality)obj.merge();
+        Nationality merged = (Nationality)locationService.updateNationality(obj);
         obj.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'Nationality' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void NationalityIntegrationTest.testPersist() {
+    public void NationalityIntegrationTest.testSaveNationality() {
         Assert.assertNotNull("Data on demand for 'Nationality' failed to initialize correctly", dod.getRandomNationality());
         Nationality obj = dod.getNewTransientNationality(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Nationality' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Nationality' identifier to be null", obj.getId());
-        obj.persist();
+        locationService.saveNationality(obj);
         obj.flush();
         Assert.assertNotNull("Expected 'Nationality' identifier to no longer be null", obj.getId());
     }
     
     @Test
-    public void NationalityIntegrationTest.testRemove() {
+    public void NationalityIntegrationTest.testDeleteNationality() {
         Nationality obj = dod.getRandomNationality();
         Assert.assertNotNull("Data on demand for 'Nationality' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Nationality' failed to provide an identifier", id);
-        obj = Nationality.findNationality(id);
-        obj.remove();
+        obj = locationService.findNationality(id);
+        locationService.deleteNationality(obj);
         obj.flush();
-        Assert.assertNull("Failed to remove 'Nationality' with identifier '" + id + "'", Nationality.findNationality(id));
+        Assert.assertNull("Failed to remove 'Nationality' with identifier '" + id + "'", locationService.findNationality(id));
     }
     
 }

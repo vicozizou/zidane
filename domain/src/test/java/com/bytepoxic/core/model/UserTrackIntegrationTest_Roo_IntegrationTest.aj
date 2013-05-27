@@ -3,9 +3,9 @@
 
 package com.bytepoxic.core.model;
 
-import com.bytepoxic.core.model.UserTrack;
 import com.bytepoxic.core.model.UserTrackDataOnDemand;
 import com.bytepoxic.core.model.UserTrackIntegrationTest;
+import com.bytepoxic.core.service.UserService;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,10 +26,13 @@ privileged aspect UserTrackIntegrationTest_Roo_IntegrationTest {
     @Autowired
     UserTrackDataOnDemand UserTrackIntegrationTest.dod;
     
+    @Autowired
+    UserService UserTrackIntegrationTest.userService;
+    
     @Test
-    public void UserTrackIntegrationTest.testCountUserTracks() {
+    public void UserTrackIntegrationTest.testCountAllUserTracks() {
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to initialize correctly", dod.getRandomUserTrack());
-        long count = UserTrack.countUserTracks();
+        long count = userService.countAllUserTracks();
         Assert.assertTrue("Counter for 'UserTrack' incorrectly reported there were no entries", count > 0);
     }
     
@@ -39,7 +42,7 @@ privileged aspect UserTrackIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to provide an identifier", id);
-        obj = UserTrack.findUserTrack(id);
+        obj = userService.findUserTrack(id);
         Assert.assertNotNull("Find method for 'UserTrack' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'UserTrack' returned the incorrect identifier", id, obj.getId());
     }
@@ -47,9 +50,9 @@ privileged aspect UserTrackIntegrationTest_Roo_IntegrationTest {
     @Test
     public void UserTrackIntegrationTest.testFindAllUserTracks() {
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to initialize correctly", dod.getRandomUserTrack());
-        long count = UserTrack.countUserTracks();
+        long count = userService.countAllUserTracks();
         Assert.assertTrue("Too expensive to perform a find all test for 'UserTrack', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<UserTrack> result = UserTrack.findAllUserTracks();
+        List<UserTrack> result = userService.findAllUserTracks();
         Assert.assertNotNull("Find all method for 'UserTrack' illegally returned null", result);
         Assert.assertTrue("Find all method for 'UserTrack' failed to return any data", result.size() > 0);
     }
@@ -57,11 +60,11 @@ privileged aspect UserTrackIntegrationTest_Roo_IntegrationTest {
     @Test
     public void UserTrackIntegrationTest.testFindUserTrackEntries() {
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to initialize correctly", dod.getRandomUserTrack());
-        long count = UserTrack.countUserTracks();
+        long count = userService.countAllUserTracks();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<UserTrack> result = UserTrack.findUserTrackEntries(firstResult, maxResults);
+        List<UserTrack> result = userService.findUserTrackEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'UserTrack' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'UserTrack' returned an incorrect number of entries", count, result.size());
     }
@@ -72,7 +75,7 @@ privileged aspect UserTrackIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to provide an identifier", id);
-        obj = UserTrack.findUserTrack(id);
+        obj = userService.findUserTrack(id);
         Assert.assertNotNull("Find method for 'UserTrack' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyUserTrack(obj);
         Integer currentVersion = obj.getVersion();
@@ -81,41 +84,41 @@ privileged aspect UserTrackIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void UserTrackIntegrationTest.testMergeUpdate() {
+    public void UserTrackIntegrationTest.testUpdateUserTrackUpdate() {
         UserTrack obj = dod.getRandomUserTrack();
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to provide an identifier", id);
-        obj = UserTrack.findUserTrack(id);
+        obj = userService.findUserTrack(id);
         boolean modified =  dod.modifyUserTrack(obj);
         Integer currentVersion = obj.getVersion();
-        UserTrack merged = obj.merge();
+        UserTrack merged = userService.updateUserTrack(obj);
         obj.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'UserTrack' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void UserTrackIntegrationTest.testPersist() {
+    public void UserTrackIntegrationTest.testSaveUserTrack() {
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to initialize correctly", dod.getRandomUserTrack());
         UserTrack obj = dod.getNewTransientUserTrack(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'UserTrack' identifier to be null", obj.getId());
-        obj.persist();
+        userService.saveUserTrack(obj);
         obj.flush();
         Assert.assertNotNull("Expected 'UserTrack' identifier to no longer be null", obj.getId());
     }
     
     @Test
-    public void UserTrackIntegrationTest.testRemove() {
+    public void UserTrackIntegrationTest.testDeleteUserTrack() {
         UserTrack obj = dod.getRandomUserTrack();
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'UserTrack' failed to provide an identifier", id);
-        obj = UserTrack.findUserTrack(id);
-        obj.remove();
+        obj = userService.findUserTrack(id);
+        userService.deleteUserTrack(obj);
         obj.flush();
-        Assert.assertNull("Failed to remove 'UserTrack' with identifier '" + id + "'", UserTrack.findUserTrack(id));
+        Assert.assertNull("Failed to remove 'UserTrack' with identifier '" + id + "'", userService.findUserTrack(id));
     }
     
 }

@@ -6,6 +6,7 @@ package com.bytepoxic.core.model;
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.LocationDataOnDemand;
 import com.bytepoxic.core.model.NationalityDataOnDemand;
+import com.bytepoxic.core.service.LocationService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,6 +30,9 @@ privileged aspect LocationDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     NationalityDataOnDemand LocationDataOnDemand.nationalityDataOnDemand;
+    
+    @Autowired
+    LocationService LocationDataOnDemand.locationService;
     
     public Location LocationDataOnDemand.getNewTransientLocation(int index) {
         Location obj = new Location();
@@ -114,14 +118,14 @@ privileged aspect LocationDataOnDemand_Roo_DataOnDemand {
         }
         Location obj = data.get(index);
         Long id = obj.getId();
-        return Location.findLocation(id);
+        return locationService.findLocation(id);
     }
     
     public Location LocationDataOnDemand.getRandomLocation() {
         init();
         Location obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return Location.findLocation(id);
+        return locationService.findLocation(id);
     }
     
     public boolean LocationDataOnDemand.modifyLocation(Location obj) {
@@ -131,7 +135,7 @@ privileged aspect LocationDataOnDemand_Roo_DataOnDemand {
     public void LocationDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = Location.findLocationEntries(from, to);
+        data = locationService.findLocationEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Location' illegally returned null");
         }
@@ -143,7 +147,7 @@ privileged aspect LocationDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Location obj = getNewTransientLocation(i);
             try {
-                obj.persist();
+                locationService.saveLocation(obj);
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

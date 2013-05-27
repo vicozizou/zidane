@@ -15,7 +15,6 @@ import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.throwing.ServiceCoreException;
 import com.bytepoxic.core.util.LogUtils;
 
-@Service(value = "locationService")
 public class LocationServiceImpl implements LocationService {
 	private static Logger logger = LoggerFactory.getLogger(LocationServiceImpl.class);
 	

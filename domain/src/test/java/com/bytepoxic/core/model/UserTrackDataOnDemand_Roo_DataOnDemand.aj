@@ -7,6 +7,7 @@ import com.bytepoxic.core.model.AppUserDataOnDemand;
 import com.bytepoxic.core.model.TrackingType;
 import com.bytepoxic.core.model.UserTrack;
 import com.bytepoxic.core.model.UserTrackDataOnDemand;
+import com.bytepoxic.core.service.UserService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +31,9 @@ privileged aspect UserTrackDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     AppUserDataOnDemand UserTrackDataOnDemand.appUserDataOnDemand;
+    
+    @Autowired
+    UserService UserTrackDataOnDemand.userService;
     
     public UserTrack UserTrackDataOnDemand.getNewTransientUserTrack(int index) {
         UserTrack obj = new UserTrack();
@@ -58,14 +62,14 @@ privileged aspect UserTrackDataOnDemand_Roo_DataOnDemand {
         }
         UserTrack obj = data.get(index);
         Long id = obj.getId();
-        return UserTrack.findUserTrack(id);
+        return userService.findUserTrack(id);
     }
     
     public UserTrack UserTrackDataOnDemand.getRandomUserTrack() {
         init();
         UserTrack obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return UserTrack.findUserTrack(id);
+        return userService.findUserTrack(id);
     }
     
     public boolean UserTrackDataOnDemand.modifyUserTrack(UserTrack obj) {
@@ -75,7 +79,7 @@ privileged aspect UserTrackDataOnDemand_Roo_DataOnDemand {
     public void UserTrackDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = UserTrack.findUserTrackEntries(from, to);
+        data = userService.findUserTrackEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'UserTrack' illegally returned null");
         }
@@ -87,7 +91,7 @@ privileged aspect UserTrackDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             UserTrack obj = getNewTransientUserTrack(i);
             try {
-                obj.persist();
+                userService.saveUserTrack(obj);
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

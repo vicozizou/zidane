@@ -7,6 +7,7 @@ import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.LocationDataOnDemand;
 import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.model.NationalityDataOnDemand;
+import com.bytepoxic.core.service.LocationService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,6 +28,9 @@ privileged aspect NationalityDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     LocationDataOnDemand NationalityDataOnDemand.locationDataOnDemand;
+    
+    @Autowired
+    LocationService NationalityDataOnDemand.locationService;
     
     public Nationality NationalityDataOnDemand.getNewTransientNationality(int index) {
         Nationality obj = new Nationality();
@@ -67,14 +71,14 @@ privileged aspect NationalityDataOnDemand_Roo_DataOnDemand {
         }
         Nationality obj = data.get(index);
         Long id = obj.getId();
-        return Nationality.findNationality(id);
+        return locationService.findNationality(id);
     }
     
     public Nationality NationalityDataOnDemand.getRandomNationality() {
         init();
         Nationality obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return Nationality.findNationality(id);
+        return locationService.findNationality(id);
     }
     
     public boolean NationalityDataOnDemand.modifyNationality(Nationality obj) {
@@ -84,7 +88,7 @@ privileged aspect NationalityDataOnDemand_Roo_DataOnDemand {
     public void NationalityDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = Nationality.findNationalityEntries(from, to);
+        data = locationService.findNationalityEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Nationality' illegally returned null");
         }
@@ -96,7 +100,7 @@ privileged aspect NationalityDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Nationality obj = getNewTransientNationality(i);
             try {
-                obj.persist();
+                locationService.saveNationality(obj);
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

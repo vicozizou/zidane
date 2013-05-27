@@ -3,9 +3,9 @@
 
 package com.bytepoxic.core.model;
 
-import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.LocationDataOnDemand;
 import com.bytepoxic.core.model.LocationIntegrationTest;
+import com.bytepoxic.core.service.LocationService;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,10 +26,13 @@ privileged aspect LocationIntegrationTest_Roo_IntegrationTest {
     @Autowired
     LocationDataOnDemand LocationIntegrationTest.dod;
     
+    @Autowired
+    LocationService LocationIntegrationTest.locationService;
+    
     @Test
-    public void LocationIntegrationTest.testCountLocations() {
+    public void LocationIntegrationTest.testCountAllLocations() {
         Assert.assertNotNull("Data on demand for 'Location' failed to initialize correctly", dod.getRandomLocation());
-        long count = Location.countLocations();
+        long count = locationService.countAllLocations();
         Assert.assertTrue("Counter for 'Location' incorrectly reported there were no entries", count > 0);
     }
     
@@ -39,7 +42,7 @@ privileged aspect LocationIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Location' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Location' failed to provide an identifier", id);
-        obj = Location.findLocation(id);
+        obj = locationService.findLocation(id);
         Assert.assertNotNull("Find method for 'Location' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'Location' returned the incorrect identifier", id, obj.getId());
     }
@@ -47,9 +50,9 @@ privileged aspect LocationIntegrationTest_Roo_IntegrationTest {
     @Test
     public void LocationIntegrationTest.testFindAllLocations() {
         Assert.assertNotNull("Data on demand for 'Location' failed to initialize correctly", dod.getRandomLocation());
-        long count = Location.countLocations();
+        long count = locationService.countAllLocations();
         Assert.assertTrue("Too expensive to perform a find all test for 'Location', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<Location> result = Location.findAllLocations();
+        List<Location> result = locationService.findAllLocations();
         Assert.assertNotNull("Find all method for 'Location' illegally returned null", result);
         Assert.assertTrue("Find all method for 'Location' failed to return any data", result.size() > 0);
     }
@@ -57,11 +60,11 @@ privileged aspect LocationIntegrationTest_Roo_IntegrationTest {
     @Test
     public void LocationIntegrationTest.testFindLocationEntries() {
         Assert.assertNotNull("Data on demand for 'Location' failed to initialize correctly", dod.getRandomLocation());
-        long count = Location.countLocations();
+        long count = locationService.countAllLocations();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<Location> result = Location.findLocationEntries(firstResult, maxResults);
+        List<Location> result = locationService.findLocationEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'Location' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'Location' returned an incorrect number of entries", count, result.size());
     }
@@ -72,7 +75,7 @@ privileged aspect LocationIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Location' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Location' failed to provide an identifier", id);
-        obj = Location.findLocation(id);
+        obj = locationService.findLocation(id);
         Assert.assertNotNull("Find method for 'Location' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyLocation(obj);
         Integer currentVersion = obj.getVersion();
@@ -81,41 +84,41 @@ privileged aspect LocationIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void LocationIntegrationTest.testMergeUpdate() {
+    public void LocationIntegrationTest.testUpdateLocationUpdate() {
         Location obj = dod.getRandomLocation();
         Assert.assertNotNull("Data on demand for 'Location' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Location' failed to provide an identifier", id);
-        obj = Location.findLocation(id);
+        obj = locationService.findLocation(id);
         boolean modified =  dod.modifyLocation(obj);
         Integer currentVersion = obj.getVersion();
-        Location merged = (Location)obj.merge();
+        Location merged = (Location)locationService.updateLocation(obj);
         obj.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'Location' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void LocationIntegrationTest.testPersist() {
+    public void LocationIntegrationTest.testSaveLocation() {
         Assert.assertNotNull("Data on demand for 'Location' failed to initialize correctly", dod.getRandomLocation());
         Location obj = dod.getNewTransientLocation(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Location' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Location' identifier to be null", obj.getId());
-        obj.persist();
+        locationService.saveLocation(obj);
         obj.flush();
         Assert.assertNotNull("Expected 'Location' identifier to no longer be null", obj.getId());
     }
     
     @Test
-    public void LocationIntegrationTest.testRemove() {
+    public void LocationIntegrationTest.testDeleteLocation() {
         Location obj = dod.getRandomLocation();
         Assert.assertNotNull("Data on demand for 'Location' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Location' failed to provide an identifier", id);
-        obj = Location.findLocation(id);
-        obj.remove();
+        obj = locationService.findLocation(id);
+        locationService.deleteLocation(obj);
         obj.flush();
-        Assert.assertNull("Failed to remove 'Location' with identifier '" + id + "'", Location.findLocation(id));
+        Assert.assertNull("Failed to remove 'Location' with identifier '" + id + "'", locationService.findLocation(id));
     }
     
 }
