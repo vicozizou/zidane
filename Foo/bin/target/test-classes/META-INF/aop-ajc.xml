@@ -1,9 +1,0 @@
-<aspectj>
-<aspects>
-<aspect name="com.bytepoxic.example.model.FooDataOnDemand_Roo_Configurable"/>
-<aspect name="com.bytepoxic.example.model.FooIntegrationTest_Roo_IntegrationTest"/>
-<aspect name="com.bytepoxic.example.model.FooIntegrationTest_Roo_Configurable"/>
-<aspect name="com.bytepoxic.example.model.FooDataOnDemand_Roo_DataOnDemand"/>
-</aspects>
-</aspectj>
-

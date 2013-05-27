@@ -1,9 +1,0 @@
-<aspectj>
-<aspects>
-<aspect name="com.bytepoxic.example.model.BarDataOnDemand_Roo_DataOnDemand"/>
-<aspect name="com.bytepoxic.example.model.BarIntegrationTest_Roo_Configurable"/>
-<aspect name="com.bytepoxic.example.model.BarIntegrationTest_Roo_IntegrationTest"/>
-<aspect name="com.bytepoxic.example.model.BarDataOnDemand_Roo_Configurable"/>
-</aspects>
-</aspectj>
-
