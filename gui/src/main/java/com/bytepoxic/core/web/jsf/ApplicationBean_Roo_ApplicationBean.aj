@@ -317,7 +317,7 @@ privileged aspect ApplicationBean_Roo_ApplicationBean {
     }
     
     public String ApplicationBean.getAppName() {
-        return "Gui";
+        return "Core parent project";
     }
     
 }

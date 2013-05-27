@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
-    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-    <jsp:output omit-xml-declaration="yes"/>
-    <page:show id="ps_com_bytepoxic_example_model_Bar" object="${bar}" path="/bars" z="tS8XJfL0ZbZvcjARXH6CZ2Q/BYU=">
-        <field:display field="num" id="s_com_bytepoxic_example_model_Bar_num" object="${bar}" z="V8Zufi9VDOBd8Jm73s9r8tmdmO4="/>
-        <field:display field="name" id="s_com_bytepoxic_example_model_Bar_name" object="${bar}" z="gkkzAiYvBs6DPpTSxOeCk2N9fSk="/>
-    </page:show>
-</div>

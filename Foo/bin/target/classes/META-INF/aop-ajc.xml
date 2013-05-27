@@ -1,0 +1,10 @@
+<aspectj>
+<aspects>
+<aspect name="com.bytepoxic.example.model.Foo_Roo_ToString"/>
+<aspect name="com.bytepoxic.example.model.Foo_Roo_Jpa_Entity"/>
+<aspect name="com.bytepoxic.example.model.Foo_Roo_Jpa_ActiveRecord"/>
+<aspect name="com.bytepoxic.example.model.Foo_Roo_Configurable"/>
+<aspect name="com.bytepoxic.example.model.Foo_Roo_JavaBean"/>
+</aspects>
+</aspectj>
+

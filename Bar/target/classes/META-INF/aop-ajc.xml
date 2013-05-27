@@ -1,0 +1,12 @@
+<aspectj>
+<aspects>
+<aspect name="com.bytepoxic.example.model.Bar_Roo_Configurable"/>
+<aspect name="com.bytepoxic.example.web.BarController_Roo_Controller"/>
+<aspect name="com.bytepoxic.example.model.Bar_Roo_ToString"/>
+<aspect name="com.bytepoxic.example.model.Bar_Roo_Jpa_ActiveRecord"/>
+<aspect name="com.bytepoxic.example.model.Bar_Roo_JavaBean"/>
+<aspect name="com.bytepoxic.example.web.ApplicationConversionServiceFactoryBean_Roo_ConversionService"/>
+<aspect name="com.bytepoxic.example.model.Bar_Roo_Jpa_Entity"/>
+</aspects>
+</aspectj>
+

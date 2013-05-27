@@ -1,0 +1,17 @@
+<aspectj>
+<aspects>
+<aspect name="com.bytepoxic.example.model.Foo_Roo_ToString"/>
+<aspect name="com.bytepoxic.example.jsf.converter.FooConverter_Roo_Configurable"/>
+<aspect name="com.bytepoxic.example.jsf.ApplicationBean_Roo_Configurable"/>
+<aspect name="com.bytepoxic.example.model.Foo_Roo_Jpa_Entity"/>
+<aspect name="com.bytepoxic.example.jsf.FooBean_Roo_Configurable"/>
+<aspect name="com.bytepoxic.example.model.Foo_Roo_JavaBean"/>
+<aspect name="com.bytepoxic.example.jsf.ApplicationBean_Roo_ApplicationBean"/>
+<aspect name="com.bytepoxic.example.jsf.converter.FooConverter_Roo_Converter"/>
+<aspect name="com.bytepoxic.example.jsf.FooBean_Roo_Serializable"/>
+<aspect name="com.bytepoxic.example.jsf.FooBean_Roo_ManagedBean"/>
+<aspect name="com.bytepoxic.example.model.Foo_Roo_Jpa_ActiveRecord"/>
+<aspect name="com.bytepoxic.example.model.Foo_Roo_Configurable"/>
+</aspects>
+</aspectj>
+
