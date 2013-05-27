@@ -1,7 +1,9 @@
 package com.bytepoxic.core.model;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,7 +50,7 @@ public class Location extends BaseEntity implements Comparable<com.bytepoxic.cor
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent")
     @Sort(type = SortType.NATURAL)
     @Fetch(FetchMode.SUBSELECT)
-    private List<com.bytepoxic.core.model.Location> children = new ArrayList<com.bytepoxic.core.model.Location>();
+    private Set<com.bytepoxic.core.model.Location> children = new LinkedHashSet<com.bytepoxic.core.model.Location>();
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "country", optional = true)
     @JoinColumn(name = "country", nullable = true)
@@ -134,7 +136,7 @@ public class Location extends BaseEntity implements Comparable<com.bytepoxic.cor
 
     public void addLocation(com.bytepoxic.core.model.Location loc) {
         if (children == null) {
-            children = new ArrayList<Location>();
+            children = new LinkedHashSet<Location>();
         }
         children.add(loc);
     }
@@ -158,9 +160,10 @@ public class Location extends BaseEntity implements Comparable<com.bytepoxic.cor
 
     public void removeLocation() {
         while (hasChildren()) {
-            Location child = children.get(0);
-            child.removeLocation();
-            child = null;
+        	for(Location child : children) {
+        		child.removeLocation();
+                child = null;
+        	}
         }
         if (parent != null) {
             parent.children.remove(this);

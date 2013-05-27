@@ -16,22 +16,6 @@ privileged aspect LocationServiceImpl_Roo_Service {
     
     declare @type: LocationServiceImpl: @Transactional;
     
-    public long LocationServiceImpl.countAllLocations() {
-        return Location.countLocations();
-    }
-    
-    public List<Location> LocationServiceImpl.findAllLocations() {
-        return Location.findAllLocations();
-    }
-    
-    public List<Location> LocationServiceImpl.findLocationEntries(int firstResult, int maxResults) {
-        return Location.findLocationEntries(firstResult, maxResults);
-    }
-    
-    public void LocationServiceImpl.saveLocation(Location location) {
-        location.persist();
-    }
-    
     public long LocationServiceImpl.countAllNationalitys() {
         return Nationality.countNationalitys();
     }
@@ -50,6 +34,22 @@ privileged aspect LocationServiceImpl_Roo_Service {
     
     public void LocationServiceImpl.saveNationality(Nationality nationality) {
         nationality.persist();
+    }
+    
+    public long LocationServiceImpl.countAllLocations() {
+        return Location.countLocations();
+    }
+    
+    public List<Location> LocationServiceImpl.findAllLocations() {
+        return Location.findAllLocations();
+    }
+    
+    public List<Location> LocationServiceImpl.findLocationEntries(int firstResult, int maxResults) {
+        return Location.findLocationEntries(firstResult, maxResults);
+    }
+    
+    public void LocationServiceImpl.saveLocation(Location location) {
+        location.persist();
     }
     
 }

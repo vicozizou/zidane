@@ -41,26 +41,6 @@ privileged aspect UserServiceImpl_Roo_Service {
         return userTrack.merge();
     }
     
-    public long UserServiceImpl.countAllAppRoles() {
-        return AppRole.countAppRoles();
-    }
-    
-    public void UserServiceImpl.deleteAppRole(AppRole appRole) {
-        appRole.remove();
-    }
-    
-    public List<AppRole> UserServiceImpl.findAllAppRoles() {
-        return AppRole.findAllAppRoles();
-    }
-    
-    public List<AppRole> UserServiceImpl.findAppRoleEntries(int firstResult, int maxResults) {
-        return AppRole.findAppRoleEntries(firstResult, maxResults);
-    }
-    
-    public void UserServiceImpl.saveAppRole(AppRole appRole) {
-        appRole.persist();
-    }
-    
     public long UserServiceImpl.countAllAppUsers() {
         return AppUser.countAppUsers();
     }
@@ -79,6 +59,26 @@ privileged aspect UserServiceImpl_Roo_Service {
     
     public void UserServiceImpl.saveAppUser(AppUser appUser) {
         appUser.persist();
+    }
+    
+    public long UserServiceImpl.countAllAppRoles() {
+        return AppRole.countAppRoles();
+    }
+    
+    public void UserServiceImpl.deleteAppRole(AppRole appRole) {
+        appRole.remove();
+    }
+    
+    public List<AppRole> UserServiceImpl.findAllAppRoles() {
+        return AppRole.findAllAppRoles();
+    }
+    
+    public List<AppRole> UserServiceImpl.findAppRoleEntries(int firstResult, int maxResults) {
+        return AppRole.findAppRoleEntries(firstResult, maxResults);
+    }
+    
+    public void UserServiceImpl.saveAppRole(AppRole appRole) {
+        appRole.persist();
     }
     
 }
