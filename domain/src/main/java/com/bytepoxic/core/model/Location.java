@@ -1,8 +1,10 @@
 package com.bytepoxic.core.model;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
@@ -10,16 +12,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -50,7 +50,7 @@ public class Location extends BaseEntity implements Comparable<com.bytepoxic.cor
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent")
     @Sort(type = SortType.NATURAL)
     @Fetch(FetchMode.SUBSELECT)
-    private List<com.bytepoxic.core.model.Location> children = new ArrayList<com.bytepoxic.core.model.Location>();
+    private Set<com.bytepoxic.core.model.Location> children = new LinkedHashSet<com.bytepoxic.core.model.Location>();
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "country", optional = true)
     @JoinColumn(name = "country", nullable = true)
@@ -136,7 +136,7 @@ public class Location extends BaseEntity implements Comparable<com.bytepoxic.cor
 
     public void addLocation(com.bytepoxic.core.model.Location loc) {
         if (children == null) {
-            children = new ArrayList<Location>();
+            children = new LinkedHashSet<Location>();
         }
         children.add(loc);
     }
@@ -160,9 +160,10 @@ public class Location extends BaseEntity implements Comparable<com.bytepoxic.cor
 
     public void removeLocation() {
         while (hasChildren()) {
-            Location child = children.get(0);
-            child.removeLocation();
-            child = null;
+        	for(Location child : children) {
+        		child.removeLocation();
+                child = null;
+        	}
         }
         if (parent != null) {
             parent.children.remove(this);

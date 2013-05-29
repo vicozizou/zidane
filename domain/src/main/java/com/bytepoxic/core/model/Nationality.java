@@ -13,7 +13,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaActiveRecord(finders = { "findNationalitysByName" })
 public class Nationality extends I18NableEntity {
-
     @NotNull
     @Column(unique = true)
     @Size(max = 64)

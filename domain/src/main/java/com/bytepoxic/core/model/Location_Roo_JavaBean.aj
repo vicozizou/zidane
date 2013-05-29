@@ -5,7 +5,7 @@ package com.bytepoxic.core.model;
 
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.Nationality;
-import java.util.List;
+import java.util.Set;
 
 privileged aspect Location_Roo_JavaBean {
     
@@ -57,11 +57,11 @@ privileged aspect Location_Roo_JavaBean {
         this.longitude = longitude;
     }
     
-    public List<Location> Location.getChildren() {
+    public Set<Location> Location.getChildren() {
         return this.children;
     }
     
-    public void Location.setChildren(List<Location> children) {
+    public void Location.setChildren(Set<Location> children) {
         this.children = children;
     }
     

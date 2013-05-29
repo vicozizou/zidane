@@ -1,6 +1,6 @@
 package com.bytepoxic.core.throwing;
 
-public class ServiceCoreException extends CoreException {
+public class ServiceCoreException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public ServiceCoreException(String arg0, Throwable arg1) {
