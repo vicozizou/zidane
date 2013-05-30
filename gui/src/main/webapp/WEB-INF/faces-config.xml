@@ -6,7 +6,7 @@
     <application>
         <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
         <resource-bundle>
-            <base-name>com.bytepoxic.core.web.jsf.i18n.messages</base-name>
+            <base-name>com.bytepoxic.core.web.faces.bean.i18n.messages</base-name>
             <var>messages</var>
         </resource-bundle>
         <locale-config>
@@ -17,6 +17,6 @@
         </locale-config>
     </application>
     <factory>
-        <exception-handler-factory>com.bytepoxic.core.web.jsf.util.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
+        <exception-handler-factory>com.bytepoxic.core.web.faces.bean.util.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
     </factory>
 </faces-config>
