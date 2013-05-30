@@ -127,7 +127,7 @@ entity jpa --class ~.model.Email --testAutomatically
 field string --fieldName emailAddress --notNull --unique --sizeMax 64
 field enum --fieldName type --type ~.model.EmailType --notNull
 
-entity jpa --class ~.model.Person --abstract --extends ~.model.BaseEntity --inheritanceType JOINED
+entity jpa --class ~.model.Person --extends ~.model.BaseEntity --inheritanceType JOINED
 field string --fieldName names --notNull --sizeMax 128
 field string --fieldName surnames --notNull --sizeMax 128
 field enum --fieldName gender --type ~.model.Gender --notNull

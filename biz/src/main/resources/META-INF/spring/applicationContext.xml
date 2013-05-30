@@ -7,7 +7,7 @@
         then be used within application context files in the form of
         ${propertyKey}.
     -->
-    <context:property-placeholder location="classpath*:META-INF/spring/*.properties"/>
+    <!-- <context:property-placeholder location="classpath*:META-INF/spring/*.properties"/> -->
     <!--
         Turn on AspectJ @Configurable support. As a result, any time you
         instantiate an object, Spring will attempt to perform dependency
@@ -21,7 +21,7 @@
         method). Roo applications use this useful feature in a number of
         areas, such as @PersistenceContext injection into entities.
     -->
-    <context:spring-configured/>
+    <!-- <context:spring-configured/> -->
     <!--
         This declaration will cause Spring to locate every @Component,
         @Repository and @Service in your application. In practical terms this
@@ -43,7 +43,7 @@
         The most commonly used annotation is @Autowired, which instructs Spring to
         dependency inject an object into your class.
     -->
-    <context:component-scan base-package="com.bytepoxic.core">
+    <!-- <context:component-scan base-package="com.bytepoxic.core">
         <context:exclude-filter expression=".*_Roo_.*" type="regex"/>
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
         <context:exclude-filter expression=".util.*" type="regex"/>
@@ -69,7 +69,7 @@
     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
         <property name="persistenceUnitName" value="persistenceUnit"/>
         <property name="dataSource" ref="dataSource"/>
-    </bean>
+    </bean> -->
     
     <bean autowire="byType" class="com.bytepoxic.core.service.security.UserSecurityServiceImpl" id="userSecurityService"/>
 </beans>
