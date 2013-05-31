@@ -17,24 +17,24 @@ privileged aspect UserServiceImpl_Roo_Service {
     
     declare @type: UserServiceImpl: @Transactional;
     
-    public long UserServiceImpl.countAllAppUsers() {
-        return AppUser.countAppUsers();
+    public long UserServiceImpl.countAllAppRoles() {
+        return AppRole.countAppRoles();
     }
     
-    public void UserServiceImpl.deleteAppUser(AppUser appUser) {
-        appUser.remove();
+    public void UserServiceImpl.deleteAppRole(AppRole appRole) {
+        appRole.remove();
     }
     
-    public List<AppUser> UserServiceImpl.findAllAppUsers() {
-        return AppUser.findAllAppUsers();
+    public List<AppRole> UserServiceImpl.findAllAppRoles() {
+        return AppRole.findAllAppRoles();
     }
     
-    public List<AppUser> UserServiceImpl.findAppUserEntries(int firstResult, int maxResults) {
-        return AppUser.findAppUserEntries(firstResult, maxResults);
+    public List<AppRole> UserServiceImpl.findAppRoleEntries(int firstResult, int maxResults) {
+        return AppRole.findAppRoleEntries(firstResult, maxResults);
     }
     
-    public void UserServiceImpl.saveAppUser(AppUser appUser) {
-        appUser.persist();
+    public void UserServiceImpl.saveAppRole(AppRole appRole) {
+        appRole.persist();
     }
     
     public long UserServiceImpl.countAllUserTracks() {
@@ -61,24 +61,24 @@ privileged aspect UserServiceImpl_Roo_Service {
         return userTrack.merge();
     }
     
-    public long UserServiceImpl.countAllAppRoles() {
-        return AppRole.countAppRoles();
+    public long UserServiceImpl.countAllAppUsers() {
+        return AppUser.countAppUsers();
     }
     
-    public void UserServiceImpl.deleteAppRole(AppRole appRole) {
-        appRole.remove();
+    public void UserServiceImpl.deleteAppUser(AppUser appUser) {
+        appUser.remove();
     }
     
-    public List<AppRole> UserServiceImpl.findAllAppRoles() {
-        return AppRole.findAllAppRoles();
+    public List<AppUser> UserServiceImpl.findAllAppUsers() {
+        return AppUser.findAllAppUsers();
     }
     
-    public List<AppRole> UserServiceImpl.findAppRoleEntries(int firstResult, int maxResults) {
-        return AppRole.findAppRoleEntries(firstResult, maxResults);
+    public List<AppUser> UserServiceImpl.findAppUserEntries(int firstResult, int maxResults) {
+        return AppUser.findAppUserEntries(firstResult, maxResults);
     }
     
-    public void UserServiceImpl.saveAppRole(AppRole appRole) {
-        appRole.persist();
+    public void UserServiceImpl.saveAppUser(AppUser appUser) {
+        appUser.persist();
     }
     
 }
