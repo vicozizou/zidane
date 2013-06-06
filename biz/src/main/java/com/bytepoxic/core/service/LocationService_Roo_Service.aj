@@ -10,13 +10,13 @@ import java.util.List;
 
 privileged aspect LocationService_Roo_Service {
     
+    public abstract long LocationService.countAllLocations();    
+    public abstract List<Location> LocationService.findAllLocations();    
+    public abstract List<Location> LocationService.findLocationEntries(int firstResult, int maxResults);    
+    public abstract void LocationService.saveLocation(Location location);    
     public abstract long LocationService.countAllNationalitys();    
     public abstract void LocationService.deleteNationality(Nationality nationality);    
     public abstract List<Nationality> LocationService.findAllNationalitys();    
     public abstract List<Nationality> LocationService.findNationalityEntries(int firstResult, int maxResults);    
     public abstract void LocationService.saveNationality(Nationality nationality);    
-    public abstract long LocationService.countAllLocations();    
-    public abstract List<Location> LocationService.findAllLocations();    
-    public abstract List<Location> LocationService.findLocationEntries(int firstResult, int maxResults);    
-    public abstract void LocationService.saveLocation(Location location);    
 }
