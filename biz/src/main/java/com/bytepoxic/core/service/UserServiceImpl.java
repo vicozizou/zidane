@@ -1,12 +1,12 @@
 package com.bytepoxic.core.service;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -17,7 +17,8 @@ import com.bytepoxic.core.model.UserTrack;
 import com.bytepoxic.core.throwing.ServiceCoreException;
 import com.bytepoxic.core.util.LogUtils;
 
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, Serializable {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 			
 	@Override
