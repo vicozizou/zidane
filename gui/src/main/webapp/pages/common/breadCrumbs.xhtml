@@ -1,0 +1,19 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<c:choose>
+		<c:when test="#{not empty navBean.breadCrumbs}">
+			<p:breadCrumb> 
+				<c:forEach var="breadCrumb" items="#{navBean.breadCrumbs}">
+					<p:menuitem value="#{app[breadCrumb.labelKey]}" url="#{breadCrumb.url}"/>
+				</c:forEach>
+			</p:breadCrumb>
+		</c:when>
+		<c:when test="#{navBean.useRootWhenUnfound and not navBean.thisPageRoot}">
+			<p:breadCrumb> 
+				<p:menuitem value="#{app[navBean.root.labelKey]}" url="#{navBean.root.url}"/>
+			</p:breadCrumb>
+		</c:when>
+	</c:choose>
+</ui:composition>

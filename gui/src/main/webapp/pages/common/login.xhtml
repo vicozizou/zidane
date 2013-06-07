@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/faces/templates/unsigned.xhtml">
+
+	<ui:define name="content">
+		<ui:include src="/faces/includes/localeForm.xhtml"/>
+		<h:form prependId="false">
+			<p:focus/>
+			<p:panel id="panel" header="#{app['login.title']}">
+				<h:panelGroup>
+					<h:panelGrid>
+						<p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true"/>
+					</h:panelGrid>
+					<h:panelGrid columns="2" columnClasses="label,value" styleClass="grid">
+						<h:outputLabel for="username" value="#{app['login.username']}"/>
+						<h:inputText id="username" value="#{loginBean.username}" required="true" requiredMessage="#{msg['login.username.required']}" validatorMessage="#{msg['login.username.max_length']}">
+							<f:validateLength maximum="32"/>
+						</h:inputText>
+
+						<h:outputLabel for="password" value="#{app['login.password']}"/>
+						<h:inputSecret id="password" value="#{loginBean.password}" required="true" requiredMessage="#{msg['login.password.required']}"/>
+
+						<h:outputText/>
+
+						<h:panelGrid columns="2">
+							<p:commandButton value="#{app['login.reset']}" type="reset"/>
+							<p:commandButton value="#{app['login.do_login']}" action="#{loginBean.loginUser}" async="true" update="panel"/>
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGroup>
+			</p:panel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

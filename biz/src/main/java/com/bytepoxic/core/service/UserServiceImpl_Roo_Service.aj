@@ -17,26 +17,6 @@ privileged aspect UserServiceImpl_Roo_Service {
     
     declare @type: UserServiceImpl: @Transactional;
     
-    public long UserServiceImpl.countAllAppUsers() {
-        return AppUser.countAppUsers();
-    }
-    
-    public void UserServiceImpl.deleteAppUser(AppUser appUser) {
-        appUser.remove();
-    }
-    
-    public List<AppUser> UserServiceImpl.findAllAppUsers() {
-        return AppUser.findAllAppUsers();
-    }
-    
-    public List<AppUser> UserServiceImpl.findAppUserEntries(int firstResult, int maxResults) {
-        return AppUser.findAppUserEntries(firstResult, maxResults);
-    }
-    
-    public void UserServiceImpl.saveAppUser(AppUser appUser) {
-        appUser.persist();
-    }
-    
     public long UserServiceImpl.countAllUserTracks() {
         return UserTrack.countUserTracks();
     }
@@ -59,6 +39,26 @@ privileged aspect UserServiceImpl_Roo_Service {
     
     public UserTrack UserServiceImpl.updateUserTrack(UserTrack userTrack) {
         return userTrack.merge();
+    }
+    
+    public long UserServiceImpl.countAllAppUsers() {
+        return AppUser.countAppUsers();
+    }
+    
+    public void UserServiceImpl.deleteAppUser(AppUser appUser) {
+        appUser.remove();
+    }
+    
+    public List<AppUser> UserServiceImpl.findAllAppUsers() {
+        return AppUser.findAllAppUsers();
+    }
+    
+    public List<AppUser> UserServiceImpl.findAppUserEntries(int firstResult, int maxResults) {
+        return AppUser.findAppUserEntries(firstResult, maxResults);
+    }
+    
+    public void UserServiceImpl.saveAppUser(AppUser appUser) {
+        appUser.persist();
     }
     
     public long UserServiceImpl.countAllAppRoles() {
