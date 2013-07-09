@@ -1,0 +1,11 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<f:facet name="footer">
+		<p:button id="new" value="#{app['app.entity.generic.new']}" outcome="#{currentFormBean.makeNew}" icon="ui-icon ui-icon-contact" disabled="#{currentFormBean.newHidden}" rendered="#{currentFormBean.showNew}"/>
+		<p:commandButton id="refresh" value="#{app['app.entity.generic.refresh']}" action="#{currentFormBean.refresh}" async="true" icon="ui-icon ui-icon-refresh" disabled="#{currentFormBean.refreshHidden}" rendered="#{currentFormBean.showRefresh}"/>
+		<p:commandButton id="remove" value="#{app['app.entity.generic.remove']}" action="#{currentFormBean.remove}" async="true" icon="ui-icon ui-icon-close" disabled="#{currentFormBean.removeHidden}" rendered="#{currentFormBean.showRemove}"/>
+	</f:facet>
+</ui:composition>
