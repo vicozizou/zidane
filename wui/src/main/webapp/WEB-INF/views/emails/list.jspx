@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_bytepoxic_core_model_Email" items="${emails}" z="RNqTyTRZvUSwmAoY8M5oHtNulNc=">
+        <table:table data="${emails}" id="l_com_bytepoxic_core_model_Email" path="/emails" z="QIX+7dM3Tl7hh0iVADLN2GCPdmo=">
+            <table:column id="c_com_bytepoxic_core_model_Email_emailAddress" property="emailAddress" z="ypM+hdbqr0Ia2NUA568Ss7UeTRk="/>
+            <table:column id="c_com_bytepoxic_core_model_Email_type" property="type" z="Amvwm/A0JopMj5pTJGP95kLbESU="/>
+            <table:column id="c_com_bytepoxic_core_model_Email_owner" property="owner" z="mPidysG3Kh0FbQ7VHaMQ22nrK4Y="/>
+        </table:table>
+    </page:list>
+</div>

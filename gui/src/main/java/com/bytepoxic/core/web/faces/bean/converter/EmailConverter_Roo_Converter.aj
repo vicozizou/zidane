@@ -3,12 +3,14 @@
 
 package com.bytepoxic.core.web.faces.bean.converter;
 
+import com.bytepoxic.core.dao.EmailDAO;
 import com.bytepoxic.core.model.Email;
 import com.bytepoxic.core.web.faces.bean.converter.EmailConverter;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 privileged aspect EmailConverter_Roo_Converter {
     
@@ -16,12 +18,15 @@ privileged aspect EmailConverter_Roo_Converter {
     
     declare @type: EmailConverter: @FacesConverter("com.bytepoxic.core.web.faces.bean.converter.EmailConverter");
     
+    @Autowired
+    EmailDAO EmailConverter.emailDAO;
+    
     public Object EmailConverter.getAsObject(FacesContext context, UIComponent component, String value) {
         if (value == null || value.length() == 0) {
             return null;
         }
         Long id = Long.parseLong(value);
-        return Email.findEmail(id);
+        return emailDAO.findOne(id);
     }
     
     public String EmailConverter.getAsString(FacesContext context, UIComponent component, Object value) {

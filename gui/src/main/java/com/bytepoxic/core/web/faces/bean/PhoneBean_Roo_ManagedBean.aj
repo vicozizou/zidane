@@ -3,6 +3,8 @@
 
 package com.bytepoxic.core.web.faces.bean;
 
+import com.bytepoxic.core.dao.PersonDAO;
+import com.bytepoxic.core.dao.PhoneDAO;
 import com.bytepoxic.core.model.Person;
 import com.bytepoxic.core.model.Phone;
 import com.bytepoxic.core.model.PhoneType;
@@ -28,12 +30,19 @@ import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 
 privileged aspect PhoneBean_Roo_ManagedBean {
     
     declare @type: PhoneBean: @ManagedBean(name = "phoneBean");
     
     declare @type: PhoneBean: @SessionScoped;
+    
+    @Autowired
+    PhoneDAO PhoneBean.phoneDAO;
+    
+    @Autowired
+    PersonDAO PhoneBean.personDAO;
     
     private String PhoneBean.name = "Phones";
     
@@ -76,7 +85,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
     }
     
     public String PhoneBean.findAllPhones() {
-        allPhones = Phone.findAllPhones();
+        allPhones = phoneDAO.findAll();
         dataVisible = !allPhones.isEmpty();
         return null;
     }
@@ -336,7 +345,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
     
     public List<Person> PhoneBean.completeOwner(String query) {
         List<Person> suggestions = new ArrayList<Person>();
-        for (Person person : Person.findAllPeople()) {
+        for (Person person : personDAO.findAll()) {
             String personStr = String.valueOf(person.getCreationDate() +  " "  + person.getUpdateDate() +  " "  + person.getNames() +  " "  + person.getSurnames());
             if (personStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(person);
@@ -372,10 +381,10 @@ privileged aspect PhoneBean_Roo_ManagedBean {
     public String PhoneBean.persist() {
         String message = "";
         if (phone.getId() != null) {
-            phone.merge();
+            phoneDAO.save(phone);
             message = "message_successfully_updated";
         } else {
-            phone.persist();
+            phoneDAO.save(phone);
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
@@ -389,7 +398,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
     }
     
     public String PhoneBean.delete() {
-        phone.remove();
+        phoneDAO.delete(phone);
         FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Phone");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();

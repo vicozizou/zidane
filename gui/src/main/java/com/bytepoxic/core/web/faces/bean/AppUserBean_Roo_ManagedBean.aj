@@ -3,6 +3,7 @@
 
 package com.bytepoxic.core.web.faces.bean;
 
+import com.bytepoxic.core.dao.PlaceDAO;
 import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppUser;
 import com.bytepoxic.core.model.Email;
@@ -12,8 +13,8 @@ import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.model.Phone;
 import com.bytepoxic.core.model.Place;
 import com.bytepoxic.core.model.UserStatus;
-import com.bytepoxic.core.service.LocationService;
-import com.bytepoxic.core.service.UserService;
+import com.bytepoxic.core.service.LocationService2;
+import com.bytepoxic.core.service.UserService2;
 import com.bytepoxic.core.web.faces.bean.AppUserBean;
 import com.bytepoxic.core.web.faces.bean.converter.AppRoleConverter;
 import com.bytepoxic.core.web.faces.bean.converter.NationalityConverter;
@@ -57,10 +58,13 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     declare @type: AppUserBean: @SessionScoped;
     
     @Autowired
-    UserService AppUserBean.userService;
+    UserService2 AppUserBean.userService2;
     
     @Autowired
-    LocationService AppUserBean.locationService;
+    LocationService2 AppUserBean.locationService2;
+    
+    @Autowired
+    PlaceDAO AppUserBean.placeDAO;
     
     private String AppUserBean.name = "AppUsers";
     
@@ -113,7 +117,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     }
     
     public String AppUserBean.findAllAppUsers() {
-        allAppUsers = userService.findAllAppUsers();
+        allAppUsers = userService2.findAllAppUsers();
         dataVisible = !allAppUsers.isEmpty();
         return null;
     }
@@ -1366,7 +1370,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     public List<Nationality> AppUserBean.completeNationality(String query) {
         List<Nationality> suggestions = new ArrayList<Nationality>();
-        for (Nationality nationality : locationService.findAllNationalitys()) {
+        for (Nationality nationality : locationService2.findAllNationalitys()) {
             String nationalityStr = String.valueOf(nationality.getLabelKey() +  " "  + nationality.getName());
             if (nationalityStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(nationality);
@@ -1377,7 +1381,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     public List<Place> AppUserBean.completeHomePlace(String query) {
         List<Place> suggestions = new ArrayList<Place>();
-        for (Place place : Place.findAllPlaces()) {
+        for (Place place : placeDAO.findAll()) {
             String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
             if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(place);
@@ -1388,7 +1392,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     public List<Place> AppUserBean.completeWorkPlace(String query) {
         List<Place> suggestions = new ArrayList<Place>();
-        for (Place place : Place.findAllPlaces()) {
+        for (Place place : placeDAO.findAll()) {
             String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
             if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(place);
@@ -1476,10 +1480,10 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     public String AppUserBean.persist() {
         String message = "";
         if (appUser.getId() != null) {
-            userService.updateAppUser(appUser);
+            userService2.updateAppUser(appUser);
             message = "message_successfully_updated";
         } else {
-            userService.saveAppUser(appUser);
+            userService2.saveAppUser(appUser);
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
@@ -1493,7 +1497,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     }
     
     public String AppUserBean.delete() {
-        userService.deleteAppUser(appUser);
+        userService2.deleteAppUser(appUser);
         FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "AppUser");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();

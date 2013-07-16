@@ -7,12 +7,10 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EntityManager;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -21,16 +19,15 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooJpaActiveRecord(finders = { "findLocationsByParent", "findLocationsByName", "findLocationsByCode" })
-public class Location extends BaseEntity implements Comparable<com.bytepoxic.core.model.Location> {
-
+@RooJpaEntity
+public class Location extends BaseEntity implements Comparable<Location> {
     @ManyToOne
-    private com.bytepoxic.core.model.Location parent;
+    private Location parent;
 
     @NotNull
     @Size(max = 64)
@@ -50,7 +47,7 @@ public class Location extends BaseEntity implements Comparable<com.bytepoxic.cor
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent")
     @Sort(type = SortType.NATURAL)
     @Fetch(FetchMode.SUBSELECT)
-    private Set<com.bytepoxic.core.model.Location> children = new LinkedHashSet<com.bytepoxic.core.model.Location>();
+    private Set<Location> children = new LinkedHashSet<Location>();
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "country", optional = true)
     @JoinColumn(name = "country", nullable = true)
@@ -60,11 +57,11 @@ public class Location extends BaseEntity implements Comparable<com.bytepoxic.cor
     @Size(max = 128)
     private String labelKey;
 
-    public static TypedQuery<com.bytepoxic.core.model.Location> findMainLocations() {
+    /*public static TypedQuery<com.bytepoxic.core.model.Location> findMainLocations() {
         EntityManager em = Location.entityManager();
         TypedQuery<Location> q = em.createQuery("SELECT o FROM Location AS o WHERE o.parent is null and o.deleted = false", Location.class);
         return q;
-    }
+    }*/
 
     @Override
     public int hashCode() {
@@ -85,12 +82,6 @@ public class Location extends BaseEntity implements Comparable<com.bytepoxic.cor
         if (getId() == null) {
             if (other.getId() != null) return false;
         } else if (!getId().equals(other.getId())) return false;
-        if (code == null) {
-            if (other.code != null) return false;
-        } else if (!code.equals(other.code)) return false;
-        if (name == null) {
-            if (other.name != null) return false;
-        } else if (!name.equals(other.name)) return false;
         return true;
     }
 
@@ -174,7 +165,7 @@ public class Location extends BaseEntity implements Comparable<com.bytepoxic.cor
         }
     }
 
-    public List<com.bytepoxic.core.model.Location> getChildrenAsList() {
+    public List<Location> getChildrenAsList() {
         return new ArrayList<Location>(children);
     }
 }

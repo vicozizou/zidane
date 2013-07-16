@@ -3,10 +3,11 @@
 
 package com.bytepoxic.core.service;
 
+import com.bytepoxic.core.dao.LocationDAO;
 import com.bytepoxic.core.model.Location;
-import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.service.LocationServiceImpl;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,40 +17,35 @@ privileged aspect LocationServiceImpl_Roo_Service {
     
     declare @type: LocationServiceImpl: @Transactional;
     
+    @Autowired
+    LocationDAO LocationServiceImpl.locationDAO;
+    
     public long LocationServiceImpl.countAllLocations() {
-        return Location.countLocations();
+        return locationDAO.count();
+    }
+    
+    public void LocationServiceImpl.deleteLocation(Location location) {
+        locationDAO.delete(location);
+    }
+    
+    public Location LocationServiceImpl.findLocation(Long id) {
+        return locationDAO.findOne(id);
     }
     
     public List<Location> LocationServiceImpl.findAllLocations() {
-        return Location.findAllLocations();
+        return locationDAO.findAll();
     }
     
     public List<Location> LocationServiceImpl.findLocationEntries(int firstResult, int maxResults) {
-        return Location.findLocationEntries(firstResult, maxResults);
+        return locationDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
     public void LocationServiceImpl.saveLocation(Location location) {
-        location.persist();
+        locationDAO.save(location);
     }
     
-    public long LocationServiceImpl.countAllNationalitys() {
-        return Nationality.countNationalitys();
-    }
-    
-    public void LocationServiceImpl.deleteNationality(Nationality nationality) {
-        nationality.remove();
-    }
-    
-    public List<Nationality> LocationServiceImpl.findAllNationalitys() {
-        return Nationality.findAllNationalitys();
-    }
-    
-    public List<Nationality> LocationServiceImpl.findNationalityEntries(int firstResult, int maxResults) {
-        return Nationality.findNationalityEntries(firstResult, maxResults);
-    }
-    
-    public void LocationServiceImpl.saveNationality(Nationality nationality) {
-        nationality.persist();
+    public Location LocationServiceImpl.updateLocation(Location location) {
+        return locationDAO.save(location);
     }
     
 }

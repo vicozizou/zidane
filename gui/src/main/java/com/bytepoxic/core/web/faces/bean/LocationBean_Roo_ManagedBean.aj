@@ -3,6 +3,7 @@
 
 package com.bytepoxic.core.web.faces.bean;
 
+import com.bytepoxic.core.dao.NationalityDAO;
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.service.LocationService;
@@ -44,6 +45,9 @@ privileged aspect LocationBean_Roo_ManagedBean {
     
     @Autowired
     LocationService LocationBean.locationService;
+    
+    @Autowired
+    NationalityDAO LocationBean.nationalityDAO;
     
     private String LocationBean.name = "Locations";
     
@@ -793,7 +797,7 @@ privileged aspect LocationBean_Roo_ManagedBean {
     
     public List<Nationality> LocationBean.completeNationality(String query) {
         List<Nationality> suggestions = new ArrayList<Nationality>();
-        for (Nationality nationality : locationService.findAllNationalitys()) {
+        for (Nationality nationality : nationalityDAO.findAll()) {
             String nationalityStr = String.valueOf(nationality.getLabelKey() +  " "  + nationality.getName());
             if (nationalityStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(nationality);

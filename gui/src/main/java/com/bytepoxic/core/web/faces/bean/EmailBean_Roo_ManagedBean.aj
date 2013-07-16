@@ -3,6 +3,8 @@
 
 package com.bytepoxic.core.web.faces.bean;
 
+import com.bytepoxic.core.dao.EmailDAO;
+import com.bytepoxic.core.dao.PersonDAO;
 import com.bytepoxic.core.model.Email;
 import com.bytepoxic.core.model.EmailType;
 import com.bytepoxic.core.model.Person;
@@ -28,12 +30,19 @@ import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 
 privileged aspect EmailBean_Roo_ManagedBean {
     
     declare @type: EmailBean: @ManagedBean(name = "emailBean");
     
     declare @type: EmailBean: @SessionScoped;
+    
+    @Autowired
+    EmailDAO EmailBean.emailDAO;
+    
+    @Autowired
+    PersonDAO EmailBean.personDAO;
     
     private String EmailBean.name = "Emails";
     
@@ -76,7 +85,7 @@ privileged aspect EmailBean_Roo_ManagedBean {
     }
     
     public String EmailBean.findAllEmails() {
-        allEmails = Email.findAllEmails();
+        allEmails = emailDAO.findAll();
         dataVisible = !allEmails.isEmpty();
         return null;
     }
@@ -336,7 +345,7 @@ privileged aspect EmailBean_Roo_ManagedBean {
     
     public List<Person> EmailBean.completeOwner(String query) {
         List<Person> suggestions = new ArrayList<Person>();
-        for (Person person : Person.findAllPeople()) {
+        for (Person person : personDAO.findAll()) {
             String personStr = String.valueOf(person.getCreationDate() +  " "  + person.getUpdateDate() +  " "  + person.getNames() +  " "  + person.getSurnames());
             if (personStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(person);
@@ -372,10 +381,10 @@ privileged aspect EmailBean_Roo_ManagedBean {
     public String EmailBean.persist() {
         String message = "";
         if (email.getId() != null) {
-            email.merge();
+            emailDAO.save(email);
             message = "message_successfully_updated";
         } else {
-            email.persist();
+            emailDAO.save(email);
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
@@ -389,7 +398,7 @@ privileged aspect EmailBean_Roo_ManagedBean {
     }
     
     public String EmailBean.delete() {
-        email.remove();
+        emailDAO.delete(email);
         FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Email");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();

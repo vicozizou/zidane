@@ -3,6 +3,8 @@
 
 package com.bytepoxic.core.web.faces.bean;
 
+import com.bytepoxic.core.dao.PersonDAO;
+import com.bytepoxic.core.dao.PlaceDAO;
 import com.bytepoxic.core.model.Email;
 import com.bytepoxic.core.model.Gender;
 import com.bytepoxic.core.model.IdentificationType;
@@ -48,7 +50,13 @@ privileged aspect PersonBean_Roo_ManagedBean {
     declare @type: PersonBean: @SessionScoped;
     
     @Autowired
+    PersonDAO PersonBean.personDAO;
+    
+    @Autowired
     LocationService PersonBean.locationService;
+    
+    @Autowired
+    PlaceDAO PersonBean.placeDAO;
     
     private String PersonBean.name = "People";
     
@@ -99,7 +107,7 @@ privileged aspect PersonBean_Roo_ManagedBean {
     }
     
     public String PersonBean.findAllPeople() {
-        allPeople = Person.findAllPeople();
+        allPeople = personDAO.findAll();
         dataVisible = !allPeople.isEmpty();
         return null;
     }
@@ -944,7 +952,7 @@ privileged aspect PersonBean_Roo_ManagedBean {
     
     public List<Place> PersonBean.completeHomePlace(String query) {
         List<Place> suggestions = new ArrayList<Place>();
-        for (Place place : Place.findAllPlaces()) {
+        for (Place place : placeDAO.findAll()) {
             String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
             if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(place);
@@ -955,7 +963,7 @@ privileged aspect PersonBean_Roo_ManagedBean {
     
     public List<Place> PersonBean.completeWorkPlace(String query) {
         List<Place> suggestions = new ArrayList<Place>();
-        for (Place place : Place.findAllPlaces()) {
+        for (Place place : placeDAO.findAll()) {
             String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
             if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(place);
@@ -1019,10 +1027,10 @@ privileged aspect PersonBean_Roo_ManagedBean {
     public String PersonBean.persist() {
         String message = "";
         if (person.getId() != null) {
-            person.merge();
+            personDAO.save(person);
             message = "message_successfully_updated";
         } else {
-            person.persist();
+            personDAO.save(person);
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
@@ -1036,7 +1044,7 @@ privileged aspect PersonBean_Roo_ManagedBean {
     }
     
     public String PersonBean.delete() {
-        person.remove();
+        personDAO.delete(person);
         FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Person");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();

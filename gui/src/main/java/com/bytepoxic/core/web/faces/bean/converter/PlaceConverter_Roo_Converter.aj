@@ -3,12 +3,14 @@
 
 package com.bytepoxic.core.web.faces.bean.converter;
 
+import com.bytepoxic.core.dao.PlaceDAO;
 import com.bytepoxic.core.model.Place;
 import com.bytepoxic.core.web.faces.bean.converter.PlaceConverter;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 privileged aspect PlaceConverter_Roo_Converter {
     
@@ -16,12 +18,15 @@ privileged aspect PlaceConverter_Roo_Converter {
     
     declare @type: PlaceConverter: @FacesConverter("com.bytepoxic.core.web.faces.bean.converter.PlaceConverter");
     
+    @Autowired
+    PlaceDAO PlaceConverter.placeDAO;
+    
     public Object PlaceConverter.getAsObject(FacesContext context, UIComponent component, String value) {
         if (value == null || value.length() == 0) {
             return null;
         }
         Long id = Long.parseLong(value);
-        return Place.findPlace(id);
+        return placeDAO.findOne(id);
     }
     
     public String PlaceConverter.getAsString(FacesContext context, UIComponent component, Object value) {

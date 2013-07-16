@@ -3,6 +3,7 @@
 
 package com.bytepoxic.core.web.faces.bean;
 
+import com.bytepoxic.core.dao.NationalityDAO;
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.service.LocationService;
@@ -35,6 +36,9 @@ privileged aspect NationalityBean_Roo_ManagedBean {
     declare @type: NationalityBean: @ManagedBean(name = "nationalityBean");
     
     declare @type: NationalityBean: @SessionScoped;
+    
+    @Autowired
+    NationalityDAO NationalityBean.nationalityDAO;
     
     @Autowired
     LocationService NationalityBean.locationService;
@@ -81,7 +85,7 @@ privileged aspect NationalityBean_Roo_ManagedBean {
     }
     
     public String NationalityBean.findAllNationalitys() {
-        allNationalitys = locationService.findAllNationalitys();
+        allNationalitys = nationalityDAO.findAll();
         dataVisible = !allNationalitys.isEmpty();
         return null;
     }
@@ -372,10 +376,10 @@ privileged aspect NationalityBean_Roo_ManagedBean {
     public String NationalityBean.persist() {
         String message = "";
         if (nationality.getId() != null) {
-            locationService.updateNationality(nationality);
+            nationalityDAO.save(nationality);
             message = "message_successfully_updated";
         } else {
-            locationService.saveNationality(nationality);
+            nationalityDAO.save(nationality);
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
@@ -389,7 +393,7 @@ privileged aspect NationalityBean_Roo_ManagedBean {
     }
     
     public String NationalityBean.delete() {
-        locationService.deleteNationality(nationality);
+        nationalityDAO.delete(nationality);
         FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Nationality");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();

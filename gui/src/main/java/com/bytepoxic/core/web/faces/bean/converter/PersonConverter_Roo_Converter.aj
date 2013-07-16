@@ -3,12 +3,14 @@
 
 package com.bytepoxic.core.web.faces.bean.converter;
 
+import com.bytepoxic.core.dao.PersonDAO;
 import com.bytepoxic.core.model.Person;
 import com.bytepoxic.core.web.faces.bean.converter.PersonConverter;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 privileged aspect PersonConverter_Roo_Converter {
     
@@ -16,12 +18,15 @@ privileged aspect PersonConverter_Roo_Converter {
     
     declare @type: PersonConverter: @FacesConverter("com.bytepoxic.core.web.faces.bean.converter.PersonConverter");
     
+    @Autowired
+    PersonDAO PersonConverter.personDAO;
+    
     public Object PersonConverter.getAsObject(FacesContext context, UIComponent component, String value) {
         if (value == null || value.length() == 0) {
             return null;
         }
         Long id = Long.parseLong(value);
-        return Person.findPerson(id);
+        return personDAO.findOne(id);
     }
     
     public String PersonConverter.getAsString(FacesContext context, UIComponent component, Object value) {
