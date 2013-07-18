@@ -17,7 +17,6 @@ public interface UserService {
 	List<AppRole> findAppRolesByName(String name) throws ServiceCoreException;
 	AppRole findAppRoleByName(String name) throws ServiceCoreException;
 	
-	List<AppUser> findAppUsersByUsername(String name) throws ServiceCoreException;
 	AppUser findAppUserByUsername(String username) throws ServiceCoreException;
 	
 	List<UserTrack> findUserTracksByUser(AppUser appUser) throws ServiceCoreException;
