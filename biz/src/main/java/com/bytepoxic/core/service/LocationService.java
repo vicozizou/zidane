@@ -11,7 +11,6 @@ import com.bytepoxic.core.throwing.ServiceCoreException;
 public interface LocationService {
 	List<Location> findLocationsByParent(Location parent) throws ServiceCoreException;
 	List<Location> findMainLocations() throws ServiceCoreException;
-	Location buildLocationTree(Location start) throws ServiceCoreException;
 	List<Location> findLocationsByName(String name) throws ServiceCoreException;
 	List<Location> findLocationsByCode(String code) throws ServiceCoreException;
 }

@@ -4,7 +4,7 @@
 package com.bytepoxic.core.web.faces.bean.converter;
 
 import com.bytepoxic.core.model.AppUser;
-import com.bytepoxic.core.service.UserService2;
+import com.bytepoxic.core.service.UserService;
 import com.bytepoxic.core.web.faces.bean.converter.AppUserConverter;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -19,14 +19,14 @@ privileged aspect AppUserConverter_Roo_Converter {
     declare @type: AppUserConverter: @FacesConverter("com.bytepoxic.core.web.faces.bean.converter.AppUserConverter");
     
     @Autowired
-    UserService2 AppUserConverter.userService2;
+    UserService AppUserConverter.userService;
     
     public Object AppUserConverter.getAsObject(FacesContext context, UIComponent component, String value) {
         if (value == null || value.length() == 0) {
             return null;
         }
         Long id = Long.parseLong(value);
-        return userService2.findAppUser(id);
+        return userService.findAppUser(id);
     }
     
     public String AppUserConverter.getAsString(FacesContext context, UIComponent component, Object value) {

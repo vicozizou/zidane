@@ -1,6 +1,7 @@
 package com.bytepoxic.core.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -12,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 @RooJavaBean
 @RooToString
 @RooJpaEntity
+@Entity
 public class AppRole extends I18NableEntity implements GrantedAuthority {
 	private static final long serialVersionUID = 1L;
 

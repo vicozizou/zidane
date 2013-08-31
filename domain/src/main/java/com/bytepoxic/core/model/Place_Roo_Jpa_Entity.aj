@@ -5,15 +5,12 @@ package com.bytepoxic.core.model;
 
 import com.bytepoxic.core.model.Place;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect Place_Roo_Jpa_Entity {
-    
-    declare @type: Place: @Entity;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

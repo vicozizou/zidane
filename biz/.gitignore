@@ -5,3 +5,4 @@ log.roo
 .metadata
 .classpath
 /bin
+/target

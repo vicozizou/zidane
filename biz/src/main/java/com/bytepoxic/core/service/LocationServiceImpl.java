@@ -1,14 +1,12 @@
 package com.bytepoxic.core.service;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.bytepoxic.core.dao.LocationDAOCustom;
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.throwing.ServiceCoreException;
 import com.bytepoxic.core.util.LogUtils;
@@ -16,16 +14,14 @@ import com.bytepoxic.core.util.LogUtils;
 public class LocationServiceImpl implements LocationService {
 	private static Logger logger = LoggerFactory.getLogger(LocationServiceImpl.class);
 	
-	@Autowired
-	private LocationDAOCustom locationDAOCustom;
-	
 	@Override
+	@Transactional(readOnly = true)
 	public List<Location> findLocationsByParent(Location parent) throws ServiceCoreException {
 		if (parent == null) {
 			logger.warn("Parent location is null, getting parent less locations");
 		}
 		try {
-			List<Location> locations = locationDAOCustom.findLocationsByParent(parent);
+			List<Location> locations = locationDAO.findLocationsByParent(parent);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Locations found:" + LogUtils.formatCollection(locations, "\n"));
 			}
@@ -36,9 +32,10 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Location> findMainLocations() throws ServiceCoreException {
 		try {
-			List<Location> locations = locationDAOCustom.findMainLocations();
+			List<Location> locations = locationDAO.findMainLocations();
 			if (logger.isDebugEnabled()) {
 				logger.debug("Locations found:" + LogUtils.formatCollection(locations, "\n"));
 			}
@@ -49,13 +46,14 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Location> findLocationsByName(String name) throws ServiceCoreException {
 		if (!StringUtils.hasText(name)) {
 			logger.warn("Location name is empty, cannot find locations");
 			return null;
 		}
 		try {
-			List<Location> locations = locationDAOCustom.findLocationsByName(name);
+			List<Location> locations = locationDAO.findLocationsByName(name);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Locations found:" + LogUtils.formatCollection(locations, "\n"));
 			}
@@ -66,13 +64,14 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Location> findLocationsByCode(String code) throws ServiceCoreException {
 		if (!StringUtils.hasText(code)) {
 			logger.warn("Location code is empty, cannot find locations");
 			return null;
 		}
 		try {
-			List<Location> locations = locationDAOCustom.findLocationsByCode(code);
+			List<Location> locations = locationDAO.findLocationsByCode(code);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Locations found:" + LogUtils.formatCollection(locations, "\n"));
 			}
@@ -80,22 +79,5 @@ public class LocationServiceImpl implements LocationService {
 		} catch (Exception e) {
 			throw new ServiceCoreException(String.format("Error finding locations with code %s", code), e);
 		}
-	}
-	
-	@Override
-	public Location buildLocationTree(Location start) throws ServiceCoreException {
-		List<Location> children = null;
-		if (start != null) {
-			children = findLocationsByParent(start);
-		} else {
-			start = new Location();
-			children = findMainLocations();
-		}
-		Collections.sort(children);
-		for(Location child : children) {
-			start.addLocation(child);
-			buildLocationTree(child);
-		}
-		return start;
 	}
 }

@@ -4,7 +4,7 @@
 package com.bytepoxic.core.web.faces.bean;
 
 import com.bytepoxic.core.model.AppRole;
-import com.bytepoxic.core.service.UserService2;
+import com.bytepoxic.core.service.UserService;
 import com.bytepoxic.core.web.faces.bean.AppRoleBean;
 import com.bytepoxic.core.web.faces.bean.util.MessageFactory;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ privileged aspect AppRoleBean_Roo_ManagedBean {
     declare @type: AppRoleBean: @SessionScoped;
     
     @Autowired
-    UserService2 AppRoleBean.userService2;
+    UserService AppRoleBean.userService;
     
     private String AppRoleBean.name = "AppRoles";
     
@@ -79,7 +79,7 @@ privileged aspect AppRoleBean_Roo_ManagedBean {
     }
     
     public String AppRoleBean.findAllAppRoles() {
-        allAppRoles = userService2.findAllAppRoles();
+        allAppRoles = userService.findAllAppRoles();
         dataVisible = !allAppRoles.isEmpty();
         return null;
     }
@@ -355,10 +355,10 @@ privileged aspect AppRoleBean_Roo_ManagedBean {
     public String AppRoleBean.persist() {
         String message = "";
         if (appRole.getId() != null) {
-            userService2.updateAppRole(appRole);
+            userService.updateAppRole(appRole);
             message = "message_successfully_updated";
         } else {
-            userService2.saveAppRole(appRole);
+            userService.saveAppRole(appRole);
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
@@ -372,7 +372,7 @@ privileged aspect AppRoleBean_Roo_ManagedBean {
     }
     
     public String AppRoleBean.delete() {
-        userService2.deleteAppRole(appRole);
+        userService.deleteAppRole(appRole);
         FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "AppRole");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();

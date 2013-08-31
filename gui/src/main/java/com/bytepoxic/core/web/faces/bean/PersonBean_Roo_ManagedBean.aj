@@ -3,6 +3,7 @@
 
 package com.bytepoxic.core.web.faces.bean;
 
+import com.bytepoxic.core.dao.NationalityDAO;
 import com.bytepoxic.core.dao.PersonDAO;
 import com.bytepoxic.core.dao.PlaceDAO;
 import com.bytepoxic.core.model.Email;
@@ -12,7 +13,6 @@ import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.model.Person;
 import com.bytepoxic.core.model.Phone;
 import com.bytepoxic.core.model.Place;
-import com.bytepoxic.core.service.LocationService;
 import com.bytepoxic.core.web.faces.bean.PersonBean;
 import com.bytepoxic.core.web.faces.bean.converter.NationalityConverter;
 import com.bytepoxic.core.web.faces.bean.converter.PlaceConverter;
@@ -53,7 +53,7 @@ privileged aspect PersonBean_Roo_ManagedBean {
     PersonDAO PersonBean.personDAO;
     
     @Autowired
-    LocationService PersonBean.locationService;
+    NationalityDAO PersonBean.nationalityDAO;
     
     @Autowired
     PlaceDAO PersonBean.placeDAO;
@@ -941,7 +941,7 @@ privileged aspect PersonBean_Roo_ManagedBean {
     
     public List<Nationality> PersonBean.completeNationality(String query) {
         List<Nationality> suggestions = new ArrayList<Nationality>();
-        for (Nationality nationality : locationService.findAllNationalitys()) {
+        for (Nationality nationality : nationalityDAO.findAll()) {
             String nationalityStr = String.valueOf(nationality.getLabelKey() +  " "  + nationality.getName());
             if (nationalityStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(nationality);

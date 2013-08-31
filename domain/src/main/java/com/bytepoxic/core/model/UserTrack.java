@@ -2,6 +2,7 @@ package com.bytepoxic.core.model;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -16,6 +17,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity
+@Entity
 public class UserTrack {
     @ManyToOne
     private AppUser tracked;

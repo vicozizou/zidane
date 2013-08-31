@@ -3,6 +3,7 @@
 
 package com.bytepoxic.core.web.faces.bean;
 
+import com.bytepoxic.core.dao.NationalityDAO;
 import com.bytepoxic.core.dao.PlaceDAO;
 import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppUser;
@@ -13,8 +14,7 @@ import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.model.Phone;
 import com.bytepoxic.core.model.Place;
 import com.bytepoxic.core.model.UserStatus;
-import com.bytepoxic.core.service.LocationService2;
-import com.bytepoxic.core.service.UserService2;
+import com.bytepoxic.core.service.UserService;
 import com.bytepoxic.core.web.faces.bean.AppUserBean;
 import com.bytepoxic.core.web.faces.bean.converter.AppRoleConverter;
 import com.bytepoxic.core.web.faces.bean.converter.NationalityConverter;
@@ -58,10 +58,10 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     declare @type: AppUserBean: @SessionScoped;
     
     @Autowired
-    UserService2 AppUserBean.userService2;
+    UserService AppUserBean.userService;
     
     @Autowired
-    LocationService2 AppUserBean.locationService2;
+    NationalityDAO AppUserBean.nationalityDAO;
     
     @Autowired
     PlaceDAO AppUserBean.placeDAO;
@@ -117,7 +117,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     }
     
     public String AppUserBean.findAllAppUsers() {
-        allAppUsers = userService2.findAllAppUsers();
+        allAppUsers = userService.findAllAppUsers();
         dataVisible = !allAppUsers.isEmpty();
         return null;
     }
@@ -1370,7 +1370,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     public List<Nationality> AppUserBean.completeNationality(String query) {
         List<Nationality> suggestions = new ArrayList<Nationality>();
-        for (Nationality nationality : locationService2.findAllNationalitys()) {
+        for (Nationality nationality : nationalityDAO.findAll()) {
             String nationalityStr = String.valueOf(nationality.getLabelKey() +  " "  + nationality.getName());
             if (nationalityStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(nationality);
@@ -1480,10 +1480,10 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     public String AppUserBean.persist() {
         String message = "";
         if (appUser.getId() != null) {
-            userService2.updateAppUser(appUser);
+            userService.updateAppUser(appUser);
             message = "message_successfully_updated";
         } else {
-            userService2.saveAppUser(appUser);
+            userService.saveAppUser(appUser);
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
@@ -1497,7 +1497,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     }
     
     public String AppUserBean.delete() {
-        userService2.deleteAppUser(appUser);
+        userService.deleteAppUser(appUser);
         FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "AppUser");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();

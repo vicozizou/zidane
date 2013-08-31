@@ -20,6 +20,6 @@ public interface UserService {
 	AppUser findAppUserByUsername(String username) throws ServiceCoreException;
 	
 	List<UserTrack> findUserTracksByUser(AppUser appUser) throws ServiceCoreException;
-	List<UserTrack> findUserTracksByUserAndDate(AppUser appUser, Date date) throws ServiceCoreException;
-	List<UserTrack> findUserTracksByDate(Date date) throws ServiceCoreException;
+	List<UserTrack> findUserTracksByUserAndDates(AppUser appUser, Date fromDate, Date toDate) throws ServiceCoreException;
+	List<UserTrack> findUserTracksByDates(Date fromDate, Date toDate) throws ServiceCoreException;
 }
