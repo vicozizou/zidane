@@ -70,5 +70,5 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
     
-    <!-- <bean autowire="byType" class="com.bytepoxic.core.service.security.UserSecurityServiceImpl" id="userSecurityService"/> -->
+    <bean autowire="byType" class="com.bytepoxic.core.service.security.UserSecurityServiceImpl" id="userSecurityService"/>
 </beans>
