@@ -7,7 +7,6 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
@@ -25,7 +24,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @RooJavaBean
 @RooToString
 @RooJpaEntity
-@Entity
 public class AppUser extends Person implements UserDetails {
 	private static final long serialVersionUID = 1L;
 

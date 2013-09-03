@@ -18,7 +18,6 @@
 		<module>domain</module>
 		<module>persistence</module>
 		<module>biz</module>
-		<module>wui</module>
     </modules>
 	<repositories>
 		<repository>

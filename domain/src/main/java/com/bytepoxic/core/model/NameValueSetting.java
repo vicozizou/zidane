@@ -13,7 +13,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(inheritanceType = "TABLE_PER_CLASS")
 public abstract class NameValueSetting extends I18NableEntity {
-
     @NotNull
     @Column(unique = true)
     @Size(max = 64)

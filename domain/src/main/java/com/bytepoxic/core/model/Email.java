@@ -1,7 +1,6 @@
 package com.bytepoxic.core.model;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
@@ -14,7 +13,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity
-@Entity
 public class Email {
     @NotNull
     @Column(unique = true)
