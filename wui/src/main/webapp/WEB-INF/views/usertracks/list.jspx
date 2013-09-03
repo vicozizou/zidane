@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_bytepoxic_core_model_UserTrack" items="${usertracks}" z="DjvDGlLwASkhB9WKE4fSXUxSVNk=">
+        <table:table data="${usertracks}" id="l_com_bytepoxic_core_model_UserTrack" path="/usertracks" z="PcL8tllTM+2s9y/TOx4hWo87pBk=">
+            <table:column id="c_com_bytepoxic_core_model_UserTrack_tracked" property="tracked" z="HVITCl9ElqEHduqOBVVY2nXz6pI="/>
+            <table:column id="c_com_bytepoxic_core_model_UserTrack_trackingType" property="trackingType" z="sCY6SLcbycx22/+SryhgFQI6YdA="/>
+            <table:column date="true" dateTimePattern="${userTrack_trackingdate_date_format}" id="c_com_bytepoxic_core_model_UserTrack_trackingDate" property="trackingDate" z="zFCNZJUhaNrFQBd0tfccWHjjq7w="/>
+        </table:table>
+    </page:list>
+</div>

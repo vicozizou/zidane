@@ -22,7 +22,7 @@ enum type --class ~.model.IdentificationType
 field string --fieldName type --notNull
 field string --fieldName labelKey --sizeMax 128
 enum constant --name LOCALE
-enum constant --name RESIDENCEsc
+enum constant --name RESIDENCE
 enum constant --name AMNESTY
 enum constant --name PASSPORT
 enum constant --name OTHER

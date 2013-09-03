@@ -1,6 +1,6 @@
 package com.bytepoxic.core.service;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,108 +12,13 @@ import org.springframework.util.StringUtils;
 
 import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppUser;
-import com.bytepoxic.core.model.TrackingType;
 import com.bytepoxic.core.model.UserTrack;
 import com.bytepoxic.core.throwing.ServiceCoreException;
 import com.bytepoxic.core.util.LogUtils;
 
-public class UserServiceImpl implements UserService, Serializable {
-	private static final long serialVersionUID = 1L;
+public class UserServiceImpl implements UserService {
 	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-			
-	@Override
-	@Transactional
-	@Secured({"ROLE_ADMIN"})
-	public void createAppRole(AppRole appRole) throws ServiceCoreException {
-		if (appRole == null) {
-			throw new ServiceCoreException("AppRole is null, cannot create it");
-		}
-		try {
-			appRole.persist();
-		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error persisting appRole %s", appRole), e);
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("AppRole persisted with id %s", appRole.getId()));
-		}
-	}
-
-	@Override
-	public AppRole findAppRole(Long id) throws ServiceCoreException {
-		try {
-			AppRole appRole = AppRole.findAppRole(id);
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("AppRole with id %s%sfound", id, appRole == null ? " was not " : ""));
-			}
-			return appRole;
-		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error finding appRole with %s", id), e);
-		}
-	}
-
-	@Override
-	public List<AppRole> listAppRoles() throws ServiceCoreException {
-		try {
-			List<AppRole> appRoles = AppRole.findAllAppRoles();
-			if (logger.isDebugEnabled()) {
-				logger.debug("AppRoles found:" + LogUtils.formatCollection(appRoles));
-			}
-			return appRoles;
-		} catch (Exception e) {
-			throw new ServiceCoreException("Error listing appRoles", e);
-		}
-	}
-
-	@Override
-	public List<AppRole> listAppRoles(int firstResult, int maxResults) throws ServiceCoreException {
-		try {
-			List<AppRole> appRoles = AppRole.findAppRoleEntries(firstResult, maxResults);
-			if (logger.isDebugEnabled()) {
-				logger.debug("AppRoles found:" + LogUtils.formatCollection(appRoles));
-			}
-			return appRoles;
-		} catch (Exception e) {
-			throw new ServiceCoreException("Error listing appRoles", e);
-		}
-	}
-
-	@Override
-	@Transactional
-	@Secured({"ROLE_ADMIN"})
-	public void updateAppRole(AppRole appRole) throws ServiceCoreException {
-		if (appRole == null) {
-			throw new ServiceCoreException("AppRole is null, cannot update it");
-		}
-		try {
-			appRole.merge();
-		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error updating appRole %s", appRole), e);
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("AppRole updated: %s", appRole));
-		}
-	}
-
-	@Override
-	@Transactional
-	@Secured({"ROLE_ADMIN"})
-	public void deleteAppRole(Long id) throws ServiceCoreException {
-		if (id == null) {
-			throw new ServiceCoreException("AppRole id is null, cannot delete it");
-		}
-		AppRole appRole = findAppRole(id);
-		if (appRole != null) {
-			try {
-				appRole.remove();
-			} catch (Exception e) {
-				throw new ServiceCoreException(String.format("Error updating appRole with id %s", id), e);
-			}
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("AppRole with id %s%sdeleted", id, appRole == null ? " was not " : ""));
-		}
-	}
-
+	
 	@Override
 	@Transactional
 	@Secured({"ROLE_ADMIN"})
@@ -122,20 +27,24 @@ public class UserServiceImpl implements UserService, Serializable {
 			throw new ServiceCoreException("AppRole ids are null, cannot delete them");
 		}
 		for (AppRole role : roles) {
-			deleteAppRole(role.getId());
+			deleteAppRole(role);
 		}
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<AppRole> findAppRolesByName(String name) throws ServiceCoreException {
 		if (!StringUtils.hasText(name)) {
 			logger.warn("AppRole name is empty, cannot find appRoles");
 			return null;
 		}
 		try {
-			List<AppRole> appRoles = AppRole.findAppRolesByName(name).getResultList();
+			List<AppRole> appRoles = appRoleDAO.findAppRolesByName(name);
 			if (logger.isDebugEnabled()) {
 				logger.debug("AppRoles found:" + LogUtils.formatCollection(appRoles, "\n"));
+			}
+			if (null == appRoles) {
+				appRoles = new ArrayList<AppRole>(0);
 			}
 			return appRoles;
 		} catch (Exception e) {
@@ -144,161 +53,28 @@ public class UserServiceImpl implements UserService, Serializable {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public AppRole findAppRoleByName(String name) throws ServiceCoreException {
-		if (!StringUtils.hasText(name)) {
-			logger.warn("AppRole name is empty, cannot find appRole");
-			return null;
+		List<AppRole> appRoles = findAppRolesByName(name);
+		if (!appRoles.isEmpty()) {
+			return appRoles.get(0);
 		}
-		try {
-			List<AppRole> appRoles = findAppRolesByName(name);
-			AppRole appRole = null;
-			if (appRoles != null && !appRoles.isEmpty()) {
-				appRole = appRoles.get(0);
-			}
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("AppRole found: %s", appRole != null ? appRole : "none"));
-			}
-			return appRole;
-		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error finding appRole with name %s", name), e);
-		}
+		return null;
 	}
-
+	
 	@Override
-	public long countAppRoles() throws ServiceCoreException {
-		try {
-			long count = AppRole.countAppRoles();
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("Found %s appRoles", count));
-			}
-			return count;
-		} catch (Exception e) {
-			throw new ServiceCoreException("Error counting appRoles", e);
-		}
-	}
-
-	@Override
-	@Transactional
-	@Secured({"ROLE_ADMIN", "ROLE_USER"})
-	public void createAppUser(AppUser appUser) throws ServiceCoreException {
-		if (appUser == null) {
-			throw new ServiceCoreException("AppUser is null, cannot create it");
-		}
-		try {
-			appUser.persist();
-		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error persisting appUser %s", appUser), e);
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("AppUser persisted with id %s", appUser.getId()));
-		}
-	}
-
-	@Override
-	public AppUser findAppUser(Long id) throws ServiceCoreException {
-		try {
-			AppUser appUser = AppUser.findAppUser(id);
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("AppUser with id %s%sfound", id, appUser == null ? " was not " : ""));
-			}
-			return appUser;
-		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error finding appUser with %s", id), e);
-		}
-	}
-
-	@Override
-	public List<AppUser> listAppUsers() throws ServiceCoreException {
-		try {
-			List<AppUser> appUsers = AppUser.findAllAppUsers();
-			if (logger.isDebugEnabled()) {
-				logger.debug("AppUsers found:" + LogUtils.formatCollection(appUsers));
-			}
-			return appUsers;
-		} catch (Exception e) {
-			throw new ServiceCoreException("Error listing appUsers", e);
-		}
-	}
-
-	@Override
-	public List<AppUser> listAppUsers(int firstResult, int maxResults) throws ServiceCoreException {
-		try {
-			List<AppUser> appUsers = AppUser.findAppUserEntries(firstResult, maxResults);
-			if (logger.isDebugEnabled()) {
-				logger.debug("AppUsers found:" + LogUtils.formatCollection(appUsers));
-			}
-			return appUsers;
-		} catch (Exception e) {
-			throw new ServiceCoreException("Error listing appUsers", e);
-		}
-	}
-
-	@Override
-	@Transactional
-	@Secured({"ROLE_ADMIN"})
-	public void updateAppUser(AppUser appUser) throws ServiceCoreException {
-		if (appUser == null) {
-			throw new ServiceCoreException("AppUser is null, cannot update it");
-		}
-		try {
-			appUser.merge();
-		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error updating appUser %s", appUser), e);
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("AppUser updated: %s", appUser));
-		}
-	}
-
-	@Override
-	@Transactional
-	@Secured({"ROLE_ADMIN"})
-	public void deleteAppUser(Long id) throws ServiceCoreException {
-		if (id == null) {
-			throw new ServiceCoreException("AppUser id is null, cannot delete it");
-		}
-		AppUser appUser = findAppUser(id);
-		if (appUser != null) {
-			try {
-				appUser.remove();
-			} catch (Exception e) {
-				throw new ServiceCoreException(String.format("Error updating appUser with id %s", id), e);
-			}
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("AppUser with id %s%sdeleted", id, appUser == null ? " was not " : ""));
-		}
-	}
-
-	@Override
-	public List<AppUser> findAppUsersByUsername(String username) throws ServiceCoreException {
-		if (!StringUtils.hasText(username)) {
-			logger.warn("AppUser username is empty, cannot find appUsers");
-			return null;
-		}
-		try {
-			List<AppUser> appUsers = AppUser.findAppUsersByUsername(username).getResultList();
-			if (logger.isDebugEnabled()) {
-				logger.debug("AppUsers found:" + LogUtils.formatCollection(appUsers, "\n"));
-			}
-			return appUsers;
-		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error finding appUsers with username %s", username), e);
-		}
-	}
-
-	@Override
-	public AppUser findAppUserByUsername(String username) throws ServiceCoreException {
+	@Transactional(readOnly = true)
+	public AppUser findAppUserByUsername(final String username) throws ServiceCoreException {
 		if (!StringUtils.hasText(username)) {
 			logger.warn("AppUser name is empty, cannot find appUser");
 			return null;
 		}
 		try {
-			List<AppUser> appUsers = findAppUsersByUsername(username);
-			AppUser appUser = null;
-			if (appUsers != null && !appUsers.isEmpty()) {
-				appUser = appUsers.get(0);
+			List<AppUser> appUsers = appUserDAO.findAppUserByUsername(username);
+			if (null == appUsers) {
+				appUsers = new ArrayList<AppUser>(0);
 			}
+			AppUser appUser = appUsers.isEmpty() ? null : appUsers.get(0);
 			if (logger.isDebugEnabled()) {
 				logger.debug(String.format("AppUser found: %s", appUser != null ? appUser : "none"));
 			}
@@ -309,102 +85,19 @@ public class UserServiceImpl implements UserService, Serializable {
 	}
 	
 	@Override
-	public long countAppUsers() throws ServiceCoreException {
-		try {
-			long count = AppUser.countAppUsers();
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("Found %s appUsers", count));
-			}
-			return count;
-		} catch (Exception e) {
-			throw new ServiceCoreException("Error counting appUsers", e);
-		}
-	}
-	
-	@Override
-	@Transactional
-	public void trackUser(AppUser appUser, TrackingType type) throws ServiceCoreException {
-		if (appUser == null) {
-			throw new ServiceCoreException("AppUser is null, cannot create it");
-		}
-		if (type == null) {
-			throw new ServiceCoreException("Tracking type is null, cannot create it");
-		}
-		UserTrack userTrack = new UserTrack();
-		try {
-			userTrack.setTracked(appUser);
-			userTrack.setTrackingType(type);
-			userTrack.setTrackingDate(new Date());
-			userTrack.persist();
-		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error persisting userTrack %s", userTrack), e);
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("UserTrack persisted with id %s", userTrack.getId()));
-		}
-	}
-
-	@Override
-	@Transactional
-	public void trackUserSignin(AppUser appUser) throws ServiceCoreException {
-		trackUser(appUser, TrackingType.USER_SIGNIN);
-	}
-
-	@Override
-	@Transactional
-	public void trackUserSignout(AppUser appUser) throws ServiceCoreException {
-		trackUser(appUser, TrackingType.USER_SIGNOUT);
-	}
-
-	@Override
-	public UserTrack findUserTrack(Long id) throws ServiceCoreException {
-		try {
-			UserTrack userTrack = UserTrack.findUserTrack(id);
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("UserTrack with id %s%sfound", id, userTrack == null ? " was not " : ""));
-			}
-			return userTrack;
-		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error finding userTrack with %s", id), e);
-		}
-	}
-
-	@Override
-	public List<UserTrack> listUserTracks() throws ServiceCoreException {
-		try {
-			List<UserTrack> userTracks = UserTrack.findAllUserTracks();
-			if (logger.isDebugEnabled()) {
-				logger.debug("UserTracks found:" + LogUtils.formatCollection(userTracks));
-			}
-			return userTracks;
-		} catch (Exception e) {
-			throw new ServiceCoreException("Error listing userTracks", e);
-		}
-	}
-
-	@Override
-	public List<UserTrack> listUserTracks(int firstResult, int maxResults) throws ServiceCoreException {
-		try {
-			List<UserTrack> userTracks = UserTrack.findUserTrackEntries(firstResult, maxResults);
-			if (logger.isDebugEnabled()) {
-				logger.debug("UserTracks found:" + LogUtils.formatCollection(userTracks));
-			}
-			return userTracks;
-		} catch (Exception e) {
-			throw new ServiceCoreException("Error listing userTracks", e);
-		}
-	}
-
-	@Override
+	@Transactional(readOnly = true)
 	public List<UserTrack> findUserTracksByUser(AppUser appUser) throws ServiceCoreException {
 		if (appUser == null) {
 			logger.warn("AppUser is null, cannot find userTracks");
 			return null;
 		}
 		try {
-			List<UserTrack> userTracks = UserTrack.findUserTracksByTracked(appUser).getResultList();
+			List<UserTrack> userTracks = userTrackDAO.findUserTracksByUser(appUser);
 			if (logger.isDebugEnabled()) {
 				logger.debug("UserTracks found:" + LogUtils.formatCollection(userTracks, "\n"));
+			}
+			if (null == userTracks) {
+				userTracks = new ArrayList<UserTrack>(0);
 			}
 			return userTracks;
 		} catch (Exception e) {
@@ -413,40 +106,49 @@ public class UserServiceImpl implements UserService, Serializable {
 	}
 
 	@Override
-	public List<UserTrack> findUserTracksByDate(Date date) throws ServiceCoreException {
-		if (date == null) {
+	@Transactional(readOnly = true)
+	public List<UserTrack> findUserTracksByDates(Date fromDate, Date toDate) throws ServiceCoreException {
+		if (fromDate == null) {
 			logger.warn("Tracking date is null, cannot find userTracks");
 			return null;
 		}
 		try {
-			List<UserTrack> userTracks = UserTrack.findUserTracksByTrackingDate(date).getResultList();
+			List<UserTrack> userTracks = userTrackDAO.findUserTracksByDates(fromDate, toDate);
 			if (logger.isDebugEnabled()) {
 				logger.debug("UserTracks found:" + LogUtils.formatCollection(userTracks, "\n"));
 			}
+			if (null == userTracks) {
+				userTracks = new ArrayList<UserTrack>(0);
+			}
 			return userTracks;
 		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error finding userTracks with date %s", date), e);
+			throw new ServiceCoreException(String.format("Error finding userTracks with form date %s and toDate %s", fromDate, toDate), e);
 		}
 	}
 
 	@Override
-	public List<UserTrack> findUserTracksByUserAndDate(AppUser appUser, Date date) throws ServiceCoreException {
+	@Transactional(readOnly = true)
+	public List<UserTrack> findUserTracksByUserAndDates(AppUser appUser, Date fromDate, Date toDate) throws ServiceCoreException {
 		if (appUser == null) {
 			logger.warn("AppUser is null, cannot find userTracks");
 			return null;
 		}
-		if (date == null) {
+		if (fromDate == null) {
 			logger.warn("Tracking date is null, cannot find userTracks");
 			return null;
 		}
 		try {
-			List<UserTrack> userTracks = UserTrack.findUserTracksByTrackedAndTrackingDate(appUser, date).getResultList();
+			List<UserTrack> userTracks = userTrackDAO.findUserTracksByUserAndDates(appUser, fromDate, toDate);
 			if (logger.isDebugEnabled()) {
 				logger.debug("UserTracks found:" + LogUtils.formatCollection(userTracks, "\n"));
 			}
+			if (null == userTracks) {
+				userTracks = new ArrayList<UserTrack>(0);
+			}
 			return userTracks;
 		} catch (Exception e) {
-			throw new ServiceCoreException(String.format("Error finding userTracks with user %s and date %s", appUser, date), e);
+			throw new ServiceCoreException(String.format(
+					"Error finding userTracks with user %s, fromDate %s and toDate %s", appUser, fromDate, toDate), e);
 		}
 	}
 }

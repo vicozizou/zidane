@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_bytepoxic_core_model_Person" object="${person}" path="/people" z="StpP0tjlGMXjINveWiTTFhe0aSI=">
+        <field:display field="deleted" id="s_com_bytepoxic_core_model_Person_deleted" object="${person}" z="ieyNgJ2Azxtz/zjesAuAndZSFnc="/>
+        <field:display date="true" dateTimePattern="${person_creationdate_date_format}" field="creationDate" id="s_com_bytepoxic_core_model_Person_creationDate" object="${person}" z="l3cpei5YhJuRaRNHLrCaPKqns+w="/>
+        <field:display date="true" dateTimePattern="${person_updatedate_date_format}" field="updateDate" id="s_com_bytepoxic_core_model_Person_updateDate" object="${person}" z="i48J0ErMZGN0yXXQ8esx9qRCBeI="/>
+        <field:display field="names" id="s_com_bytepoxic_core_model_Person_names" object="${person}" z="U90SLEQ70z6yl0iiordD4SMCowA="/>
+        <field:display field="surnames" id="s_com_bytepoxic_core_model_Person_surnames" object="${person}" z="NCguE2RlYq6gS7l5nmruBlzN9uM="/>
+        <field:display field="gender" id="s_com_bytepoxic_core_model_Person_gender" object="${person}" z="dBhFmcR633ZJc/PBZZGhitNjMLo="/>
+        <field:display date="true" dateTimePattern="${person_birthday_date_format}" field="birthday" id="s_com_bytepoxic_core_model_Person_birthday" object="${person}" z="QwzwHs1TbPLxW7Sn3hehf0w/mCA="/>
+        <field:display field="identification" id="s_com_bytepoxic_core_model_Person_identification" object="${person}" z="lxzwQH2InBL+SHIKPBiUPXJhWww="/>
+        <field:display field="identificationType" id="s_com_bytepoxic_core_model_Person_identificationType" object="${person}" z="9AoqBcFK6w4S9/pHkiD0xWwSQ80="/>
+        <field:display field="nationality" id="s_com_bytepoxic_core_model_Person_nationality" object="${person}" z="SvtiU3oGybTQJQnEZ7zy0mgKiwU="/>
+        <field:display field="homePlace" id="s_com_bytepoxic_core_model_Person_homePlace" object="${person}" z="Gb5Z6Jp317VhRyI55oewcttxjHs="/>
+        <field:display field="workPlace" id="s_com_bytepoxic_core_model_Person_workPlace" object="${person}" z="O8HSpQIfFORcq/FtFk5rII2BJYs="/>
+    </page:show>
+</div>

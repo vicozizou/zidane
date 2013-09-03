@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_bytepoxic_core_model_Place" items="${places}" z="BHZnxsXBZQJCrrjDd4gS5avWfhE=">
+        <table:table data="${places}" id="l_com_bytepoxic_core_model_Place" path="/places" z="aPg0NlK2saVFoWb2SxS6bn7LdT8=">
+            <table:column id="c_com_bytepoxic_core_model_Place_name" property="name" z="5NsPNK6/0/ZKheMzluslKYQqsS4="/>
+            <table:column id="c_com_bytepoxic_core_model_Place_location" property="location" z="ybwwMX6+VvrvuPHPC3SnumIzW1Y="/>
+            <table:column id="c_com_bytepoxic_core_model_Place_primaryAddress" property="primaryAddress" z="nqga4z3GA6p8+JLDyeTJHY7xxi0="/>
+            <table:column id="c_com_bytepoxic_core_model_Place_secondaryAddress" property="secondaryAddress" z="WJtIDm929KG/PxrxmVQHA+6KNGk="/>
+            <table:column id="c_com_bytepoxic_core_model_Place_latitude" property="latitude" z="x3ktPuRZBZeMYm04jmTKsw0p7lU="/>
+            <table:column id="c_com_bytepoxic_core_model_Place_longitude" property="longitude" z="gx0ZYjkfRZDyokvpDZ9rrhJc6wk="/>
+        </table:table>
+    </page:list>
+</div>

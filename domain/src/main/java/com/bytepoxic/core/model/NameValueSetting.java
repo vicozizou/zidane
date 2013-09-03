@@ -6,14 +6,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooJpaActiveRecord(inheritanceType = "TABLE_PER_CLASS")
+@RooJpaEntity(inheritanceType = "TABLE_PER_CLASS")
 public abstract class NameValueSetting extends I18NableEntity {
-
     @NotNull
     @Column(unique = true)
     @Size(max = 64)
