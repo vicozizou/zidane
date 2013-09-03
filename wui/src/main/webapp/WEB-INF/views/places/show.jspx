@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_bytepoxic_core_model_Place" object="${place}" path="/places" z="pX3Mrh0rnsmP+ToSFE1b2wSHh2Y=">
+        <field:display field="name" id="s_com_bytepoxic_core_model_Place_name" object="${place}" z="45CLYelvTs6ol+v2HsszbnHn1bY="/>
+        <field:display field="location" id="s_com_bytepoxic_core_model_Place_location" object="${place}" z="KYWgOQ5VZfNYKOBAURhuGYAHA8g="/>
+        <field:display field="primaryAddress" id="s_com_bytepoxic_core_model_Place_primaryAddress" object="${place}" z="wHRevFzX/PZE/RxW1yycVWFV5sk="/>
+        <field:display field="secondaryAddress" id="s_com_bytepoxic_core_model_Place_secondaryAddress" object="${place}" z="gG8vHVGIjcvUXssS6816p35SPpQ="/>
+        <field:display field="latitude" id="s_com_bytepoxic_core_model_Place_latitude" object="${place}" z="0MLTOMcaO++e1mViqhlnM7xwyhY="/>
+        <field:display field="longitude" id="s_com_bytepoxic_core_model_Place_longitude" object="${place}" z="gO2+oZeStpCctjhpjDxyvhTjjSQ="/>
+        <field:display field="zoom" id="s_com_bytepoxic_core_model_Place_zoom" object="${place}" z="MFrG7UJICdYDjgzjqL3goR0f1jE="/>
+    </page:show>
+</div>

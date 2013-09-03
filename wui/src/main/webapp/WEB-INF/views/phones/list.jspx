@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_bytepoxic_core_model_Phone" items="${phones}" z="JBfZoB801lB0x2Mx6g/PN1rWC/M=">
+        <table:table data="${phones}" id="l_com_bytepoxic_core_model_Phone" path="/phones" z="Yzr2Yzqg7PvhXh22rx6ygUepH94=">
+            <table:column id="c_com_bytepoxic_core_model_Phone_phoneNumber" property="phoneNumber" z="qweEE1GJRbKy7ZpXK3TpB5k5m5U="/>
+            <table:column id="c_com_bytepoxic_core_model_Phone_type" property="type" z="FRzPlwUyHynWyfDs7KL/ktbgLOc="/>
+            <table:column id="c_com_bytepoxic_core_model_Phone_owner" property="owner" z="qCAFspLt5jiz32OU/1oHfWcrs6w="/>
+        </table:table>
+    </page:list>
+</div>
