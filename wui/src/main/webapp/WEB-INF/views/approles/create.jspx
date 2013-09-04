@@ -3,7 +3,6 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:create id="fc_com_bytepoxic_core_model_AppRole" modelAttribute="appRole" path="/approles" render="${empty dependencies}" z="lZ8+uUjxDqhBtiW68hrqU8WIXO4=">
-        <field:textarea field="labelKey" id="c_com_bytepoxic_core_model_AppRole_labelKey" z="tDXE3zURVekSyWpNUMvmSPdlwvY="/>
         <field:textarea field="name" id="c_com_bytepoxic_core_model_AppRole_name" required="true" z="4PBzl18x3Gz37L5e236BE8vFk5s="/>
         <field:textarea field="description" id="c_com_bytepoxic_core_model_AppRole_description" z="nHoFyiXtmGC80fF3TRM8O51YdA4="/>
     </form:create>

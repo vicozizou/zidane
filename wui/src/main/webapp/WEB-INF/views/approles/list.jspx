@@ -4,7 +4,6 @@
     <jsp:output omit-xml-declaration="yes"/>
     <page:list id="pl_com_bytepoxic_core_model_AppRole" items="${approles}" z="87+9dyIhDWHEuK94/tbARP05BH8=">
         <table:table data="${approles}" id="l_com_bytepoxic_core_model_AppRole" path="/approles" z="IWJMzvsLVRp4uRgiHZscINHdCS8=">
-            <table:column id="c_com_bytepoxic_core_model_AppRole_labelKey" property="labelKey" z="VE5+iyKfg5n9wcIjWJ3dujG5xpE="/>
             <table:column id="c_com_bytepoxic_core_model_AppRole_name" property="name" z="5nQStL5ptLwC4OAwgB+QupDaw4g="/>
             <table:column id="c_com_bytepoxic_core_model_AppRole_description" property="description" z="CHEFooEFABbBYZrhU6uwuKnbb1Y="/>
         </table:table>
