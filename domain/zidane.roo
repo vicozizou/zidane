@@ -2,6 +2,7 @@
 //persistence setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY
 //persistence setup --database MYSQL --provider HIBERNATE --databaseName medatum --userName medatum --password medatum
 jpa setup --database POSTGRES --provider HIBERNATE --databaseName anfield --userName kalel --password krypt0n1t3
+jpa setup --database MYSQL --provider HIBERNATE --databaseName anfield --userName kalel --password krypt0n1t3
 
 enum type --class ~.model.PhoneType
 field string --fieldName type --notNull

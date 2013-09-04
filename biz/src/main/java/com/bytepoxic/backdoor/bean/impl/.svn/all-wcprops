@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/cruyff/!svn/ver/142/trunk/code/cruyff/src/main/java/com/aureabox/backdoor/bean/impl
+END
+AppRoleBackDoorBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/cruyff/!svn/ver/69/trunk/code/cruyff/src/main/java/com/aureabox/backdoor/bean/impl/AppRoleBackDoorBean.java
+END
+LocationBackDoorBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/cruyff/!svn/ver/142/trunk/code/cruyff/src/main/java/com/aureabox/backdoor/bean/impl/LocationBackDoorBean.java
+END
+PersonBackDoorBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/cruyff/!svn/ver/75/trunk/code/cruyff/src/main/java/com/aureabox/backdoor/bean/impl/PersonBackDoorBean.java
+END
+AppUserRoleBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/cruyff/!svn/ver/49/trunk/code/cruyff/src/main/java/com/aureabox/backdoor/bean/impl/AppUserRoleBean.java
+END
+AppUserBackDoorBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/cruyff/!svn/ver/145/trunk/code/cruyff/src/main/java/com/aureabox/backdoor/bean/impl/AppUserBackDoorBean.java
+END
