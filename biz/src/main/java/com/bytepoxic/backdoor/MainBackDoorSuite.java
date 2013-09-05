@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
 import com.bytepoxic.backdoor.bean.BackDoorBean;
 
 public class MainBackDoorSuite {
-	private static final String APP_USAGE = "Usage: java com.aureabox.model.backdoor.MainBackDoorSuite <input data location>";
+	private static final String APP_USAGE = "Usage: java com.bytepoxic.backdoor.MainBackDoorSuite <input data location>";
 	private static final String INPUT_DATA_LOCATION = "inputDataLocation";
 	private static Log logger = LogFactory.getLog(MainBackDoorSuite.class);
 
@@ -31,7 +31,7 @@ public class MainBackDoorSuite {
 
 		inputDataLocation = new File(argMap.get(INPUT_DATA_LOCATION));
 		backDoors = new ArrayList<BackDoorBean>();
-		String[] locations = new String[] { "classpath:backdoor/backDoorContext.xml" };
+		String[] locations = new String[] { "classpath:backdoor/applicationContext.xml", "classpath:backdoor/applicationContext-jpa.xml" };
 		logger.info(String.format("Loading Spring context at %s", locations[0]));
 		context = new ClassPathXmlApplicationContext(locations);
 	}
@@ -83,7 +83,8 @@ public class MainBackDoorSuite {
 		Hashtable<String, String> parsed = new Hashtable<String, String>();
 
 		if (args.length == 0) {
-			throw new IllegalArgumentException(String.format("Wrong number of arguments", APP_USAGE));
+			logger.error(APP_USAGE);
+			throw new IllegalArgumentException("Wrong number of arguments");
 		}
 
 		parsed.put(INPUT_DATA_LOCATION, args[0]);

@@ -3,15 +3,19 @@ package com.bytepoxic.backdoor.bean.impl;
 import java.text.ParseException;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.bytepoxic.backdoor.bean.AbstractBackDoor;
 import com.bytepoxic.backdoor.throwing.BackDoorException;
 import com.bytepoxic.core.model.Gender;
 import com.bytepoxic.core.model.IdentificationType;
-import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.model.Person;
-import com.bytepoxic.core.model.Place;
+import com.bytepoxic.core.service.LocationService;
 
 public class PersonBackDoorBean extends AbstractBackDoor {
+	@Autowired
+	private LocationService locationService;
+	
 	@Override
 	public void parseValues(String[] values, Object target) {
 		// birthday, names, gender, identification, identification_type,
@@ -32,9 +36,18 @@ public class PersonBackDoorBean extends AbstractBackDoor {
 		person.setIdentificationType(resolveIdType(values[i++]));
 		person.setSurnames(values[i++]);
 		person.setDeleted(Boolean.parseBoolean(values[i++]));
-		person.setHomePlace(Place.findPlace(convertId(values[i++])));
-		person.setNationality(Nationality.findNationality(convertId(values[i++])));
-		person.setWorkPlace(Place.findPlace(convertId(values[i++])));
+		Long value = convertId(values[i++]);
+		if (null != value) {
+			person.setHomePlace(locationService.findPlace(value));
+		}
+		value = convertId(values[i++]);
+		if (null != value) {
+			person.setNationality(locationService.findNationality(value));
+		}
+		value = convertId(values[i++]);
+		if (null != value) {
+			person.setWorkPlace(locationService.findPlace(value));
+		}
 		person.setDeleted(false);
 		person.setCreationDate(new Date());
 	}

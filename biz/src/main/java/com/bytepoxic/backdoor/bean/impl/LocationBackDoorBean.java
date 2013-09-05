@@ -8,7 +8,6 @@ import com.bytepoxic.backdoor.throwing.BackDoorException;
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.service.LocationService;
-import com.bytepoxic.core.throwing.CoreException;
 import com.bytepoxic.core.throwing.ServiceCoreException;
 
 public class LocationBackDoorBean extends AbstractBackDoor {

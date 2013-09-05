@@ -4,7 +4,11 @@
 package com.bytepoxic.core.service;
 
 import com.bytepoxic.core.dao.LocationDAO;
+import com.bytepoxic.core.dao.NationalityDAO;
+import com.bytepoxic.core.dao.PlaceDAO;
 import com.bytepoxic.core.model.Location;
+import com.bytepoxic.core.model.Nationality;
+import com.bytepoxic.core.model.Place;
 import com.bytepoxic.core.service.LocationServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,69 @@ privileged aspect LocationServiceImpl_Roo_Service {
     declare @type: LocationServiceImpl: @Transactional;
     
     @Autowired
+    PlaceDAO LocationServiceImpl.placeDAO;
+    
+    @Autowired
+    NationalityDAO LocationServiceImpl.nationalityDAO;
+    
+    @Autowired
     LocationDAO LocationServiceImpl.locationDAO;
+    
+    public long LocationServiceImpl.countAllPlaces() {
+        return placeDAO.count();
+    }
+    
+    public void LocationServiceImpl.deletePlace(Place place) {
+        placeDAO.delete(place);
+    }
+    
+    public Place LocationServiceImpl.findPlace(Long id) {
+        return placeDAO.findOne(id);
+    }
+    
+    public List<Place> LocationServiceImpl.findAllPlaces() {
+        return placeDAO.findAll();
+    }
+    
+    public List<Place> LocationServiceImpl.findPlaceEntries(int firstResult, int maxResults) {
+        return placeDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+    }
+    
+    public void LocationServiceImpl.savePlace(Place place) {
+        placeDAO.save(place);
+    }
+    
+    public Place LocationServiceImpl.updatePlace(Place place) {
+        return placeDAO.save(place);
+    }
+    
+    public long LocationServiceImpl.countAllNationalitys() {
+        return nationalityDAO.count();
+    }
+    
+    public void LocationServiceImpl.deleteNationality(Nationality nationality) {
+        nationalityDAO.delete(nationality);
+    }
+    
+    public Nationality LocationServiceImpl.findNationality(Long id) {
+        return nationalityDAO.findOne(id);
+    }
+    
+    public List<Nationality> LocationServiceImpl.findAllNationalitys() {
+        return nationalityDAO.findAll();
+    }
+    
+    public List<Nationality> LocationServiceImpl.findNationalityEntries(int firstResult, int maxResults) {
+        return nationalityDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+    }
+    
+    public void LocationServiceImpl.saveNationality(Nationality nationality) {
+        nationalityDAO.save(nationality);
+    }
+    
+    public Nationality LocationServiceImpl.updateNationality(Nationality nationality) {
+        return nationalityDAO.save(nationality);
+    }
     
     public long LocationServiceImpl.countAllLocations() {
         return locationDAO.count();

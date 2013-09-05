@@ -7,7 +7,7 @@
         then be used within application context files in the form of
         ${propertyKey}.
     -->
-    <!-- <context:property-placeholder location="classpath*:META-INF/spring/*.properties"/> -->
+    <context:property-placeholder location="classpath*:META-INF/backdoor/*.properties"/>
     <!--
         Turn on AspectJ @Configurable support. As a result, any time you
         instantiate an object, Spring will attempt to perform dependency
@@ -21,7 +21,7 @@
         method). Roo applications use this useful feature in a number of
         areas, such as @PersistenceContext injection into entities.
     -->
-    <!-- <context:spring-configured/> -->
+    <context:spring-configured/>
     <!--
         This declaration will cause Spring to locate every @Component,
         @Repository and @Service in your application. In practical terms this
@@ -43,10 +43,31 @@
         The most commonly used annotation is @Autowired, which instructs Spring to
         dependency inject an object into your class.
     -->
-    <context:component-scan base-package="com.bytepoxic.core.service">
+    <context:component-scan base-package="com.bytepoxic.core">
         <context:exclude-filter expression=".*_Roo_.*" type="regex"/>
+        <context:exclude-filter expression=".util.*" type="regex"/>
         <context:exclude-filter expression=".throwing.*" type="regex"/>
+        <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
+    
+    <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource">
+        <property name="driverClassName" value="${database.driverClassName}"/>
+        <property name="url" value="${database.url}"/>
+        <property name="username" value="${database.username}"/>
+        <property name="password" value="${database.password}"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testOnReturn" value="true"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="timeBetweenEvictionRunsMillis" value="1800000"/>
+        <property name="numTestsPerEvictionRun" value="3"/>
+        <property name="minEvictableIdleTimeMillis" value="1800000"/>
+        <property name="validationQuery" value="SELECT 1"/>
+    </bean>
+    
+    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
+        <property name="persistenceUnitName" value="persistenceUnit"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
     
     <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
@@ -60,5 +81,24 @@
     	<constructor-arg value="256"/>
     </bean>
     
-    <!-- <bean autowire="byType" class="com.bytepoxic.core.service.security.UserSecurityServiceImpl" id="userSecurityService"/> -->
+    <bean class="com.bytepoxic.backdoor.bean.impl.AppRoleBackDoorBean" id="appRoleBackDoor">
+    	<property name="fileNames" value="${appRoleBackDoor.files}"/>
+    </bean>
+
+    <bean class="com.bytepoxic.backdoor.bean.impl.PersonBackDoorBean" id="personBackDoor"/>
+    
+    <bean class="com.bytepoxic.backdoor.bean.impl.AppUserRoleBean"/>
+
+    <bean class="com.bytepoxic.backdoor.bean.impl.AppUserBackDoorBean" id="appUserBackDoor">
+    	<property name="fileNames" value="${appUserBackDoor.files}"/>
+    	<property name="personBackDoor" ref="personBackDoor"/>
+    	<property name="userRoleBackDoor" ref="userRoleBackDoor"/>
+    	<property name="passwordEncoder" ref="passwordEncoder"/>
+    </bean>
+    
+    <bean class="com.bytepoxic.backdoor.bean.impl.AppUserRoleBean" id="userRoleBackDoor"/>
+
+    <bean class="com.bytepoxic.backdoor.bean.impl.LocationBackDoorBean" id="locationBackDoor">
+    	<property name="fileNames" value="${locationBackDoor.files}"/>
+    </bean>
 </beans>

@@ -12,7 +12,6 @@
         <field:checkbox field="appCurrent" id="c_com_bytepoxic_core_model_Location_appCurrent" z="PYwLBzYvwUcnIoioZeUqQpP1XMw="/>
         <field:input field="latitude" id="c_com_bytepoxic_core_model_Location_latitude" validationMessageCode="field_invalid_number" z="7lJ5lCAu4jKp6aWDuqEyxMa2nJM="/>
         <field:input field="longitude" id="c_com_bytepoxic_core_model_Location_longitude" validationMessageCode="field_invalid_number" z="ZTlulBzRZhbyilhBUNExEj2SgZQ="/>
-        <field:simple field="children" id="c_com_bytepoxic_core_model_Location_children" messageCode="entity_reference_not_managed" messageCodeAttribute="Location" z="JMpNlv2kGeRrDMYQilGyB3hS6zI="/>
         <field:select field="nationality" id="c_com_bytepoxic_core_model_Location_nationality" itemValue="id" items="${nationalitys}" path="/nationalitys" z="1lg4UgzJ1Wkj7LZdtASq1nd+fH4="/>
         <field:textarea field="labelKey" id="c_com_bytepoxic_core_model_Location_labelKey" z="a7F3U0iubSPoLV3kiGlwBbF/Mw8="/>
     </form:update>

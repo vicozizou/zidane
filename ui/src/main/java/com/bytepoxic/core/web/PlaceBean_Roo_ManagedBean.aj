@@ -3,7 +3,6 @@
 
 package com.bytepoxic.core.web;
 
-import com.bytepoxic.core.dao.PlaceDAO;
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.Place;
 import com.bytepoxic.core.service.LocationService;
@@ -38,9 +37,6 @@ privileged aspect PlaceBean_Roo_ManagedBean {
     declare @type: PlaceBean: @ManagedBean(name = "placeBean");
     
     declare @type: PlaceBean: @SessionScoped;
-    
-    @Autowired
-    PlaceDAO PlaceBean.placeDAO;
     
     @Autowired
     LocationService PlaceBean.locationService;
@@ -90,7 +86,7 @@ privileged aspect PlaceBean_Roo_ManagedBean {
     }
     
     public String PlaceBean.findAllPlaces() {
-        allPlaces = placeDAO.findAll();
+        allPlaces = locationService.findAllPlaces();
         dataVisible = !allPlaces.isEmpty();
         return null;
     }
@@ -572,10 +568,10 @@ privileged aspect PlaceBean_Roo_ManagedBean {
     public String PlaceBean.persist() {
         String message = "";
         if (place.getId() != null) {
-            placeDAO.save(place);
+            locationService.updatePlace(place);
             message = "message_successfully_updated";
         } else {
-            placeDAO.save(place);
+            locationService.savePlace(place);
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
@@ -589,7 +585,7 @@ privileged aspect PlaceBean_Roo_ManagedBean {
     }
     
     public String PlaceBean.delete() {
-        placeDAO.delete(place);
+        locationService.deletePlace(place);
         FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Place");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();

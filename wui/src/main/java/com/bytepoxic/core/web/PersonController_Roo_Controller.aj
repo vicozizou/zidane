@@ -4,13 +4,12 @@
 package com.bytepoxic.core.web;
 
 import com.bytepoxic.core.dao.EmailDAO;
-import com.bytepoxic.core.dao.NationalityDAO;
 import com.bytepoxic.core.dao.PersonDAO;
 import com.bytepoxic.core.dao.PhoneDAO;
-import com.bytepoxic.core.dao.PlaceDAO;
 import com.bytepoxic.core.model.Gender;
 import com.bytepoxic.core.model.IdentificationType;
 import com.bytepoxic.core.model.Person;
+import com.bytepoxic.core.service.LocationService;
 import com.bytepoxic.core.web.PersonController;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -37,13 +36,10 @@ privileged aspect PersonController_Roo_Controller {
     EmailDAO PersonController.emailDAO;
     
     @Autowired
-    NationalityDAO PersonController.nationalityDAO;
+    LocationService PersonController.locationService;
     
     @Autowired
     PhoneDAO PersonController.phoneDAO;
-    
-    @Autowired
-    PlaceDAO PersonController.placeDAO;
     
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String PersonController.create(@Valid Person person, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
@@ -124,9 +120,9 @@ privileged aspect PersonController_Roo_Controller {
         uiModel.addAttribute("emails", emailDAO.findAll());
         uiModel.addAttribute("genders", Arrays.asList(Gender.values()));
         uiModel.addAttribute("identificationtypes", Arrays.asList(IdentificationType.values()));
-        uiModel.addAttribute("nationalitys", nationalityDAO.findAll());
+        uiModel.addAttribute("nationalitys", locationService.findAllNationalitys());
         uiModel.addAttribute("phones", phoneDAO.findAll());
-        uiModel.addAttribute("places", placeDAO.findAll());
+        uiModel.addAttribute("places", locationService.findAllPlaces());
     }
     
     String PersonController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
