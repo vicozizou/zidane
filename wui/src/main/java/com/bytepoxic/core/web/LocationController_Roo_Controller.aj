@@ -3,7 +3,6 @@
 
 package com.bytepoxic.core.web;
 
-import com.bytepoxic.core.dao.NationalityDAO;
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.service.LocationService;
 import com.bytepoxic.core.web.LocationController;
@@ -26,9 +25,6 @@ privileged aspect LocationController_Roo_Controller {
     
     @Autowired
     LocationService LocationController.locationService;
-    
-    @Autowired
-    NationalityDAO LocationController.nationalityDAO;
     
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String LocationController.create(@Valid Location location, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
@@ -106,7 +102,7 @@ privileged aspect LocationController_Roo_Controller {
         uiModel.addAttribute("location", location);
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("locations", locationService.findAllLocations());
-        uiModel.addAttribute("nationalitys", nationalityDAO.findAll());
+        uiModel.addAttribute("nationalitys", locationService.findAllNationalitys());
     }
     
     String LocationController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

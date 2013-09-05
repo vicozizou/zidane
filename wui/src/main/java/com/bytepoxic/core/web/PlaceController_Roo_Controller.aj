@@ -3,7 +3,6 @@
 
 package com.bytepoxic.core.web;
 
-import com.bytepoxic.core.dao.PlaceDAO;
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.Place;
 import com.bytepoxic.core.service.LocationService;
@@ -26,9 +25,6 @@ import org.springframework.web.util.WebUtils;
 privileged aspect PlaceController_Roo_Controller {
     
     @Autowired
-    PlaceDAO PlaceController.placeDAO;
-    
-    @Autowired
     LocationService PlaceController.locationService;
     
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
@@ -38,7 +34,7 @@ privileged aspect PlaceController_Roo_Controller {
             return "places/create";
         }
         uiModel.asMap().clear();
-        placeDAO.save(place);
+        locationService.savePlace(place);
         return "redirect:/places/" + encodeUrlPathSegment(place.getId().toString(), httpServletRequest);
     }
     
@@ -55,7 +51,7 @@ privileged aspect PlaceController_Roo_Controller {
     
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String PlaceController.show(@PathVariable("id") Long id, Model uiModel) {
-        uiModel.addAttribute("place", placeDAO.findOne(id));
+        uiModel.addAttribute("place", locationService.findPlace(id));
         uiModel.addAttribute("itemId", id);
         return "places/show";
     }
@@ -65,11 +61,11 @@ privileged aspect PlaceController_Roo_Controller {
         if (page != null || size != null) {
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("places", placeDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / sizeNo, sizeNo)).getContent());
-            float nrOfPages = (float) placeDAO.count() / sizeNo;
+            uiModel.addAttribute("places", locationService.findPlaceEntries(firstResult, sizeNo));
+            float nrOfPages = (float) locationService.countAllPlaces() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-            uiModel.addAttribute("places", placeDAO.findAll());
+            uiModel.addAttribute("places", locationService.findAllPlaces());
         }
         return "places/list";
     }
@@ -81,20 +77,20 @@ privileged aspect PlaceController_Roo_Controller {
             return "places/update";
         }
         uiModel.asMap().clear();
-        placeDAO.save(place);
+        locationService.updatePlace(place);
         return "redirect:/places/" + encodeUrlPathSegment(place.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String PlaceController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, placeDAO.findOne(id));
+        populateEditForm(uiModel, locationService.findPlace(id));
         return "places/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String PlaceController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        Place place = placeDAO.findOne(id);
-        placeDAO.delete(place);
+        Place place = locationService.findPlace(id);
+        locationService.deletePlace(place);
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());

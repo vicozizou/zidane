@@ -1,9 +1,9 @@
 package com.bytepoxic.core.model;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -47,7 +47,7 @@ public class Location extends BaseEntity implements Comparable<Location> {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent")
     @Sort(type = SortType.NATURAL)
     @Fetch(FetchMode.SUBSELECT)
-    private Set<Location> children = new LinkedHashSet<Location>();
+    private SortedSet<Location> children = new TreeSet<Location>();
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "country", optional = true)
     @JoinColumn(name = "country", nullable = true)
@@ -110,7 +110,7 @@ public class Location extends BaseEntity implements Comparable<Location> {
         return children != null && !children.isEmpty();
     }
 
-    public com.bytepoxic.core.model.Location findLocationById(Long id) {
+    public Location findLocationById(Long id) {
         if (this.getId() != null && this.getId().equals(id)) {
             return this;
         }
@@ -125,14 +125,14 @@ public class Location extends BaseEntity implements Comparable<Location> {
         return null;
     }
 
-    public void addLocation(com.bytepoxic.core.model.Location loc) {
+    public void addLocation(Location loc) {
         if (children == null) {
-            children = new LinkedHashSet<Location>();
+            children = new TreeSet<Location>();
         }
         children.add(loc);
     }
 
-    public void updateLocation(com.bytepoxic.core.model.Location newLoc) {
+    public void updateLocation(Location newLoc) {
         Location loc = findLocationById(newLoc.getId());
         if (loc != null) {
             if (loc.parent != null) {

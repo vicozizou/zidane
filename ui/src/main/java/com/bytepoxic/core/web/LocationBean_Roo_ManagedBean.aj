@@ -3,7 +3,6 @@
 
 package com.bytepoxic.core.web;
 
-import com.bytepoxic.core.dao.NationalityDAO;
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.service.LocationService;
@@ -12,7 +11,6 @@ import com.bytepoxic.core.web.converter.LocationConverter;
 import com.bytepoxic.core.web.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
@@ -46,9 +44,6 @@ privileged aspect LocationBean_Roo_ManagedBean {
     @Autowired
     LocationService LocationBean.locationService;
     
-    @Autowired
-    NationalityDAO LocationBean.nationalityDAO;
-    
     private String LocationBean.name = "Locations";
     
     private Location LocationBean.location;
@@ -66,8 +61,6 @@ privileged aspect LocationBean_Roo_ManagedBean {
     private HtmlPanelGrid LocationBean.viewPanelGrid;
     
     private boolean LocationBean.createDialogVisible = false;
-    
-    private List<Location> LocationBean.selectedChildren;
     
     @PostConstruct
     public void LocationBean.init() {
@@ -327,14 +320,16 @@ privileged aspect LocationBean_Roo_ManagedBean {
         longitudeCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(longitudeCreateInputMessage);
         
-        HtmlOutputText childrenCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel childrenCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        childrenCreateOutput.setFor("childrenCreateInput");
         childrenCreateOutput.setId("childrenCreateOutput");
         childrenCreateOutput.setValue("Children:");
         htmlPanelGrid.getChildren().add(childrenCreateOutput);
         
-        HtmlOutputText childrenCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText childrenCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         childrenCreateInput.setId("childrenCreateInput");
-        childrenCreateInput.setValue("This relationship is managed from the Location side");
+        childrenCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.children}", SortedSet.class));
+        childrenCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(childrenCreateInput);
         
         Message childrenCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -571,14 +566,16 @@ privileged aspect LocationBean_Roo_ManagedBean {
         longitudeEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(longitudeEditInputMessage);
         
-        HtmlOutputText childrenEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        OutputLabel childrenEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        childrenEditOutput.setFor("childrenEditInput");
         childrenEditOutput.setId("childrenEditOutput");
         childrenEditOutput.setValue("Children:");
         htmlPanelGrid.getChildren().add(childrenEditOutput);
         
-        HtmlOutputText childrenEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        InputText childrenEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         childrenEditInput.setId("childrenEditInput");
-        childrenEditInput.setValue("This relationship is managed from the Location side");
+        childrenEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.children}", SortedSet.class));
+        childrenEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(childrenEditInput);
         
         Message childrenEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -733,8 +730,7 @@ privileged aspect LocationBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(childrenLabel);
         
         HtmlOutputText childrenValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        childrenValue.setId("childrenValue");
-        childrenValue.setValue("This relationship is managed from the Location side");
+        childrenValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.children}", String.class));
         htmlPanelGrid.getChildren().add(childrenValue);
         
         HtmlOutputText nationalityLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -784,20 +780,9 @@ privileged aspect LocationBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<Location> LocationBean.getSelectedChildren() {
-        return selectedChildren;
-    }
-    
-    public void LocationBean.setSelectedChildren(List<Location> selectedChildren) {
-        if (selectedChildren != null) {
-            location.setChildren(new HashSet<Location>(selectedChildren));
-        }
-        this.selectedChildren = selectedChildren;
-    }
-    
     public List<Nationality> LocationBean.completeNationality(String query) {
         List<Nationality> suggestions = new ArrayList<Nationality>();
-        for (Nationality nationality : nationalityDAO.findAll()) {
+        for (Nationality nationality : locationService.findAllNationalitys()) {
             String nationalityStr = String.valueOf(nationality.getLabelKey() +  " "  + nationality.getName());
             if (nationalityStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(nationality);
@@ -807,9 +792,6 @@ privileged aspect LocationBean_Roo_ManagedBean {
     }
     
     public String LocationBean.onEdit() {
-        if (location != null && location.getChildren() != null) {
-            selectedChildren = new ArrayList<Location>(location.getChildren());
-        }
         return null;
     }
     
@@ -862,7 +844,6 @@ privileged aspect LocationBean_Roo_ManagedBean {
     
     public void LocationBean.reset() {
         location = null;
-        selectedChildren = null;
         createDialogVisible = false;
     }
     

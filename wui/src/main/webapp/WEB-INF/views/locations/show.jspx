@@ -14,5 +14,6 @@
         <field:display field="longitude" id="s_com_bytepoxic_core_model_Location_longitude" object="${location}" z="2T1LBH3dwLbk1yA7t9WlY+rzRWQ="/>
         <field:display field="nationality" id="s_com_bytepoxic_core_model_Location_nationality" object="${location}" z="NhZr1GOrAY54ATLayyEWmiUKuyw="/>
         <field:display field="labelKey" id="s_com_bytepoxic_core_model_Location_labelKey" object="${location}" z="SbICSH2ST9GUkJi9mfgFIIE7pPs="/>
+        <field:display field="children" id="s_com_bytepoxic_core_model_Location_children" object="${location}" z="Y/1Bf8C3SYqYarFuP7m8A0xd0is="/>
     </page:show>
 </div>

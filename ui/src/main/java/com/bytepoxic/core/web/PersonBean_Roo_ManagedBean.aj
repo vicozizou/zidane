@@ -3,9 +3,7 @@
 
 package com.bytepoxic.core.web;
 
-import com.bytepoxic.core.dao.NationalityDAO;
 import com.bytepoxic.core.dao.PersonDAO;
-import com.bytepoxic.core.dao.PlaceDAO;
 import com.bytepoxic.core.model.Email;
 import com.bytepoxic.core.model.Gender;
 import com.bytepoxic.core.model.IdentificationType;
@@ -13,6 +11,7 @@ import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.model.Person;
 import com.bytepoxic.core.model.Phone;
 import com.bytepoxic.core.model.Place;
+import com.bytepoxic.core.service.LocationService;
 import com.bytepoxic.core.web.PersonBean;
 import com.bytepoxic.core.web.converter.NationalityConverter;
 import com.bytepoxic.core.web.converter.PlaceConverter;
@@ -53,10 +52,7 @@ privileged aspect PersonBean_Roo_ManagedBean {
     PersonDAO PersonBean.personDAO;
     
     @Autowired
-    NationalityDAO PersonBean.nationalityDAO;
-    
-    @Autowired
-    PlaceDAO PersonBean.placeDAO;
+    LocationService PersonBean.locationService;
     
     private String PersonBean.name = "People";
     
@@ -941,7 +937,7 @@ privileged aspect PersonBean_Roo_ManagedBean {
     
     public List<Nationality> PersonBean.completeNationality(String query) {
         List<Nationality> suggestions = new ArrayList<Nationality>();
-        for (Nationality nationality : nationalityDAO.findAll()) {
+        for (Nationality nationality : locationService.findAllNationalitys()) {
             String nationalityStr = String.valueOf(nationality.getLabelKey() +  " "  + nationality.getName());
             if (nationalityStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(nationality);
@@ -952,7 +948,7 @@ privileged aspect PersonBean_Roo_ManagedBean {
     
     public List<Place> PersonBean.completeHomePlace(String query) {
         List<Place> suggestions = new ArrayList<Place>();
-        for (Place place : placeDAO.findAll()) {
+        for (Place place : locationService.findAllPlaces()) {
             String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
             if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(place);
@@ -963,7 +959,7 @@ privileged aspect PersonBean_Roo_ManagedBean {
     
     public List<Place> PersonBean.completeWorkPlace(String query) {
         List<Place> suggestions = new ArrayList<Place>();
-        for (Place place : placeDAO.findAll()) {
+        for (Place place : locationService.findAllPlaces()) {
             String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
             if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(place);

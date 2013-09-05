@@ -7,7 +7,7 @@ import org.springframework.roo.addon.layers.service.RooService;
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.throwing.ServiceCoreException;
 
-@RooService(domainTypes = { com.bytepoxic.core.model.Location.class, com.bytepoxic.core.model.Nationality.class })
+@RooService(domainTypes = { com.bytepoxic.core.model.Location.class, com.bytepoxic.core.model.Nationality.class, com.bytepoxic.core.model.Place.class })
 public interface LocationService {
 	List<Location> findLocationsByParent(Location parent) throws ServiceCoreException;
 	List<Location> findMainLocations() throws ServiceCoreException;

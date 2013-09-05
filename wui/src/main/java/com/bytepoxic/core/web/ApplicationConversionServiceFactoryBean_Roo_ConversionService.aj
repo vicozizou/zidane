@@ -4,10 +4,8 @@
 package com.bytepoxic.core.web;
 
 import com.bytepoxic.core.dao.EmailDAO;
-import com.bytepoxic.core.dao.NationalityDAO;
 import com.bytepoxic.core.dao.PersonDAO;
 import com.bytepoxic.core.dao.PhoneDAO;
-import com.bytepoxic.core.dao.PlaceDAO;
 import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppUser;
 import com.bytepoxic.core.model.Email;
@@ -39,16 +37,10 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     LocationService ApplicationConversionServiceFactoryBean.locationService;
     
     @Autowired
-    NationalityDAO ApplicationConversionServiceFactoryBean.nationalityDAO;
-    
-    @Autowired
     PersonDAO ApplicationConversionServiceFactoryBean.personDAO;
     
     @Autowired
     PhoneDAO ApplicationConversionServiceFactoryBean.phoneDAO;
-    
-    @Autowired
-    PlaceDAO ApplicationConversionServiceFactoryBean.placeDAO;
     
     public Converter<AppRole, String> ApplicationConversionServiceFactoryBean.getAppRoleToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.bytepoxic.core.model.AppRole, java.lang.String>() {
@@ -157,7 +149,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Long, Nationality> ApplicationConversionServiceFactoryBean.getIdToNationalityConverter() {
         return new org.springframework.core.convert.converter.Converter<java.lang.Long, com.bytepoxic.core.model.Nationality>() {
             public com.bytepoxic.core.model.Nationality convert(java.lang.Long id) {
-                return nationalityDAO.findOne(id);
+                return locationService.findNationality(id);
             }
         };
     }
@@ -229,7 +221,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Long, Place> ApplicationConversionServiceFactoryBean.getIdToPlaceConverter() {
         return new org.springframework.core.convert.converter.Converter<java.lang.Long, com.bytepoxic.core.model.Place>() {
             public com.bytepoxic.core.model.Place convert(java.lang.Long id) {
-                return placeDAO.findOne(id);
+                return locationService.findPlace(id);
             }
         };
     }

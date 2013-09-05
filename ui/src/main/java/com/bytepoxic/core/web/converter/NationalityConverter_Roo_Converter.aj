@@ -3,8 +3,8 @@
 
 package com.bytepoxic.core.web.converter;
 
-import com.bytepoxic.core.dao.NationalityDAO;
 import com.bytepoxic.core.model.Nationality;
+import com.bytepoxic.core.service.LocationService;
 import com.bytepoxic.core.web.converter.NationalityConverter;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -19,14 +19,14 @@ privileged aspect NationalityConverter_Roo_Converter {
     declare @type: NationalityConverter: @FacesConverter("com.bytepoxic.core.web.converter.NationalityConverter");
     
     @Autowired
-    NationalityDAO NationalityConverter.nationalityDAO;
+    LocationService NationalityConverter.locationService;
     
     public Object NationalityConverter.getAsObject(FacesContext context, UIComponent component, String value) {
         if (value == null || value.length() == 0) {
             return null;
         }
         Long id = Long.parseLong(value);
-        return nationalityDAO.findOne(id);
+        return locationService.findNationality(id);
     }
     
     public String NationalityConverter.getAsString(FacesContext context, UIComponent component, Object value) {

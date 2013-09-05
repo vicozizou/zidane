@@ -3,7 +3,6 @@
 
 package com.bytepoxic.core.web;
 
-import com.bytepoxic.core.dao.NationalityDAO;
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.service.LocationService;
@@ -26,9 +25,6 @@ import org.springframework.web.util.WebUtils;
 privileged aspect NationalityController_Roo_Controller {
     
     @Autowired
-    NationalityDAO NationalityController.nationalityDAO;
-    
-    @Autowired
     LocationService NationalityController.locationService;
     
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
@@ -38,7 +34,7 @@ privileged aspect NationalityController_Roo_Controller {
             return "nationalitys/create";
         }
         uiModel.asMap().clear();
-        nationalityDAO.save(nationality);
+        locationService.saveNationality(nationality);
         return "redirect:/nationalitys/" + encodeUrlPathSegment(nationality.getId().toString(), httpServletRequest);
     }
     
@@ -55,7 +51,7 @@ privileged aspect NationalityController_Roo_Controller {
     
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String NationalityController.show(@PathVariable("id") Long id, Model uiModel) {
-        uiModel.addAttribute("nationality", nationalityDAO.findOne(id));
+        uiModel.addAttribute("nationality", locationService.findNationality(id));
         uiModel.addAttribute("itemId", id);
         return "nationalitys/show";
     }
@@ -65,11 +61,11 @@ privileged aspect NationalityController_Roo_Controller {
         if (page != null || size != null) {
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("nationalitys", nationalityDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / sizeNo, sizeNo)).getContent());
-            float nrOfPages = (float) nationalityDAO.count() / sizeNo;
+            uiModel.addAttribute("nationalitys", locationService.findNationalityEntries(firstResult, sizeNo));
+            float nrOfPages = (float) locationService.countAllNationalitys() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-            uiModel.addAttribute("nationalitys", nationalityDAO.findAll());
+            uiModel.addAttribute("nationalitys", locationService.findAllNationalitys());
         }
         return "nationalitys/list";
     }
@@ -81,20 +77,20 @@ privileged aspect NationalityController_Roo_Controller {
             return "nationalitys/update";
         }
         uiModel.asMap().clear();
-        nationalityDAO.save(nationality);
+        locationService.updateNationality(nationality);
         return "redirect:/nationalitys/" + encodeUrlPathSegment(nationality.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String NationalityController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, nationalityDAO.findOne(id));
+        populateEditForm(uiModel, locationService.findNationality(id));
         return "nationalitys/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String NationalityController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        Nationality nationality = nationalityDAO.findOne(id);
-        nationalityDAO.delete(nationality);
+        Nationality nationality = locationService.findNationality(id);
+        locationService.deleteNationality(nationality);
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
