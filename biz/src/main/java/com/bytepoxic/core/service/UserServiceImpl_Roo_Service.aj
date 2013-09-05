@@ -22,41 +22,13 @@ privileged aspect UserServiceImpl_Roo_Service {
     declare @type: UserServiceImpl: @Transactional;
     
     @Autowired
-    AppRoleDAO UserServiceImpl.appRoleDAO;
-    
-    @Autowired
     AppUserDAO UserServiceImpl.appUserDAO;
     
     @Autowired
     UserTrackDAO UserServiceImpl.userTrackDAO;
     
-    public long UserServiceImpl.countAllAppRoles() {
-        return appRoleDAO.count();
-    }
-    
-    public void UserServiceImpl.deleteAppRole(AppRole appRole) {
-        appRoleDAO.delete(appRole);
-    }
-    
-    public AppRole UserServiceImpl.findAppRole(Long id) {
-        return appRoleDAO.findOne(id);
-    }
-    
-    public List<AppRole> UserServiceImpl.findAllAppRoles() {
-        return appRoleDAO.findAll();
-    }
-    
-    public List<AppRole> UserServiceImpl.findAppRoleEntries(int firstResult, int maxResults) {
-        return appRoleDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
-    }
-    
-    public void UserServiceImpl.saveAppRole(AppRole appRole) {
-        appRoleDAO.save(appRole);
-    }
-    
-    public AppRole UserServiceImpl.updateAppRole(AppRole appRole) {
-        return appRoleDAO.save(appRole);
-    }
+    @Autowired
+    AppRoleDAO UserServiceImpl.appRoleDAO;
     
     public long UserServiceImpl.countAllAppUsers() {
         return appUserDAO.count();
@@ -112,6 +84,34 @@ privileged aspect UserServiceImpl_Roo_Service {
     
     public UserTrack UserServiceImpl.updateUserTrack(UserTrack userTrack) {
         return userTrackDAO.save(userTrack);
+    }
+    
+    public long UserServiceImpl.countAllAppRoles() {
+        return appRoleDAO.count();
+    }
+    
+    public void UserServiceImpl.deleteAppRole(AppRole appRole) {
+        appRoleDAO.delete(appRole);
+    }
+    
+    public AppRole UserServiceImpl.findAppRole(Long id) {
+        return appRoleDAO.findOne(id);
+    }
+    
+    public List<AppRole> UserServiceImpl.findAllAppRoles() {
+        return appRoleDAO.findAll();
+    }
+    
+    public List<AppRole> UserServiceImpl.findAppRoleEntries(int firstResult, int maxResults) {
+        return appRoleDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+    }
+    
+    public void UserServiceImpl.saveAppRole(AppRole appRole) {
+        appRoleDAO.save(appRole);
+    }
+    
+    public AppRole UserServiceImpl.updateAppRole(AppRole appRole) {
+        return appRoleDAO.save(appRole);
     }
     
 }
