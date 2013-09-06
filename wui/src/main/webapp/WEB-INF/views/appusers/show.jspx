@@ -8,7 +8,6 @@
         <field:display date="true" dateTimePattern="${appUser_updatedate_date_format}" field="updateDate" id="s_com_bytepoxic_core_model_AppUser_updateDate" object="${appuser}" z="vehEQidvAL2PMDiBIC3SpNPGXBE="/>
         <field:display field="username" id="s_com_bytepoxic_core_model_AppUser_username" object="${appuser}" z="qwTv+pb4HLbo1MdCidFefWXALuU="/>
         <field:display field="password" id="s_com_bytepoxic_core_model_AppUser_password" object="${appuser}" z="E5WvL1QCWyecbFDCxfHMVJ4w1FQ="/>
-        <field:display field="roles" id="s_com_bytepoxic_core_model_AppUser_roles" object="${appuser}" z="hZs5uEioPX6eRNa9o+EoSoevWLE="/>
         <field:display field="userStatus" id="s_com_bytepoxic_core_model_AppUser_userStatus" object="${appuser}" z="T2Fw1SMJHrrTPC2LR228dw0oAak="/>
         <field:display field="loginAttempts" id="s_com_bytepoxic_core_model_AppUser_loginAttempts" object="${appuser}" z="kWJyp43xMFCYZEqRWOCGrIfEb4g="/>
         <field:display date="true" dateTimePattern="${appUser_lastlogindate_date_format}" field="lastLoginDate" id="s_com_bytepoxic_core_model_AppUser_lastLoginDate" object="${appuser}" z="eY224McH93A8v9kTdbLxseX0h5U="/>

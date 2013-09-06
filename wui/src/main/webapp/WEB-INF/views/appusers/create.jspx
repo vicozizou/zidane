@@ -8,7 +8,7 @@
         <field:datetime dateTimePattern="${appUser_updatedate_date_format}" field="updateDate" id="c_com_bytepoxic_core_model_AppUser_updateDate" z="H9xOLdxYI5mH3gx2tULwhR0slhk="/>
         <field:textarea field="username" id="c_com_bytepoxic_core_model_AppUser_username" required="true" z="hyg6ffjX3kN77wcOn9JOF3RfCVM="/>
         <field:textarea field="password" id="c_com_bytepoxic_core_model_AppUser_password" required="true" z="Iufr+Dp4/NGr5CGBhnLmWb2leCM="/>
-        <field:select field="roles" id="c_com_bytepoxic_core_model_AppUser_roles" itemValue="id" items="${approles}" multiple="true" path="/approles" required="true" z="h/fS2qrRwe8gJeTKb3JBMGfaeBU="/>
+        <field:simple field="roles" id="c_com_bytepoxic_core_model_AppUser_roles" messageCode="entity_reference_not_managed" messageCodeAttribute="App Role" z="Hou5gg7VwKA2Mm638u+paFguZ9Q="/>
         <field:select field="userStatus" id="c_com_bytepoxic_core_model_AppUser_userStatus" items="${userstatuses}" path="userstatuses" z="QqGMlckRY9fF8h7clqyuFlds/sU="/>
         <field:input field="loginAttempts" id="c_com_bytepoxic_core_model_AppUser_loginAttempts" validationMessageCode="field_invalid_integer" z="Fbm4l6HN8Rkyca2BpU9XObn1tuQ="/>
         <field:datetime dateTimePattern="${appUser_lastlogindate_date_format}" field="lastLoginDate" id="c_com_bytepoxic_core_model_AppUser_lastLoginDate" z="JF9n2azcaVhuJNm2nkIymHLpZdU="/>

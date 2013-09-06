@@ -18,7 +18,7 @@
 		<module>domain</module>
 		<module>persistence</module>
 		<module>biz</module>
-    	<!-- <module>wui</module> -->
+    	<module>wui</module>
     	<module>ui</module>
     </modules>
 	<repositories>
