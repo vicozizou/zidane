@@ -3,35 +3,25 @@
 
 package com.bytepoxic.core.web;
 
+import com.bytepoxic.core.dao.PersonDAO;
 import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppUser;
-import com.bytepoxic.core.model.Email;
-import com.bytepoxic.core.model.Gender;
-import com.bytepoxic.core.model.IdentificationType;
-import com.bytepoxic.core.model.Nationality;
-import com.bytepoxic.core.model.Phone;
-import com.bytepoxic.core.model.Place;
+import com.bytepoxic.core.model.Person;
 import com.bytepoxic.core.model.UserStatus;
-import com.bytepoxic.core.service.LocationService;
 import com.bytepoxic.core.service.UserService;
 import com.bytepoxic.core.web.AppUserBean;
-import com.bytepoxic.core.web.converter.AppRoleConverter;
-import com.bytepoxic.core.web.converter.NationalityConverter;
-import com.bytepoxic.core.web.converter.PlaceConverter;
+import com.bytepoxic.core.web.converter.PersonConverter;
 import com.bytepoxic.core.web.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UISelectItems;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -44,7 +34,6 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
-import org.primefaces.component.selectmanymenu.SelectManyMenu;
 import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
@@ -60,7 +49,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     UserService AppUserBean.userService;
     
     @Autowired
-    LocationService AppUserBean.locationService;
+    PersonDAO AppUserBean.personDAO;
     
     private String AppUserBean.name = "AppUsers";
     
@@ -80,10 +69,6 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     private boolean AppUserBean.createDialogVisible = false;
     
-    private List<Phone> AppUserBean.selectedPhones;
-    
-    private List<Email> AppUserBean.selectedEmails;
-    
     private List<AppRole> AppUserBean.selectedRoles;
     
     @PostConstruct
@@ -91,9 +76,9 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         columns = new ArrayList<String>();
         columns.add("creationDate");
         columns.add("updateDate");
-        columns.add("names");
-        columns.add("surnames");
-        columns.add("birthday");
+        columns.add("username");
+        columns.add("password");
+        columns.add("loginAttempts");
     }
     
     public String AppUserBean.getName() {
@@ -158,7 +143,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     public HtmlPanelGrid AppUserBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -224,234 +209,6 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         updateDateCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updateDateCreateInputMessage);
         
-        OutputLabel namesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        namesCreateOutput.setFor("namesCreateInput");
-        namesCreateOutput.setId("namesCreateOutput");
-        namesCreateOutput.setValue("Names:");
-        htmlPanelGrid.getChildren().add(namesCreateOutput);
-        
-        InputTextarea namesCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        namesCreateInput.setId("namesCreateInput");
-        namesCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.names}", String.class));
-        LengthValidator namesCreateInputValidator = new LengthValidator();
-        namesCreateInputValidator.setMaximum(128);
-        namesCreateInput.addValidator(namesCreateInputValidator);
-        namesCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(namesCreateInput);
-        
-        Message namesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        namesCreateInputMessage.setId("namesCreateInputMessage");
-        namesCreateInputMessage.setFor("namesCreateInput");
-        namesCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(namesCreateInputMessage);
-        
-        OutputLabel surnamesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        surnamesCreateOutput.setFor("surnamesCreateInput");
-        surnamesCreateOutput.setId("surnamesCreateOutput");
-        surnamesCreateOutput.setValue("Surnames:");
-        htmlPanelGrid.getChildren().add(surnamesCreateOutput);
-        
-        InputTextarea surnamesCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        surnamesCreateInput.setId("surnamesCreateInput");
-        surnamesCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.surnames}", String.class));
-        LengthValidator surnamesCreateInputValidator = new LengthValidator();
-        surnamesCreateInputValidator.setMaximum(128);
-        surnamesCreateInput.addValidator(surnamesCreateInputValidator);
-        surnamesCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(surnamesCreateInput);
-        
-        Message surnamesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        surnamesCreateInputMessage.setId("surnamesCreateInputMessage");
-        surnamesCreateInputMessage.setFor("surnamesCreateInput");
-        surnamesCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(surnamesCreateInputMessage);
-        
-        OutputLabel genderCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        genderCreateOutput.setFor("genderCreateInput");
-        genderCreateOutput.setId("genderCreateOutput");
-        genderCreateOutput.setValue("Gender:");
-        htmlPanelGrid.getChildren().add(genderCreateOutput);
-        
-        AutoComplete genderCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        genderCreateInput.setId("genderCreateInput");
-        genderCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.gender}", Gender.class));
-        genderCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completeGender}", List.class, new Class[] { String.class }));
-        genderCreateInput.setDropdown(true);
-        genderCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(genderCreateInput);
-        
-        Message genderCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        genderCreateInputMessage.setId("genderCreateInputMessage");
-        genderCreateInputMessage.setFor("genderCreateInput");
-        genderCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(genderCreateInputMessage);
-        
-        OutputLabel birthdayCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        birthdayCreateOutput.setFor("birthdayCreateInput");
-        birthdayCreateOutput.setId("birthdayCreateOutput");
-        birthdayCreateOutput.setValue("Birthday:");
-        htmlPanelGrid.getChildren().add(birthdayCreateOutput);
-        
-        Calendar birthdayCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        birthdayCreateInput.setId("birthdayCreateInput");
-        birthdayCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.birthday}", Date.class));
-        birthdayCreateInput.setNavigator(true);
-        birthdayCreateInput.setEffect("slideDown");
-        birthdayCreateInput.setPattern("dd/MM/yyyy");
-        birthdayCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(birthdayCreateInput);
-        
-        Message birthdayCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        birthdayCreateInputMessage.setId("birthdayCreateInputMessage");
-        birthdayCreateInputMessage.setFor("birthdayCreateInput");
-        birthdayCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(birthdayCreateInputMessage);
-        
-        OutputLabel identificationCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        identificationCreateOutput.setFor("identificationCreateInput");
-        identificationCreateOutput.setId("identificationCreateOutput");
-        identificationCreateOutput.setValue("Identification:");
-        htmlPanelGrid.getChildren().add(identificationCreateOutput);
-        
-        InputTextarea identificationCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        identificationCreateInput.setId("identificationCreateInput");
-        identificationCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.identification}", String.class));
-        LengthValidator identificationCreateInputValidator = new LengthValidator();
-        identificationCreateInputValidator.setMaximum(64);
-        identificationCreateInput.addValidator(identificationCreateInputValidator);
-        identificationCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(identificationCreateInput);
-        
-        Message identificationCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        identificationCreateInputMessage.setId("identificationCreateInputMessage");
-        identificationCreateInputMessage.setFor("identificationCreateInput");
-        identificationCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(identificationCreateInputMessage);
-        
-        OutputLabel identificationTypeCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        identificationTypeCreateOutput.setFor("identificationTypeCreateInput");
-        identificationTypeCreateOutput.setId("identificationTypeCreateOutput");
-        identificationTypeCreateOutput.setValue("Identification Type:");
-        htmlPanelGrid.getChildren().add(identificationTypeCreateOutput);
-        
-        AutoComplete identificationTypeCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        identificationTypeCreateInput.setId("identificationTypeCreateInput");
-        identificationTypeCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.identificationType}", IdentificationType.class));
-        identificationTypeCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completeIdentificationType}", List.class, new Class[] { String.class }));
-        identificationTypeCreateInput.setDropdown(true);
-        identificationTypeCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(identificationTypeCreateInput);
-        
-        Message identificationTypeCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        identificationTypeCreateInputMessage.setId("identificationTypeCreateInputMessage");
-        identificationTypeCreateInputMessage.setFor("identificationTypeCreateInput");
-        identificationTypeCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(identificationTypeCreateInputMessage);
-        
-        OutputLabel nationalityCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        nationalityCreateOutput.setFor("nationalityCreateInput");
-        nationalityCreateOutput.setId("nationalityCreateOutput");
-        nationalityCreateOutput.setValue("Nationality:");
-        htmlPanelGrid.getChildren().add(nationalityCreateOutput);
-        
-        AutoComplete nationalityCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        nationalityCreateInput.setId("nationalityCreateInput");
-        nationalityCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.nationality}", Nationality.class));
-        nationalityCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completeNationality}", List.class, new Class[] { String.class }));
-        nationalityCreateInput.setDropdown(true);
-        nationalityCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "nationality", String.class));
-        nationalityCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{nationality.labelKey} #{nationality.name}", String.class));
-        nationalityCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{nationality}", Nationality.class));
-        nationalityCreateInput.setConverter(new NationalityConverter());
-        nationalityCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(nationalityCreateInput);
-        
-        Message nationalityCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        nationalityCreateInputMessage.setId("nationalityCreateInputMessage");
-        nationalityCreateInputMessage.setFor("nationalityCreateInput");
-        nationalityCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(nationalityCreateInputMessage);
-        
-        OutputLabel homePlaceCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        homePlaceCreateOutput.setFor("homePlaceCreateInput");
-        homePlaceCreateOutput.setId("homePlaceCreateOutput");
-        homePlaceCreateOutput.setValue("Home Place:");
-        htmlPanelGrid.getChildren().add(homePlaceCreateOutput);
-        
-        AutoComplete homePlaceCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        homePlaceCreateInput.setId("homePlaceCreateInput");
-        homePlaceCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.homePlace}", Place.class));
-        homePlaceCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completeHomePlace}", List.class, new Class[] { String.class }));
-        homePlaceCreateInput.setDropdown(true);
-        homePlaceCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "homePlace", String.class));
-        homePlaceCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{homePlace.name} #{homePlace.primaryAddress} #{homePlace.secondaryAddress} #{homePlace.latitude}", String.class));
-        homePlaceCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{homePlace}", Place.class));
-        homePlaceCreateInput.setConverter(new PlaceConverter());
-        homePlaceCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(homePlaceCreateInput);
-        
-        Message homePlaceCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        homePlaceCreateInputMessage.setId("homePlaceCreateInputMessage");
-        homePlaceCreateInputMessage.setFor("homePlaceCreateInput");
-        homePlaceCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(homePlaceCreateInputMessage);
-        
-        OutputLabel workPlaceCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        workPlaceCreateOutput.setFor("workPlaceCreateInput");
-        workPlaceCreateOutput.setId("workPlaceCreateOutput");
-        workPlaceCreateOutput.setValue("Work Place:");
-        htmlPanelGrid.getChildren().add(workPlaceCreateOutput);
-        
-        AutoComplete workPlaceCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        workPlaceCreateInput.setId("workPlaceCreateInput");
-        workPlaceCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.workPlace}", Place.class));
-        workPlaceCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completeWorkPlace}", List.class, new Class[] { String.class }));
-        workPlaceCreateInput.setDropdown(true);
-        workPlaceCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "workPlace", String.class));
-        workPlaceCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{workPlace.name} #{workPlace.primaryAddress} #{workPlace.secondaryAddress} #{workPlace.latitude}", String.class));
-        workPlaceCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{workPlace}", Place.class));
-        workPlaceCreateInput.setConverter(new PlaceConverter());
-        workPlaceCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(workPlaceCreateInput);
-        
-        Message workPlaceCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        workPlaceCreateInputMessage.setId("workPlaceCreateInputMessage");
-        workPlaceCreateInputMessage.setFor("workPlaceCreateInput");
-        workPlaceCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(workPlaceCreateInputMessage);
-        
-        HtmlOutputText phonesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        phonesCreateOutput.setId("phonesCreateOutput");
-        phonesCreateOutput.setValue("Phones:");
-        htmlPanelGrid.getChildren().add(phonesCreateOutput);
-        
-        HtmlOutputText phonesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        phonesCreateInput.setId("phonesCreateInput");
-        phonesCreateInput.setValue("This relationship is managed from the Phone side");
-        htmlPanelGrid.getChildren().add(phonesCreateInput);
-        
-        Message phonesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        phonesCreateInputMessage.setId("phonesCreateInputMessage");
-        phonesCreateInputMessage.setFor("phonesCreateInput");
-        phonesCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(phonesCreateInputMessage);
-        
-        HtmlOutputText emailsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        emailsCreateOutput.setId("emailsCreateOutput");
-        emailsCreateOutput.setValue("Emails:");
-        htmlPanelGrid.getChildren().add(emailsCreateOutput);
-        
-        HtmlOutputText emailsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        emailsCreateInput.setId("emailsCreateInput");
-        emailsCreateInput.setValue("This relationship is managed from the Email side");
-        htmlPanelGrid.getChildren().add(emailsCreateInput);
-        
-        Message emailsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        emailsCreateInputMessage.setId("emailsCreateInputMessage");
-        emailsCreateInputMessage.setFor("emailsCreateInput");
-        emailsCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(emailsCreateInputMessage);
-        
         OutputLabel authoritiesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         authoritiesCreateOutput.setFor("authoritiesCreateInput");
         authoritiesCreateOutput.setId("authoritiesCreateOutput");
@@ -469,6 +226,30 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         authoritiesCreateInputMessage.setFor("authoritiesCreateInput");
         authoritiesCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(authoritiesCreateInputMessage);
+        
+        OutputLabel personCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        personCreateOutput.setFor("personCreateInput");
+        personCreateOutput.setId("personCreateOutput");
+        personCreateOutput.setValue("Person:");
+        htmlPanelGrid.getChildren().add(personCreateOutput);
+        
+        AutoComplete personCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        personCreateInput.setId("personCreateInput");
+        personCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.person}", Person.class));
+        personCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completePerson}", List.class, new Class[] { String.class }));
+        personCreateInput.setDropdown(true);
+        personCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "person", String.class));
+        personCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{person.creationDate} #{person.updateDate} #{person.names} #{person.surnames}", String.class));
+        personCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{person}", Person.class));
+        personCreateInput.setConverter(new PersonConverter());
+        personCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(personCreateInput);
+        
+        Message personCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        personCreateInputMessage.setId("personCreateInputMessage");
+        personCreateInputMessage.setFor("personCreateInput");
+        personCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(personCreateInputMessage);
         
         OutputLabel usernameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         usernameCreateOutput.setFor("usernameCreateInput");
@@ -512,23 +293,14 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         passwordCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(passwordCreateInputMessage);
         
-        OutputLabel rolesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        rolesCreateOutput.setFor("rolesCreateInput");
+        HtmlOutputText rolesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rolesCreateOutput.setId("rolesCreateOutput");
         rolesCreateOutput.setValue("Roles:");
         htmlPanelGrid.getChildren().add(rolesCreateOutput);
         
-        SelectManyMenu rolesCreateInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        HtmlOutputText rolesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rolesCreateInput.setId("rolesCreateInput");
-        rolesCreateInput.setConverter(new AppRoleConverter());
-        rolesCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.selectedRoles}", List.class));
-        UISelectItems rolesCreateInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        rolesCreateInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appRoleBean.allAppRoles}", List.class));
-        rolesCreateInput.setRequired(true);
-        rolesCreateInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "appRole", String.class));
-        rolesCreateInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{appRole}", String.class));
-        rolesCreateInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{appRole}", AppRole.class));
-        rolesCreateInput.getChildren().add(rolesCreateInputItems);
+        rolesCreateInput.setValue("This relationship is managed from the AppRole side");
         htmlPanelGrid.getChildren().add(rolesCreateInput);
         
         Message rolesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -621,7 +393,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     public HtmlPanelGrid AppUserBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -687,234 +459,6 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         updateDateEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updateDateEditInputMessage);
         
-        OutputLabel namesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        namesEditOutput.setFor("namesEditInput");
-        namesEditOutput.setId("namesEditOutput");
-        namesEditOutput.setValue("Names:");
-        htmlPanelGrid.getChildren().add(namesEditOutput);
-        
-        InputTextarea namesEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        namesEditInput.setId("namesEditInput");
-        namesEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.names}", String.class));
-        LengthValidator namesEditInputValidator = new LengthValidator();
-        namesEditInputValidator.setMaximum(128);
-        namesEditInput.addValidator(namesEditInputValidator);
-        namesEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(namesEditInput);
-        
-        Message namesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        namesEditInputMessage.setId("namesEditInputMessage");
-        namesEditInputMessage.setFor("namesEditInput");
-        namesEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(namesEditInputMessage);
-        
-        OutputLabel surnamesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        surnamesEditOutput.setFor("surnamesEditInput");
-        surnamesEditOutput.setId("surnamesEditOutput");
-        surnamesEditOutput.setValue("Surnames:");
-        htmlPanelGrid.getChildren().add(surnamesEditOutput);
-        
-        InputTextarea surnamesEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        surnamesEditInput.setId("surnamesEditInput");
-        surnamesEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.surnames}", String.class));
-        LengthValidator surnamesEditInputValidator = new LengthValidator();
-        surnamesEditInputValidator.setMaximum(128);
-        surnamesEditInput.addValidator(surnamesEditInputValidator);
-        surnamesEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(surnamesEditInput);
-        
-        Message surnamesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        surnamesEditInputMessage.setId("surnamesEditInputMessage");
-        surnamesEditInputMessage.setFor("surnamesEditInput");
-        surnamesEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(surnamesEditInputMessage);
-        
-        OutputLabel genderEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        genderEditOutput.setFor("genderEditInput");
-        genderEditOutput.setId("genderEditOutput");
-        genderEditOutput.setValue("Gender:");
-        htmlPanelGrid.getChildren().add(genderEditOutput);
-        
-        AutoComplete genderEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        genderEditInput.setId("genderEditInput");
-        genderEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.gender}", Gender.class));
-        genderEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completeGender}", List.class, new Class[] { String.class }));
-        genderEditInput.setDropdown(true);
-        genderEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(genderEditInput);
-        
-        Message genderEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        genderEditInputMessage.setId("genderEditInputMessage");
-        genderEditInputMessage.setFor("genderEditInput");
-        genderEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(genderEditInputMessage);
-        
-        OutputLabel birthdayEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        birthdayEditOutput.setFor("birthdayEditInput");
-        birthdayEditOutput.setId("birthdayEditOutput");
-        birthdayEditOutput.setValue("Birthday:");
-        htmlPanelGrid.getChildren().add(birthdayEditOutput);
-        
-        Calendar birthdayEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        birthdayEditInput.setId("birthdayEditInput");
-        birthdayEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.birthday}", Date.class));
-        birthdayEditInput.setNavigator(true);
-        birthdayEditInput.setEffect("slideDown");
-        birthdayEditInput.setPattern("dd/MM/yyyy");
-        birthdayEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(birthdayEditInput);
-        
-        Message birthdayEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        birthdayEditInputMessage.setId("birthdayEditInputMessage");
-        birthdayEditInputMessage.setFor("birthdayEditInput");
-        birthdayEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(birthdayEditInputMessage);
-        
-        OutputLabel identificationEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        identificationEditOutput.setFor("identificationEditInput");
-        identificationEditOutput.setId("identificationEditOutput");
-        identificationEditOutput.setValue("Identification:");
-        htmlPanelGrid.getChildren().add(identificationEditOutput);
-        
-        InputTextarea identificationEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        identificationEditInput.setId("identificationEditInput");
-        identificationEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.identification}", String.class));
-        LengthValidator identificationEditInputValidator = new LengthValidator();
-        identificationEditInputValidator.setMaximum(64);
-        identificationEditInput.addValidator(identificationEditInputValidator);
-        identificationEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(identificationEditInput);
-        
-        Message identificationEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        identificationEditInputMessage.setId("identificationEditInputMessage");
-        identificationEditInputMessage.setFor("identificationEditInput");
-        identificationEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(identificationEditInputMessage);
-        
-        OutputLabel identificationTypeEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        identificationTypeEditOutput.setFor("identificationTypeEditInput");
-        identificationTypeEditOutput.setId("identificationTypeEditOutput");
-        identificationTypeEditOutput.setValue("Identification Type:");
-        htmlPanelGrid.getChildren().add(identificationTypeEditOutput);
-        
-        AutoComplete identificationTypeEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        identificationTypeEditInput.setId("identificationTypeEditInput");
-        identificationTypeEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.identificationType}", IdentificationType.class));
-        identificationTypeEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completeIdentificationType}", List.class, new Class[] { String.class }));
-        identificationTypeEditInput.setDropdown(true);
-        identificationTypeEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(identificationTypeEditInput);
-        
-        Message identificationTypeEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        identificationTypeEditInputMessage.setId("identificationTypeEditInputMessage");
-        identificationTypeEditInputMessage.setFor("identificationTypeEditInput");
-        identificationTypeEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(identificationTypeEditInputMessage);
-        
-        OutputLabel nationalityEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        nationalityEditOutput.setFor("nationalityEditInput");
-        nationalityEditOutput.setId("nationalityEditOutput");
-        nationalityEditOutput.setValue("Nationality:");
-        htmlPanelGrid.getChildren().add(nationalityEditOutput);
-        
-        AutoComplete nationalityEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        nationalityEditInput.setId("nationalityEditInput");
-        nationalityEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.nationality}", Nationality.class));
-        nationalityEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completeNationality}", List.class, new Class[] { String.class }));
-        nationalityEditInput.setDropdown(true);
-        nationalityEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "nationality", String.class));
-        nationalityEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{nationality.labelKey} #{nationality.name}", String.class));
-        nationalityEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{nationality}", Nationality.class));
-        nationalityEditInput.setConverter(new NationalityConverter());
-        nationalityEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(nationalityEditInput);
-        
-        Message nationalityEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        nationalityEditInputMessage.setId("nationalityEditInputMessage");
-        nationalityEditInputMessage.setFor("nationalityEditInput");
-        nationalityEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(nationalityEditInputMessage);
-        
-        OutputLabel homePlaceEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        homePlaceEditOutput.setFor("homePlaceEditInput");
-        homePlaceEditOutput.setId("homePlaceEditOutput");
-        homePlaceEditOutput.setValue("Home Place:");
-        htmlPanelGrid.getChildren().add(homePlaceEditOutput);
-        
-        AutoComplete homePlaceEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        homePlaceEditInput.setId("homePlaceEditInput");
-        homePlaceEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.homePlace}", Place.class));
-        homePlaceEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completeHomePlace}", List.class, new Class[] { String.class }));
-        homePlaceEditInput.setDropdown(true);
-        homePlaceEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "homePlace", String.class));
-        homePlaceEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{homePlace.name} #{homePlace.primaryAddress} #{homePlace.secondaryAddress} #{homePlace.latitude}", String.class));
-        homePlaceEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{homePlace}", Place.class));
-        homePlaceEditInput.setConverter(new PlaceConverter());
-        homePlaceEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(homePlaceEditInput);
-        
-        Message homePlaceEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        homePlaceEditInputMessage.setId("homePlaceEditInputMessage");
-        homePlaceEditInputMessage.setFor("homePlaceEditInput");
-        homePlaceEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(homePlaceEditInputMessage);
-        
-        OutputLabel workPlaceEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        workPlaceEditOutput.setFor("workPlaceEditInput");
-        workPlaceEditOutput.setId("workPlaceEditOutput");
-        workPlaceEditOutput.setValue("Work Place:");
-        htmlPanelGrid.getChildren().add(workPlaceEditOutput);
-        
-        AutoComplete workPlaceEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
-        workPlaceEditInput.setId("workPlaceEditInput");
-        workPlaceEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.workPlace}", Place.class));
-        workPlaceEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completeWorkPlace}", List.class, new Class[] { String.class }));
-        workPlaceEditInput.setDropdown(true);
-        workPlaceEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "workPlace", String.class));
-        workPlaceEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{workPlace.name} #{workPlace.primaryAddress} #{workPlace.secondaryAddress} #{workPlace.latitude}", String.class));
-        workPlaceEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{workPlace}", Place.class));
-        workPlaceEditInput.setConverter(new PlaceConverter());
-        workPlaceEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(workPlaceEditInput);
-        
-        Message workPlaceEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        workPlaceEditInputMessage.setId("workPlaceEditInputMessage");
-        workPlaceEditInputMessage.setFor("workPlaceEditInput");
-        workPlaceEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(workPlaceEditInputMessage);
-        
-        HtmlOutputText phonesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        phonesEditOutput.setId("phonesEditOutput");
-        phonesEditOutput.setValue("Phones:");
-        htmlPanelGrid.getChildren().add(phonesEditOutput);
-        
-        HtmlOutputText phonesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        phonesEditInput.setId("phonesEditInput");
-        phonesEditInput.setValue("This relationship is managed from the Phone side");
-        htmlPanelGrid.getChildren().add(phonesEditInput);
-        
-        Message phonesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        phonesEditInputMessage.setId("phonesEditInputMessage");
-        phonesEditInputMessage.setFor("phonesEditInput");
-        phonesEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(phonesEditInputMessage);
-        
-        HtmlOutputText emailsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        emailsEditOutput.setId("emailsEditOutput");
-        emailsEditOutput.setValue("Emails:");
-        htmlPanelGrid.getChildren().add(emailsEditOutput);
-        
-        HtmlOutputText emailsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        emailsEditInput.setId("emailsEditInput");
-        emailsEditInput.setValue("This relationship is managed from the Email side");
-        htmlPanelGrid.getChildren().add(emailsEditInput);
-        
-        Message emailsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        emailsEditInputMessage.setId("emailsEditInputMessage");
-        emailsEditInputMessage.setFor("emailsEditInput");
-        emailsEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(emailsEditInputMessage);
-        
         OutputLabel authoritiesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         authoritiesEditOutput.setFor("authoritiesEditInput");
         authoritiesEditOutput.setId("authoritiesEditOutput");
@@ -932,6 +476,30 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         authoritiesEditInputMessage.setFor("authoritiesEditInput");
         authoritiesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(authoritiesEditInputMessage);
+        
+        OutputLabel personEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        personEditOutput.setFor("personEditInput");
+        personEditOutput.setId("personEditOutput");
+        personEditOutput.setValue("Person:");
+        htmlPanelGrid.getChildren().add(personEditOutput);
+        
+        AutoComplete personEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        personEditInput.setId("personEditInput");
+        personEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.person}", Person.class));
+        personEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{appUserBean.completePerson}", List.class, new Class[] { String.class }));
+        personEditInput.setDropdown(true);
+        personEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "person", String.class));
+        personEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{person.creationDate} #{person.updateDate} #{person.names} #{person.surnames}", String.class));
+        personEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{person}", Person.class));
+        personEditInput.setConverter(new PersonConverter());
+        personEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(personEditInput);
+        
+        Message personEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        personEditInputMessage.setId("personEditInputMessage");
+        personEditInputMessage.setFor("personEditInput");
+        personEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(personEditInputMessage);
         
         OutputLabel usernameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         usernameEditOutput.setFor("usernameEditInput");
@@ -975,23 +543,14 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         passwordEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(passwordEditInputMessage);
         
-        OutputLabel rolesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        rolesEditOutput.setFor("rolesEditInput");
+        HtmlOutputText rolesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rolesEditOutput.setId("rolesEditOutput");
         rolesEditOutput.setValue("Roles:");
         htmlPanelGrid.getChildren().add(rolesEditOutput);
         
-        SelectManyMenu rolesEditInput = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        HtmlOutputText rolesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rolesEditInput.setId("rolesEditInput");
-        rolesEditInput.setConverter(new AppRoleConverter());
-        rolesEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.selectedRoles}", List.class));
-        UISelectItems rolesEditInputItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        rolesEditInputItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appRoleBean.allAppRoles}", List.class));
-        rolesEditInput.setRequired(true);
-        rolesEditInputItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "appRole", String.class));
-        rolesEditInputItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{appRole}", String.class));
-        rolesEditInputItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{appRole}", AppRole.class));
-        rolesEditInput.getChildren().add(rolesEditInputItems);
+        rolesEditInput.setValue("This relationship is managed from the AppRole side");
         htmlPanelGrid.getChildren().add(rolesEditInput);
         
         Message rolesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -1084,7 +643,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     public HtmlPanelGrid AppUserBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -1123,122 +682,6 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         updateDateValue.setConverter(updateDateValueConverter);
         htmlPanelGrid.getChildren().add(updateDateValue);
         
-        HtmlOutputText namesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        namesLabel.setId("namesLabel");
-        namesLabel.setValue("Names:");
-        htmlPanelGrid.getChildren().add(namesLabel);
-        
-        InputTextarea namesValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        namesValue.setId("namesValue");
-        namesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.names}", String.class));
-        namesValue.setReadonly(true);
-        namesValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(namesValue);
-        
-        HtmlOutputText surnamesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        surnamesLabel.setId("surnamesLabel");
-        surnamesLabel.setValue("Surnames:");
-        htmlPanelGrid.getChildren().add(surnamesLabel);
-        
-        InputTextarea surnamesValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        surnamesValue.setId("surnamesValue");
-        surnamesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.surnames}", String.class));
-        surnamesValue.setReadonly(true);
-        surnamesValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(surnamesValue);
-        
-        HtmlOutputText genderLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        genderLabel.setId("genderLabel");
-        genderLabel.setValue("Gender:");
-        htmlPanelGrid.getChildren().add(genderLabel);
-        
-        HtmlOutputText genderValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        genderValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.gender}", String.class));
-        htmlPanelGrid.getChildren().add(genderValue);
-        
-        HtmlOutputText birthdayLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        birthdayLabel.setId("birthdayLabel");
-        birthdayLabel.setValue("Birthday:");
-        htmlPanelGrid.getChildren().add(birthdayLabel);
-        
-        HtmlOutputText birthdayValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        birthdayValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.birthday}", Date.class));
-        DateTimeConverter birthdayValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        birthdayValueConverter.setPattern("dd/MM/yyyy");
-        birthdayValue.setConverter(birthdayValueConverter);
-        htmlPanelGrid.getChildren().add(birthdayValue);
-        
-        HtmlOutputText identificationLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        identificationLabel.setId("identificationLabel");
-        identificationLabel.setValue("Identification:");
-        htmlPanelGrid.getChildren().add(identificationLabel);
-        
-        InputTextarea identificationValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
-        identificationValue.setId("identificationValue");
-        identificationValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.identification}", String.class));
-        identificationValue.setReadonly(true);
-        identificationValue.setDisabled(true);
-        htmlPanelGrid.getChildren().add(identificationValue);
-        
-        HtmlOutputText identificationTypeLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        identificationTypeLabel.setId("identificationTypeLabel");
-        identificationTypeLabel.setValue("Identification Type:");
-        htmlPanelGrid.getChildren().add(identificationTypeLabel);
-        
-        HtmlOutputText identificationTypeValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        identificationTypeValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.identificationType}", String.class));
-        htmlPanelGrid.getChildren().add(identificationTypeValue);
-        
-        HtmlOutputText nationalityLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        nationalityLabel.setId("nationalityLabel");
-        nationalityLabel.setValue("Nationality:");
-        htmlPanelGrid.getChildren().add(nationalityLabel);
-        
-        HtmlOutputText nationalityValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        nationalityValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.nationality}", Nationality.class));
-        nationalityValue.setConverter(new NationalityConverter());
-        htmlPanelGrid.getChildren().add(nationalityValue);
-        
-        HtmlOutputText homePlaceLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        homePlaceLabel.setId("homePlaceLabel");
-        homePlaceLabel.setValue("Home Place:");
-        htmlPanelGrid.getChildren().add(homePlaceLabel);
-        
-        HtmlOutputText homePlaceValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        homePlaceValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.homePlace}", Place.class));
-        homePlaceValue.setConverter(new PlaceConverter());
-        htmlPanelGrid.getChildren().add(homePlaceValue);
-        
-        HtmlOutputText workPlaceLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workPlaceLabel.setId("workPlaceLabel");
-        workPlaceLabel.setValue("Work Place:");
-        htmlPanelGrid.getChildren().add(workPlaceLabel);
-        
-        HtmlOutputText workPlaceValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        workPlaceValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.workPlace}", Place.class));
-        workPlaceValue.setConverter(new PlaceConverter());
-        htmlPanelGrid.getChildren().add(workPlaceValue);
-        
-        HtmlOutputText phonesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        phonesLabel.setId("phonesLabel");
-        phonesLabel.setValue("Phones:");
-        htmlPanelGrid.getChildren().add(phonesLabel);
-        
-        HtmlOutputText phonesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        phonesValue.setId("phonesValue");
-        phonesValue.setValue("This relationship is managed from the Phone side");
-        htmlPanelGrid.getChildren().add(phonesValue);
-        
-        HtmlOutputText emailsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        emailsLabel.setId("emailsLabel");
-        emailsLabel.setValue("Emails:");
-        htmlPanelGrid.getChildren().add(emailsLabel);
-        
-        HtmlOutputText emailsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        emailsValue.setId("emailsValue");
-        emailsValue.setValue("This relationship is managed from the Email side");
-        htmlPanelGrid.getChildren().add(emailsValue);
-        
         HtmlOutputText authoritiesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         authoritiesLabel.setId("authoritiesLabel");
         authoritiesLabel.setValue("Authorities:");
@@ -1247,6 +690,16 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         HtmlOutputText authoritiesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         authoritiesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.authorities}", String.class));
         htmlPanelGrid.getChildren().add(authoritiesValue);
+        
+        HtmlOutputText personLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        personLabel.setId("personLabel");
+        personLabel.setValue("Person:");
+        htmlPanelGrid.getChildren().add(personLabel);
+        
+        HtmlOutputText personValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        personValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.person}", Person.class));
+        personValue.setConverter(new PersonConverter());
+        htmlPanelGrid.getChildren().add(personValue);
         
         HtmlOutputText usernameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         usernameLabel.setId("usernameLabel");
@@ -1277,18 +730,9 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         rolesLabel.setValue("Roles:");
         htmlPanelGrid.getChildren().add(rolesLabel);
         
-        SelectManyMenu rolesValue = (SelectManyMenu) application.createComponent(SelectManyMenu.COMPONENT_TYPE);
+        HtmlOutputText rolesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         rolesValue.setId("rolesValue");
-        rolesValue.setConverter(new AppRoleConverter());
-        rolesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.selectedRoles}", List.class));
-        UISelectItems rolesValueItems = (UISelectItems) application.createComponent(UISelectItems.COMPONENT_TYPE);
-        rolesValue.setReadonly(true);
-        rolesValue.setDisabled(true);
-        rolesValueItems.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{appUserBean.appUser.roles}", Set.class));
-        rolesValueItems.setValueExpression("var", expressionFactory.createValueExpression(elContext, "appRole", String.class));
-        rolesValueItems.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{appRole}", String.class));
-        rolesValueItems.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{appRole}", AppRole.class));
-        rolesValue.getChildren().add(rolesValueItems);
+        rolesValue.setValue("This relationship is managed from the AppRole side");
         htmlPanelGrid.getChildren().add(rolesValue);
         
         HtmlOutputText userStatusLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -1344,79 +788,15 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         this.appUser = appUser;
     }
     
-    public List<Gender> AppUserBean.completeGender(String query) {
-        List<Gender> suggestions = new ArrayList<Gender>();
-        for (Gender gender : Gender.values()) {
-            if (gender.name().toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(gender);
+    public List<Person> AppUserBean.completePerson(String query) {
+        List<Person> suggestions = new ArrayList<Person>();
+        for (Person person : personDAO.findAll()) {
+            String personStr = String.valueOf(person.getCreationDate() +  " "  + person.getUpdateDate() +  " "  + person.getNames() +  " "  + person.getSurnames());
+            if (personStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(person);
             }
         }
         return suggestions;
-    }
-    
-    public List<IdentificationType> AppUserBean.completeIdentificationType(String query) {
-        List<IdentificationType> suggestions = new ArrayList<IdentificationType>();
-        for (IdentificationType identificationType : IdentificationType.values()) {
-            if (identificationType.name().toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(identificationType);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<Nationality> AppUserBean.completeNationality(String query) {
-        List<Nationality> suggestions = new ArrayList<Nationality>();
-        for (Nationality nationality : locationService.findAllNationalitys()) {
-            String nationalityStr = String.valueOf(nationality.getLabelKey() +  " "  + nationality.getName());
-            if (nationalityStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(nationality);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<Place> AppUserBean.completeHomePlace(String query) {
-        List<Place> suggestions = new ArrayList<Place>();
-        for (Place place : locationService.findAllPlaces()) {
-            String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
-            if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(place);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<Place> AppUserBean.completeWorkPlace(String query) {
-        List<Place> suggestions = new ArrayList<Place>();
-        for (Place place : locationService.findAllPlaces()) {
-            String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
-            if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(place);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<Phone> AppUserBean.getSelectedPhones() {
-        return selectedPhones;
-    }
-    
-    public void AppUserBean.setSelectedPhones(List<Phone> selectedPhones) {
-        if (selectedPhones != null) {
-            appUser.setPhones(new HashSet<Phone>(selectedPhones));
-        }
-        this.selectedPhones = selectedPhones;
-    }
-    
-    public List<Email> AppUserBean.getSelectedEmails() {
-        return selectedEmails;
-    }
-    
-    public void AppUserBean.setSelectedEmails(List<Email> selectedEmails) {
-        if (selectedEmails != null) {
-            appUser.setEmails(new HashSet<Email>(selectedEmails));
-        }
-        this.selectedEmails = selectedEmails;
     }
     
     public List<AppRole> AppUserBean.getSelectedRoles() {
@@ -1441,12 +821,6 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     }
     
     public String AppUserBean.onEdit() {
-        if (appUser != null && appUser.getPhones() != null) {
-            selectedPhones = new ArrayList<Phone>(appUser.getPhones());
-        }
-        if (appUser != null && appUser.getEmails() != null) {
-            selectedEmails = new ArrayList<Email>(appUser.getEmails());
-        }
         if (appUser != null && appUser.getRoles() != null) {
             selectedRoles = new ArrayList<AppRole>(appUser.getRoles());
         }
@@ -1502,8 +876,6 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     public void AppUserBean.reset() {
         appUser = null;
-        selectedPhones = null;
-        selectedEmails = null;
         selectedRoles = null;
         createDialogVisible = false;
     }

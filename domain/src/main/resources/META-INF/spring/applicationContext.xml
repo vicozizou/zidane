@@ -48,7 +48,6 @@
         <context:exclude-filter expression=".util.*" type="regex"/>
         <context:exclude-filter expression=".throwing.*" type="regex"/>
     </context:component-scan>
-    
     <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource">
         <property name="driverClassName" value="${database.driverClassName}"/>
         <property name="url" value="${database.url}"/>
@@ -60,11 +59,6 @@
         <property name="timeBetweenEvictionRunsMillis" value="1800000"/>
         <property name="numTestsPerEvictionRun" value="3"/>
         <property name="minEvictableIdleTimeMillis" value="1800000"/>
-        <property name="validationQuery" value="SELECT 1"/>
-    </bean>
-    
-    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
-        <property name="persistenceUnitName" value="persistenceUnit"/>
-        <property name="dataSource" ref="dataSource"/>
+        <property name="validationQuery" value="SELECT version();"/>
     </bean>
 </beans>

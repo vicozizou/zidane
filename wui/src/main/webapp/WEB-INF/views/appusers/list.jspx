@@ -7,9 +7,9 @@
             <table:column id="c_com_bytepoxic_core_model_AppUser_deleted" property="deleted" z="4KfVoOCKQSbMkH30tHRh1+bO7fM="/>
             <table:column date="true" dateTimePattern="${appUser_creationdate_date_format}" id="c_com_bytepoxic_core_model_AppUser_creationDate" property="creationDate" z="aJAFjW9v5GEFp8f4WfagFZpF59Q="/>
             <table:column date="true" dateTimePattern="${appUser_updatedate_date_format}" id="c_com_bytepoxic_core_model_AppUser_updateDate" property="updateDate" z="To2a1u1lY0HFWOvlcE28VAuKGZ4="/>
-            <table:column id="c_com_bytepoxic_core_model_AppUser_names" property="names" z="dsL2xouXYZZldErfPWCPEtnfQEg="/>
-            <table:column id="c_com_bytepoxic_core_model_AppUser_surnames" property="surnames" z="57Tsb4rW5KniwykwJzOG4uFfxFI="/>
-            <table:column id="c_com_bytepoxic_core_model_AppUser_gender" property="gender" z="ufgjMN+swL7dJ9kbDFLe8qLYJEs="/>
+            <table:column id="c_com_bytepoxic_core_model_AppUser_authorities" property="authorities" z="RiMADXD/UdsCb5A3JJIR32bS950="/>
+            <table:column id="c_com_bytepoxic_core_model_AppUser_username" property="username" z="am9LBayRHkW6g3TVzd6/fqjtxoM="/>
+            <table:column id="c_com_bytepoxic_core_model_AppUser_person" property="person" z="k+VGaW04RkgF3LOB+j7Ngd35sbQ="/>
         </table:table>
     </page:list>
 </div>

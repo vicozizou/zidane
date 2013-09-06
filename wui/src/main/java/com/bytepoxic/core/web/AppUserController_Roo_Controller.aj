@@ -3,13 +3,9 @@
 
 package com.bytepoxic.core.web;
 
-import com.bytepoxic.core.dao.EmailDAO;
-import com.bytepoxic.core.dao.PhoneDAO;
+import com.bytepoxic.core.dao.PersonDAO;
 import com.bytepoxic.core.model.AppUser;
-import com.bytepoxic.core.model.Gender;
-import com.bytepoxic.core.model.IdentificationType;
 import com.bytepoxic.core.model.UserStatus;
-import com.bytepoxic.core.service.LocationService;
 import com.bytepoxic.core.service.UserService;
 import com.bytepoxic.core.web.AppUserController;
 import java.io.UnsupportedEncodingException;
@@ -34,13 +30,7 @@ privileged aspect AppUserController_Roo_Controller {
     UserService AppUserController.userService;
     
     @Autowired
-    EmailDAO AppUserController.emailDAO;
-    
-    @Autowired
-    LocationService AppUserController.locationService;
-    
-    @Autowired
-    PhoneDAO AppUserController.phoneDAO;
+    PersonDAO AppUserController.personDAO;
     
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String AppUserController.create(@Valid AppUser appUser, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
@@ -112,7 +102,6 @@ privileged aspect AppUserController_Roo_Controller {
     void AppUserController.addDateTimeFormatPatterns(Model uiModel) {
         uiModel.addAttribute("appUser_creationdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
         uiModel.addAttribute("appUser_updatedate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
-        uiModel.addAttribute("appUser_birthday_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
         uiModel.addAttribute("appUser_lastlogindate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
     
@@ -120,12 +109,7 @@ privileged aspect AppUserController_Roo_Controller {
         uiModel.addAttribute("appUser", appUser);
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("approles", userService.findAllAppRoles());
-        uiModel.addAttribute("emails", emailDAO.findAll());
-        uiModel.addAttribute("genders", Arrays.asList(Gender.values()));
-        uiModel.addAttribute("identificationtypes", Arrays.asList(IdentificationType.values()));
-        uiModel.addAttribute("nationalitys", locationService.findAllNationalitys());
-        uiModel.addAttribute("phones", phoneDAO.findAll());
-        uiModel.addAttribute("places", locationService.findAllPlaces());
+        uiModel.addAttribute("people", personDAO.findAll());
         uiModel.addAttribute("userstatuses", Arrays.asList(UserStatus.values()));
     }
     

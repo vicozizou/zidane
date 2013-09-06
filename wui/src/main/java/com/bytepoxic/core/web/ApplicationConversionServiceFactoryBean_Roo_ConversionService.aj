@@ -69,7 +69,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<AppUser, String> ApplicationConversionServiceFactoryBean.getAppUserToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.bytepoxic.core.model.AppUser, java.lang.String>() {
             public String convert(AppUser appUser) {
-                return new StringBuilder().append(appUser.getCreationDate()).append(' ').append(appUser.getUpdateDate()).append(' ').append(appUser.getNames()).append(' ').append(appUser.getSurnames()).toString();
+                return new StringBuilder().append(appUser.getCreationDate()).append(' ').append(appUser.getUpdateDate()).append(' ').append(appUser.getUsername()).append(' ').append(appUser.getPassword()).toString();
             }
         };
     }
