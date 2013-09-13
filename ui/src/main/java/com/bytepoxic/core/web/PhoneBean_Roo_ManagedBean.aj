@@ -16,7 +16,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -130,7 +129,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
     
     public HtmlPanelGrid PhoneBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -206,7 +205,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
     
     public HtmlPanelGrid PhoneBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -282,7 +281,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
     
     public HtmlPanelGrid PhoneBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         

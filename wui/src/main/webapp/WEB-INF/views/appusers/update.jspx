@@ -6,23 +6,14 @@
         <field:checkbox field="deleted" id="c_com_bytepoxic_core_model_AppUser_deleted" z="0EXt50LLs3LISn2d+hbgadhdBrY="/>
         <field:datetime dateTimePattern="${appUser_creationdate_date_format}" field="creationDate" id="c_com_bytepoxic_core_model_AppUser_creationDate" required="true" z="g8F4kySpwzENFwNJUlbjAHIdjv8="/>
         <field:datetime dateTimePattern="${appUser_updatedate_date_format}" field="updateDate" id="c_com_bytepoxic_core_model_AppUser_updateDate" z="H9xOLdxYI5mH3gx2tULwhR0slhk="/>
-        <field:textarea field="names" id="c_com_bytepoxic_core_model_AppUser_names" required="true" z="y8ofK1oS0huGQBCeCLcJntWfwBk="/>
-        <field:textarea field="surnames" id="c_com_bytepoxic_core_model_AppUser_surnames" required="true" z="T0vw7jA9C/xCm0DsrMhLsd0CuM4="/>
-        <field:select field="gender" id="c_com_bytepoxic_core_model_AppUser_gender" items="${genders}" path="genders" required="true" z="kk8qqvAu3kXrIytsCKrOM8CgFLI="/>
-        <field:datetime dateTimePattern="${appUser_birthday_date_format}" field="birthday" id="c_com_bytepoxic_core_model_AppUser_birthday" required="true" z="yTv35lEs3Rd1uKQswer3bqTLyrs="/>
-        <field:textarea field="identification" id="c_com_bytepoxic_core_model_AppUser_identification" required="true" z="R3s/1jM1u99cqmKhrcFmDPw68v4="/>
-        <field:select field="identificationType" id="c_com_bytepoxic_core_model_AppUser_identificationType" items="${identificationtypes}" path="identificationtypes" required="true" z="SWd+qPlOOYwZZokpCrSjyJfN/Y4="/>
-        <field:select field="nationality" id="c_com_bytepoxic_core_model_AppUser_nationality" itemValue="id" items="${nationalitys}" path="/nationalitys" z="HMyQ90F+xXQdwelI5zSYHrg3eMQ="/>
-        <field:select field="homePlace" id="c_com_bytepoxic_core_model_AppUser_homePlace" itemValue="id" items="${places}" path="/places" z="XMXjadzbV4P+aq7gu7N+ux5nbPI="/>
-        <field:select field="workPlace" id="c_com_bytepoxic_core_model_AppUser_workPlace" itemValue="id" items="${places}" path="/places" z="irQCDlo9tbsp9RM2yuv1FFdU0rs="/>
-        <field:simple field="phones" id="c_com_bytepoxic_core_model_AppUser_phones" messageCode="entity_reference_not_managed" messageCodeAttribute="Phone" z="cqBhrfDpmtDaudpxDJf0wbIisqo="/>
-        <field:simple field="emails" id="c_com_bytepoxic_core_model_AppUser_emails" messageCode="entity_reference_not_managed" messageCodeAttribute="Email" z="HyawDYQuY07oq749aCSz+qVg+40="/>
         <field:textarea field="username" id="c_com_bytepoxic_core_model_AppUser_username" required="true" z="hyg6ffjX3kN77wcOn9JOF3RfCVM="/>
         <field:textarea field="password" id="c_com_bytepoxic_core_model_AppUser_password" required="true" z="Iufr+Dp4/NGr5CGBhnLmWb2leCM="/>
-        <field:select field="roles" id="c_com_bytepoxic_core_model_AppUser_roles" itemValue="id" items="${approles}" multiple="true" path="/approles" required="true" z="h/fS2qrRwe8gJeTKb3JBMGfaeBU="/>
+        <field:simple field="roles" id="c_com_bytepoxic_core_model_AppUser_roles" messageCode="entity_reference_not_managed" messageCodeAttribute="App Role" z="Hou5gg7VwKA2Mm638u+paFguZ9Q="/>
         <field:select field="userStatus" id="c_com_bytepoxic_core_model_AppUser_userStatus" items="${userstatuses}" path="userstatuses" z="QqGMlckRY9fF8h7clqyuFlds/sU="/>
         <field:input field="loginAttempts" id="c_com_bytepoxic_core_model_AppUser_loginAttempts" validationMessageCode="field_invalid_integer" z="Fbm4l6HN8Rkyca2BpU9XObn1tuQ="/>
         <field:datetime dateTimePattern="${appUser_lastlogindate_date_format}" field="lastLoginDate" id="c_com_bytepoxic_core_model_AppUser_lastLoginDate" z="JF9n2azcaVhuJNm2nkIymHLpZdU="/>
         <field:input field="daysToExpire" id="c_com_bytepoxic_core_model_AppUser_daysToExpire" validationMessageCode="field_invalid_integer" z="T/1wUyEhnos1QRwu4MFizhjSHkI="/>
+        <field:input field="authorities" id="c_com_bytepoxic_core_model_AppUser_authorities" z="F8uR6/Nyi5e/lQyXRNi0uQrwLns="/>
+        <field:select field="person" id="c_com_bytepoxic_core_model_AppUser_person" itemValue="id" items="${people}" path="/people" z="SxmsDc8EglpEt73opK2UNzSRhbA="/>
     </form:update>
 </div>

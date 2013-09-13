@@ -22,41 +22,13 @@ privileged aspect LocationServiceImpl_Roo_Service {
     declare @type: LocationServiceImpl: @Transactional;
     
     @Autowired
-    PlaceDAO LocationServiceImpl.placeDAO;
-    
-    @Autowired
     NationalityDAO LocationServiceImpl.nationalityDAO;
     
     @Autowired
+    PlaceDAO LocationServiceImpl.placeDAO;
+    
+    @Autowired
     LocationDAO LocationServiceImpl.locationDAO;
-    
-    public long LocationServiceImpl.countAllPlaces() {
-        return placeDAO.count();
-    }
-    
-    public void LocationServiceImpl.deletePlace(Place place) {
-        placeDAO.delete(place);
-    }
-    
-    public Place LocationServiceImpl.findPlace(Long id) {
-        return placeDAO.findOne(id);
-    }
-    
-    public List<Place> LocationServiceImpl.findAllPlaces() {
-        return placeDAO.findAll();
-    }
-    
-    public List<Place> LocationServiceImpl.findPlaceEntries(int firstResult, int maxResults) {
-        return placeDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
-    }
-    
-    public void LocationServiceImpl.savePlace(Place place) {
-        placeDAO.save(place);
-    }
-    
-    public Place LocationServiceImpl.updatePlace(Place place) {
-        return placeDAO.save(place);
-    }
     
     public long LocationServiceImpl.countAllNationalitys() {
         return nationalityDAO.count();
@@ -84,6 +56,34 @@ privileged aspect LocationServiceImpl_Roo_Service {
     
     public Nationality LocationServiceImpl.updateNationality(Nationality nationality) {
         return nationalityDAO.save(nationality);
+    }
+    
+    public long LocationServiceImpl.countAllPlaces() {
+        return placeDAO.count();
+    }
+    
+    public void LocationServiceImpl.deletePlace(Place place) {
+        placeDAO.delete(place);
+    }
+    
+    public Place LocationServiceImpl.findPlace(Long id) {
+        return placeDAO.findOne(id);
+    }
+    
+    public List<Place> LocationServiceImpl.findAllPlaces() {
+        return placeDAO.findAll();
+    }
+    
+    public List<Place> LocationServiceImpl.findPlaceEntries(int firstResult, int maxResults) {
+        return placeDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+    }
+    
+    public void LocationServiceImpl.savePlace(Place place) {
+        placeDAO.save(place);
+    }
+    
+    public Place LocationServiceImpl.updatePlace(Place place) {
+        return placeDAO.save(place);
     }
     
     public long LocationServiceImpl.countAllLocations() {

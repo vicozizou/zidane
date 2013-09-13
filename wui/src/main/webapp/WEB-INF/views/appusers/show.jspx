@@ -6,21 +6,13 @@
         <field:display field="deleted" id="s_com_bytepoxic_core_model_AppUser_deleted" object="${appuser}" z="EuZm5me85sDnQvIuV8u8im3EsVY="/>
         <field:display date="true" dateTimePattern="${appUser_creationdate_date_format}" field="creationDate" id="s_com_bytepoxic_core_model_AppUser_creationDate" object="${appuser}" z="bjS26hqg60+A1Zm1oT/XkIPTwVI="/>
         <field:display date="true" dateTimePattern="${appUser_updatedate_date_format}" field="updateDate" id="s_com_bytepoxic_core_model_AppUser_updateDate" object="${appuser}" z="vehEQidvAL2PMDiBIC3SpNPGXBE="/>
-        <field:display field="names" id="s_com_bytepoxic_core_model_AppUser_names" object="${appuser}" z="6QkKOuvtNvgj+IVzbs4HIHW6rlk="/>
-        <field:display field="surnames" id="s_com_bytepoxic_core_model_AppUser_surnames" object="${appuser}" z="33yjEOijmn0PjBcpGEiuUdoPct8="/>
-        <field:display field="gender" id="s_com_bytepoxic_core_model_AppUser_gender" object="${appuser}" z="7KMOlT8PgiOfA4+Hp/JjOkNTLeA="/>
-        <field:display date="true" dateTimePattern="${appUser_birthday_date_format}" field="birthday" id="s_com_bytepoxic_core_model_AppUser_birthday" object="${appuser}" z="ltO7p+wgky5NgnP4aIQhfykYKrk="/>
-        <field:display field="identification" id="s_com_bytepoxic_core_model_AppUser_identification" object="${appuser}" z="Bn0/LYzSeZbFQyCdq5hfUhyraGA="/>
-        <field:display field="identificationType" id="s_com_bytepoxic_core_model_AppUser_identificationType" object="${appuser}" z="9a0HZQNdqKySpGblD4fnV2e7NRk="/>
-        <field:display field="nationality" id="s_com_bytepoxic_core_model_AppUser_nationality" object="${appuser}" z="kb93IwPSNzpAKUj1hTXsP/9BBtc="/>
-        <field:display field="homePlace" id="s_com_bytepoxic_core_model_AppUser_homePlace" object="${appuser}" z="rFPNMKpokpUthkkH3sruoMRKmA0="/>
-        <field:display field="workPlace" id="s_com_bytepoxic_core_model_AppUser_workPlace" object="${appuser}" z="oQoX2K+M9Ndfls01s6vBa2kW690="/>
         <field:display field="username" id="s_com_bytepoxic_core_model_AppUser_username" object="${appuser}" z="qwTv+pb4HLbo1MdCidFefWXALuU="/>
         <field:display field="password" id="s_com_bytepoxic_core_model_AppUser_password" object="${appuser}" z="E5WvL1QCWyecbFDCxfHMVJ4w1FQ="/>
-        <field:display field="roles" id="s_com_bytepoxic_core_model_AppUser_roles" object="${appuser}" z="hZs5uEioPX6eRNa9o+EoSoevWLE="/>
         <field:display field="userStatus" id="s_com_bytepoxic_core_model_AppUser_userStatus" object="${appuser}" z="T2Fw1SMJHrrTPC2LR228dw0oAak="/>
         <field:display field="loginAttempts" id="s_com_bytepoxic_core_model_AppUser_loginAttempts" object="${appuser}" z="kWJyp43xMFCYZEqRWOCGrIfEb4g="/>
         <field:display date="true" dateTimePattern="${appUser_lastlogindate_date_format}" field="lastLoginDate" id="s_com_bytepoxic_core_model_AppUser_lastLoginDate" object="${appuser}" z="eY224McH93A8v9kTdbLxseX0h5U="/>
         <field:display field="daysToExpire" id="s_com_bytepoxic_core_model_AppUser_daysToExpire" object="${appuser}" z="q33my2RVU9TTO+KatK9PzQt9ONo="/>
+        <field:display field="authorities" id="s_com_bytepoxic_core_model_AppUser_authorities" object="${appuser}" z="TrXot6TAKg/eWfNtEwRclOFMryg="/>
+        <field:display field="person" id="s_com_bytepoxic_core_model_AppUser_person" object="${appuser}" z="rlSWdziNG5MNlPWYQEs6HhQggzk="/>
     </page:show>
 </div>
