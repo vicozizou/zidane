@@ -9,7 +9,6 @@ import com.bytepoxic.core.model.Person;
 import com.bytepoxic.core.model.UserStatus;
 import java.util.Date;
 import java.util.Set;
-import org.springframework.security.core.GrantedAuthority;
 
 privileged aspect AppUser_Roo_JavaBean {
     
@@ -75,10 +74,6 @@ privileged aspect AppUser_Roo_JavaBean {
     
     public void AppUser.setDaysToExpire(Integer daysToExpire) {
         this.daysToExpire = daysToExpire;
-    }
-    
-    public void AppUser.setAuthorities(Set<GrantedAuthority> authorities) {
-        this.authorities = authorities;
     }
     
 }

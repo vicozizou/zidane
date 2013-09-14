@@ -22,41 +22,13 @@ privileged aspect LocationServiceImpl_Roo_Service {
     declare @type: LocationServiceImpl: @Transactional;
     
     @Autowired
-    NationalityDAO LocationServiceImpl.nationalityDAO;
-    
-    @Autowired
     PlaceDAO LocationServiceImpl.placeDAO;
     
     @Autowired
+    NationalityDAO LocationServiceImpl.nationalityDAO;
+    
+    @Autowired
     LocationDAO LocationServiceImpl.locationDAO;
-    
-    public long LocationServiceImpl.countAllNationalitys() {
-        return nationalityDAO.count();
-    }
-    
-    public void LocationServiceImpl.deleteNationality(Nationality nationality) {
-        nationalityDAO.delete(nationality);
-    }
-    
-    public Nationality LocationServiceImpl.findNationality(Long id) {
-        return nationalityDAO.findOne(id);
-    }
-    
-    public List<Nationality> LocationServiceImpl.findAllNationalitys() {
-        return nationalityDAO.findAll();
-    }
-    
-    public List<Nationality> LocationServiceImpl.findNationalityEntries(int firstResult, int maxResults) {
-        return nationalityDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
-    }
-    
-    public void LocationServiceImpl.saveNationality(Nationality nationality) {
-        nationalityDAO.save(nationality);
-    }
-    
-    public Nationality LocationServiceImpl.updateNationality(Nationality nationality) {
-        return nationalityDAO.save(nationality);
-    }
     
     public long LocationServiceImpl.countAllPlaces() {
         return placeDAO.count();
@@ -84,6 +56,34 @@ privileged aspect LocationServiceImpl_Roo_Service {
     
     public Place LocationServiceImpl.updatePlace(Place place) {
         return placeDAO.save(place);
+    }
+    
+    public long LocationServiceImpl.countAllNationalitys() {
+        return nationalityDAO.count();
+    }
+    
+    public void LocationServiceImpl.deleteNationality(Nationality nationality) {
+        nationalityDAO.delete(nationality);
+    }
+    
+    public Nationality LocationServiceImpl.findNationality(Long id) {
+        return nationalityDAO.findOne(id);
+    }
+    
+    public List<Nationality> LocationServiceImpl.findAllNationalitys() {
+        return nationalityDAO.findAll();
+    }
+    
+    public List<Nationality> LocationServiceImpl.findNationalityEntries(int firstResult, int maxResults) {
+        return nationalityDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+    }
+    
+    public void LocationServiceImpl.saveNationality(Nationality nationality) {
+        nationalityDAO.save(nationality);
+    }
+    
+    public Nationality LocationServiceImpl.updateNationality(Nationality nationality) {
+        return nationalityDAO.save(nationality);
     }
     
     public long LocationServiceImpl.countAllLocations() {

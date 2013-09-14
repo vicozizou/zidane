@@ -11,13 +11,6 @@ import java.util.List;
 
 privileged aspect UserService_Roo_Service {
     
-    public abstract long UserService.countAllAppRoles();    
-    public abstract void UserService.deleteAppRole(AppRole appRole);    
-    public abstract AppRole UserService.findAppRole(Long id);    
-    public abstract List<AppRole> UserService.findAllAppRoles();    
-    public abstract List<AppRole> UserService.findAppRoleEntries(int firstResult, int maxResults);    
-    public abstract void UserService.saveAppRole(AppRole appRole);    
-    public abstract AppRole UserService.updateAppRole(AppRole appRole);    
     public abstract long UserService.countAllAppUsers();    
     public abstract void UserService.deleteAppUser(AppUser appUser);    
     public abstract AppUser UserService.findAppUser(Long id);    
@@ -32,4 +25,11 @@ privileged aspect UserService_Roo_Service {
     public abstract List<UserTrack> UserService.findUserTrackEntries(int firstResult, int maxResults);    
     public abstract void UserService.saveUserTrack(UserTrack userTrack);    
     public abstract UserTrack UserService.updateUserTrack(UserTrack userTrack);    
+    public abstract long UserService.countAllAppRoles();    
+    public abstract void UserService.deleteAppRole(AppRole appRole);    
+    public abstract AppRole UserService.findAppRole(Long id);    
+    public abstract List<AppRole> UserService.findAllAppRoles();    
+    public abstract List<AppRole> UserService.findAppRoleEntries(int firstResult, int maxResults);    
+    public abstract void UserService.saveAppRole(AppRole appRole);    
+    public abstract AppRole UserService.updateAppRole(AppRole appRole);    
 }
