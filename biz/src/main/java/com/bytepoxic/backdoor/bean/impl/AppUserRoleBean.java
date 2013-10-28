@@ -1,6 +1,5 @@
 package com.bytepoxic.backdoor.bean.impl;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class AppUserRoleBean extends AbstractBackDoor {
 	@Override
 	public void parseValues(String[] values, Object target) {
 		AppUser user = (AppUser) target;
-		Set<AppRole> roles = new HashSet<AppRole>();
+		Set<AppRole> roles = user.getRoles();
 
 		for (String value : values) {
 			if (StringUtils.hasText(value)) {
@@ -50,8 +49,6 @@ public class AppUserRoleBean extends AbstractBackDoor {
 				logger.warn(String.format("Empty role found in %s", values.toString()));
 			}
 		}
-		
-		user.setRoles(roles);
 	}
 
 	@Override
@@ -60,10 +57,5 @@ public class AppUserRoleBean extends AbstractBackDoor {
 
 	@Override
 	protected void handleComment(String line) {
-	}
-	
-	@Override
-	public Object instanceTarget() {
-		return new AppUser();
 	}
 }

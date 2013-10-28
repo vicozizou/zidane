@@ -16,7 +16,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -130,7 +129,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
     
     public HtmlPanelGrid PhoneBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -189,7 +188,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
         ownerCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{phoneBean.completeOwner}", List.class, new Class[] { String.class }));
         ownerCreateInput.setDropdown(true);
         ownerCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "owner", String.class));
-        ownerCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{owner.creationDate} #{owner.updateDate} #{owner.names} #{owner.surnames}", String.class));
+        ownerCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{owner.names} #{owner.surnames} #{owner.birthday} #{owner.identification}", String.class));
         ownerCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{owner}", Person.class));
         ownerCreateInput.setConverter(new PersonConverter());
         ownerCreateInput.setRequired(false);
@@ -206,7 +205,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
     
     public HtmlPanelGrid PhoneBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -265,7 +264,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
         ownerEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{phoneBean.completeOwner}", List.class, new Class[] { String.class }));
         ownerEditInput.setDropdown(true);
         ownerEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "owner", String.class));
-        ownerEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{owner.creationDate} #{owner.updateDate} #{owner.names} #{owner.surnames}", String.class));
+        ownerEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{owner.names} #{owner.surnames} #{owner.birthday} #{owner.identification}", String.class));
         ownerEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{owner}", Person.class));
         ownerEditInput.setConverter(new PersonConverter());
         ownerEditInput.setRequired(false);
@@ -282,7 +281,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
     
     public HtmlPanelGrid PhoneBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -346,7 +345,7 @@ privileged aspect PhoneBean_Roo_ManagedBean {
     public List<Person> PhoneBean.completeOwner(String query) {
         List<Person> suggestions = new ArrayList<Person>();
         for (Person person : personDAO.findAll()) {
-            String personStr = String.valueOf(person.getCreationDate() +  " "  + person.getUpdateDate() +  " "  + person.getNames() +  " "  + person.getSurnames());
+            String personStr = String.valueOf(person.getNames() +  " "  + person.getSurnames() +  " "  + person.getBirthday() +  " "  + person.getIdentification());
             if (personStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(person);
             }

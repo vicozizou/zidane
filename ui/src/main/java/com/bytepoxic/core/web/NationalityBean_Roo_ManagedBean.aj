@@ -14,7 +14,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -126,7 +125,7 @@ privileged aspect NationalityBean_Roo_ManagedBean {
     
     public HtmlPanelGrid NationalityBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -186,7 +185,7 @@ privileged aspect NationalityBean_Roo_ManagedBean {
         countryCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{nationalityBean.completeCountry}", List.class, new Class[] { String.class }));
         countryCreateInput.setDropdown(true);
         countryCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "country", String.class));
-        countryCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{country.creationDate} #{country.updateDate} #{country.name} #{country.code}", String.class));
+        countryCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{country.name} #{country.code} #{country.latitude} #{country.longitude}", String.class));
         countryCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{country}", Location.class));
         countryCreateInput.setConverter(new LocationConverter());
         countryCreateInput.setRequired(true);
@@ -203,7 +202,7 @@ privileged aspect NationalityBean_Roo_ManagedBean {
     
     public HtmlPanelGrid NationalityBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -263,7 +262,7 @@ privileged aspect NationalityBean_Roo_ManagedBean {
         countryEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{nationalityBean.completeCountry}", List.class, new Class[] { String.class }));
         countryEditInput.setDropdown(true);
         countryEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "country", String.class));
-        countryEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{country.creationDate} #{country.updateDate} #{country.name} #{country.code}", String.class));
+        countryEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{country.name} #{country.code} #{country.latitude} #{country.longitude}", String.class));
         countryEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{country}", Location.class));
         countryEditInput.setConverter(new LocationConverter());
         countryEditInput.setRequired(true);
@@ -280,7 +279,7 @@ privileged aspect NationalityBean_Roo_ManagedBean {
     
     public HtmlPanelGrid NationalityBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -337,7 +336,7 @@ privileged aspect NationalityBean_Roo_ManagedBean {
     public List<Location> NationalityBean.completeCountry(String query) {
         List<Location> suggestions = new ArrayList<Location>();
         for (Location location : locationService.findAllLocations()) {
-            String locationStr = String.valueOf(location.getCreationDate() +  " "  + location.getUpdateDate() +  " "  + location.getName() +  " "  + location.getCode());
+            String locationStr = String.valueOf(location.getName() +  " "  + location.getCode() +  " "  + location.getLatitude() +  " "  + location.getLongitude());
             if (locationStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(location);
             }

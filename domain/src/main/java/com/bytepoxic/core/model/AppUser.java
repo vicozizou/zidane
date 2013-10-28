@@ -5,11 +5,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -25,12 +23,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @RooJavaBean
 @RooToString
 @RooJpaEntity
-public class AppUser extends BaseEntity implements UserDetails {
+public class AppUser extends Person implements UserDetails {
 	private static final long serialVersionUID = 1L;
 	
-	@OneToOne(cascade = CascadeType.ALL, optional = true)
-	private Person person;
-
 	@NotNull
     @Column(unique = true)
     @Size(max = 32)

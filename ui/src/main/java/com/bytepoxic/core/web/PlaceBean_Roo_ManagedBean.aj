@@ -14,7 +14,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -131,7 +130,7 @@ privileged aspect PlaceBean_Roo_ManagedBean {
     
     public HtmlPanelGrid PlaceBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -170,7 +169,7 @@ privileged aspect PlaceBean_Roo_ManagedBean {
         locationCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{placeBean.completeLocation}", List.class, new Class[] { String.class }));
         locationCreateInput.setDropdown(true);
         locationCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "location", String.class));
-        locationCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{location.creationDate} #{location.updateDate} #{location.name} #{location.code}", String.class));
+        locationCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{location.name} #{location.code} #{location.latitude} #{location.longitude}", String.class));
         locationCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{location}", Location.class));
         locationCreateInput.setConverter(new LocationConverter());
         locationCreateInput.setRequired(true);
@@ -284,7 +283,7 @@ privileged aspect PlaceBean_Roo_ManagedBean {
     
     public HtmlPanelGrid PlaceBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -323,7 +322,7 @@ privileged aspect PlaceBean_Roo_ManagedBean {
         locationEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{placeBean.completeLocation}", List.class, new Class[] { String.class }));
         locationEditInput.setDropdown(true);
         locationEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "location", String.class));
-        locationEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{location.creationDate} #{location.updateDate} #{location.name} #{location.code}", String.class));
+        locationEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{location.name} #{location.code} #{location.latitude} #{location.longitude}", String.class));
         locationEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{location}", Location.class));
         locationEditInput.setConverter(new LocationConverter());
         locationEditInput.setRequired(true);
@@ -437,7 +436,7 @@ privileged aspect PlaceBean_Roo_ManagedBean {
     
     public HtmlPanelGrid PlaceBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -533,7 +532,7 @@ privileged aspect PlaceBean_Roo_ManagedBean {
     public List<Location> PlaceBean.completeLocation(String query) {
         List<Location> suggestions = new ArrayList<Location>();
         for (Location location : locationService.findAllLocations()) {
-            String locationStr = String.valueOf(location.getCreationDate() +  " "  + location.getUpdateDate() +  " "  + location.getName() +  " "  + location.getCode());
+            String locationStr = String.valueOf(location.getName() +  " "  + location.getCode() +  " "  + location.getLatitude() +  " "  + location.getLongitude());
             if (locationStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(location);
             }

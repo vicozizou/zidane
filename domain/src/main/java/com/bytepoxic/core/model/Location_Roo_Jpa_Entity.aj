@@ -4,10 +4,40 @@
 package com.bytepoxic.core.model;
 
 import com.bytepoxic.core.model.Location;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Version;
 
 privileged aspect Location_Roo_Jpa_Entity {
     
     declare @type: Location: @Entity;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long Location.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer Location.version;
+    
+    public Long Location.getId() {
+        return this.id;
+    }
+    
+    public void Location.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer Location.getVersion() {
+        return this.version;
+    }
+    
+    public void Location.setVersion(Integer version) {
+        this.version = version;
+    }
     
 }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bytepoxic.backdoor.bean.AbstractBackDoor;
 import com.bytepoxic.backdoor.throwing.BackDoorException;
-import com.bytepoxic.core.model.AppUser;
 import com.bytepoxic.core.model.Gender;
 import com.bytepoxic.core.model.IdentificationType;
 import com.bytepoxic.core.model.Person;
@@ -21,8 +20,7 @@ public class PersonBackDoorBean extends AbstractBackDoor {
 	public void parseValues(String[] values, Object target) {
 		// birthday, names, gender, identification, identification_type,
 		// surnames, home_place, nationality, work_place
-		AppUser appUser = (AppUser) target;
-		Person person = new Person();
+		Person person = (Person) target;
 		int i = 0;
 
 		try {
@@ -52,8 +50,6 @@ public class PersonBackDoorBean extends AbstractBackDoor {
 		}
 		person.setDeleted(false);
 		person.setCreationDate(new Date());
-		
-		appUser.setPerson(person);
 	}
 
 	private IdentificationType resolveIdType(String value) {
@@ -81,10 +77,5 @@ public class PersonBackDoorBean extends AbstractBackDoor {
 
 	@Override
 	public void handleComment(String line) {
-	}
-	
-	@Override
-	public Object instanceTarget() {
-		return new Person();
 	}
 }

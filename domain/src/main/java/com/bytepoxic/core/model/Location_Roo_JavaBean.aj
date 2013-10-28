@@ -5,6 +5,7 @@ package com.bytepoxic.core.model;
 
 import com.bytepoxic.core.model.Location;
 import com.bytepoxic.core.model.Nationality;
+import java.util.Date;
 import java.util.SortedSet;
 
 privileged aspect Location_Roo_JavaBean {
@@ -79,6 +80,30 @@ privileged aspect Location_Roo_JavaBean {
     
     public void Location.setLabelKey(String labelKey) {
         this.labelKey = labelKey;
+    }
+    
+    public boolean Location.isDeleted() {
+        return this.deleted;
+    }
+    
+    public void Location.setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+    
+    public Date Location.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void Location.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public Date Location.getUpdateDate() {
+        return this.updateDate;
+    }
+    
+    public void Location.setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
     
 }

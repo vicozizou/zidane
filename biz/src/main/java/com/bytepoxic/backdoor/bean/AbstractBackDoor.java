@@ -193,12 +193,4 @@ public abstract class AbstractBackDoor implements BackDoorBean {
 	protected boolean isMainBean() {
 		return current == this;
 	}
-
-	public Object getState() {
-		return state;
-	}
-
-	public void setState(Object state) {
-		this.state = state;
-	}
 }
