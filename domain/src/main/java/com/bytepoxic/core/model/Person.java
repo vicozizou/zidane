@@ -21,8 +21,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooJpaEntity
-public class Person extends BaseEntity {
+@RooJpaEntity(inheritanceType = "JOINED")
+public abstract class Person implements SoftDeleteable, DateTrackable {
     @NotNull
     @Size(max = 128)
     private String names;
@@ -63,4 +63,16 @@ public class Person extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private Set<Email> emails = new HashSet<Email>();
+    
+    @NotNull
+	private boolean deleted;
+
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date creationDate = new Date();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date updateDate;
 }

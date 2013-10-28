@@ -7,7 +7,6 @@ import org.springframework.util.StringUtils;
 import com.bytepoxic.backdoor.bean.AbstractBackDoor;
 import com.bytepoxic.backdoor.bean.BackDoorBean;
 import com.bytepoxic.backdoor.throwing.BackDoorException;
-import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppUser;
 import com.bytepoxic.core.model.UserStatus;
 import com.bytepoxic.core.service.UserService;
@@ -104,7 +103,7 @@ public class AppUserBackDoorBean extends AbstractBackDoor {
 				AppUser user = (AppUser) state;
 
 				try {
-					userService.saveAppUser(user);
+					userService.updateAppUser(user);
 
 					if (logger.isDebugEnabled()) {
 						logger.debug(String.format("App user persisted: %s", user.toString()));
@@ -132,10 +131,5 @@ public class AppUserBackDoorBean extends AbstractBackDoor {
 
 			return;
 		}
-	}
-	
-	@Override
-	public Object instanceTarget() {
-		return new AppRole();
 	}
 }

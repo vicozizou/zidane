@@ -15,7 +15,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -65,11 +64,11 @@ privileged aspect LocationBean_Roo_ManagedBean {
     @PostConstruct
     public void LocationBean.init() {
         columns = new ArrayList<String>();
-        columns.add("creationDate");
-        columns.add("updateDate");
         columns.add("name");
         columns.add("code");
         columns.add("latitude");
+        columns.add("longitude");
+        columns.add("children");
     }
     
     public String LocationBean.getName() {
@@ -134,71 +133,11 @@ privileged aspect LocationBean_Roo_ManagedBean {
     
     public HtmlPanelGrid LocationBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-        
-        OutputLabel deletedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        deletedCreateOutput.setFor("deletedCreateInput");
-        deletedCreateOutput.setId("deletedCreateOutput");
-        deletedCreateOutput.setValue("Deleted:");
-        htmlPanelGrid.getChildren().add(deletedCreateOutput);
-        
-        SelectBooleanCheckbox deletedCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        deletedCreateInput.setId("deletedCreateInput");
-        deletedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.deleted}", Boolean.class));
-        deletedCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(deletedCreateInput);
-        
-        Message deletedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        deletedCreateInputMessage.setId("deletedCreateInputMessage");
-        deletedCreateInputMessage.setFor("deletedCreateInput");
-        deletedCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(deletedCreateInputMessage);
-        
-        OutputLabel creationDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        creationDateCreateOutput.setFor("creationDateCreateInput");
-        creationDateCreateOutput.setId("creationDateCreateOutput");
-        creationDateCreateOutput.setValue("Creation Date:");
-        htmlPanelGrid.getChildren().add(creationDateCreateOutput);
-        
-        Calendar creationDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        creationDateCreateInput.setId("creationDateCreateInput");
-        creationDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.creationDate}", Date.class));
-        creationDateCreateInput.setNavigator(true);
-        creationDateCreateInput.setEffect("slideDown");
-        creationDateCreateInput.setPattern("dd/MM/yyyy");
-        creationDateCreateInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(creationDateCreateInput);
-        
-        Message creationDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        creationDateCreateInputMessage.setId("creationDateCreateInputMessage");
-        creationDateCreateInputMessage.setFor("creationDateCreateInput");
-        creationDateCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(creationDateCreateInputMessage);
-        
-        OutputLabel updateDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        updateDateCreateOutput.setFor("updateDateCreateInput");
-        updateDateCreateOutput.setId("updateDateCreateOutput");
-        updateDateCreateOutput.setValue("Update Date:");
-        htmlPanelGrid.getChildren().add(updateDateCreateOutput);
-        
-        Calendar updateDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        updateDateCreateInput.setId("updateDateCreateInput");
-        updateDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.updateDate}", Date.class));
-        updateDateCreateInput.setNavigator(true);
-        updateDateCreateInput.setEffect("slideDown");
-        updateDateCreateInput.setPattern("dd/MM/yyyy");
-        updateDateCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(updateDateCreateInput);
-        
-        Message updateDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        updateDateCreateInputMessage.setId("updateDateCreateInputMessage");
-        updateDateCreateInputMessage.setFor("updateDateCreateInput");
-        updateDateCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(updateDateCreateInputMessage);
         
         OutputLabel parentCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         parentCreateOutput.setFor("parentCreateInput");
@@ -212,7 +151,7 @@ privileged aspect LocationBean_Roo_ManagedBean {
         parentCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{locationBean.completeParent}", List.class, new Class[] { String.class }));
         parentCreateInput.setDropdown(true);
         parentCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "parent", String.class));
-        parentCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{parent.creationDate} #{parent.updateDate} #{parent.name} #{parent.code}", String.class));
+        parentCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{parent.name} #{parent.code} #{parent.latitude} #{parent.longitude}", String.class));
         parentCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{parent}", Location.class));
         parentCreateInput.setConverter(new LocationConverter());
         parentCreateInput.setRequired(false);
@@ -375,76 +314,76 @@ privileged aspect LocationBean_Roo_ManagedBean {
         labelKeyCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(labelKeyCreateInputMessage);
         
+        OutputLabel deletedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        deletedCreateOutput.setFor("deletedCreateInput");
+        deletedCreateOutput.setId("deletedCreateOutput");
+        deletedCreateOutput.setValue("Deleted:");
+        htmlPanelGrid.getChildren().add(deletedCreateOutput);
+        
+        SelectBooleanCheckbox deletedCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        deletedCreateInput.setId("deletedCreateInput");
+        deletedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.deleted}", Boolean.class));
+        deletedCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(deletedCreateInput);
+        
+        Message deletedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        deletedCreateInputMessage.setId("deletedCreateInputMessage");
+        deletedCreateInputMessage.setFor("deletedCreateInput");
+        deletedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(deletedCreateInputMessage);
+        
+        OutputLabel creationDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        creationDateCreateOutput.setFor("creationDateCreateInput");
+        creationDateCreateOutput.setId("creationDateCreateOutput");
+        creationDateCreateOutput.setValue("Creation Date:");
+        htmlPanelGrid.getChildren().add(creationDateCreateOutput);
+        
+        Calendar creationDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        creationDateCreateInput.setId("creationDateCreateInput");
+        creationDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.creationDate}", Date.class));
+        creationDateCreateInput.setNavigator(true);
+        creationDateCreateInput.setEffect("slideDown");
+        creationDateCreateInput.setPattern("dd/MM/yyyy");
+        creationDateCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(creationDateCreateInput);
+        
+        Message creationDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        creationDateCreateInputMessage.setId("creationDateCreateInputMessage");
+        creationDateCreateInputMessage.setFor("creationDateCreateInput");
+        creationDateCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(creationDateCreateInputMessage);
+        
+        OutputLabel updateDateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        updateDateCreateOutput.setFor("updateDateCreateInput");
+        updateDateCreateOutput.setId("updateDateCreateOutput");
+        updateDateCreateOutput.setValue("Update Date:");
+        htmlPanelGrid.getChildren().add(updateDateCreateOutput);
+        
+        Calendar updateDateCreateInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        updateDateCreateInput.setId("updateDateCreateInput");
+        updateDateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.updateDate}", Date.class));
+        updateDateCreateInput.setNavigator(true);
+        updateDateCreateInput.setEffect("slideDown");
+        updateDateCreateInput.setPattern("dd/MM/yyyy");
+        updateDateCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(updateDateCreateInput);
+        
+        Message updateDateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        updateDateCreateInputMessage.setId("updateDateCreateInputMessage");
+        updateDateCreateInputMessage.setFor("updateDateCreateInput");
+        updateDateCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(updateDateCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
     public HtmlPanelGrid LocationBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-        
-        OutputLabel deletedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        deletedEditOutput.setFor("deletedEditInput");
-        deletedEditOutput.setId("deletedEditOutput");
-        deletedEditOutput.setValue("Deleted:");
-        htmlPanelGrid.getChildren().add(deletedEditOutput);
-        
-        SelectBooleanCheckbox deletedEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        deletedEditInput.setId("deletedEditInput");
-        deletedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.deleted}", Boolean.class));
-        deletedEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(deletedEditInput);
-        
-        Message deletedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        deletedEditInputMessage.setId("deletedEditInputMessage");
-        deletedEditInputMessage.setFor("deletedEditInput");
-        deletedEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(deletedEditInputMessage);
-        
-        OutputLabel creationDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        creationDateEditOutput.setFor("creationDateEditInput");
-        creationDateEditOutput.setId("creationDateEditOutput");
-        creationDateEditOutput.setValue("Creation Date:");
-        htmlPanelGrid.getChildren().add(creationDateEditOutput);
-        
-        Calendar creationDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        creationDateEditInput.setId("creationDateEditInput");
-        creationDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.creationDate}", Date.class));
-        creationDateEditInput.setNavigator(true);
-        creationDateEditInput.setEffect("slideDown");
-        creationDateEditInput.setPattern("dd/MM/yyyy");
-        creationDateEditInput.setRequired(true);
-        htmlPanelGrid.getChildren().add(creationDateEditInput);
-        
-        Message creationDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        creationDateEditInputMessage.setId("creationDateEditInputMessage");
-        creationDateEditInputMessage.setFor("creationDateEditInput");
-        creationDateEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(creationDateEditInputMessage);
-        
-        OutputLabel updateDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        updateDateEditOutput.setFor("updateDateEditInput");
-        updateDateEditOutput.setId("updateDateEditOutput");
-        updateDateEditOutput.setValue("Update Date:");
-        htmlPanelGrid.getChildren().add(updateDateEditOutput);
-        
-        Calendar updateDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
-        updateDateEditInput.setId("updateDateEditInput");
-        updateDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.updateDate}", Date.class));
-        updateDateEditInput.setNavigator(true);
-        updateDateEditInput.setEffect("slideDown");
-        updateDateEditInput.setPattern("dd/MM/yyyy");
-        updateDateEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(updateDateEditInput);
-        
-        Message updateDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        updateDateEditInputMessage.setId("updateDateEditInputMessage");
-        updateDateEditInputMessage.setFor("updateDateEditInput");
-        updateDateEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(updateDateEditInputMessage);
         
         OutputLabel parentEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         parentEditOutput.setFor("parentEditInput");
@@ -458,7 +397,7 @@ privileged aspect LocationBean_Roo_ManagedBean {
         parentEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{locationBean.completeParent}", List.class, new Class[] { String.class }));
         parentEditInput.setDropdown(true);
         parentEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "parent", String.class));
-        parentEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{parent.creationDate} #{parent.updateDate} #{parent.name} #{parent.code}", String.class));
+        parentEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{parent.name} #{parent.code} #{parent.latitude} #{parent.longitude}", String.class));
         parentEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{parent}", Location.class));
         parentEditInput.setConverter(new LocationConverter());
         parentEditInput.setRequired(false);
@@ -621,49 +560,76 @@ privileged aspect LocationBean_Roo_ManagedBean {
         labelKeyEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(labelKeyEditInputMessage);
         
+        OutputLabel deletedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        deletedEditOutput.setFor("deletedEditInput");
+        deletedEditOutput.setId("deletedEditOutput");
+        deletedEditOutput.setValue("Deleted:");
+        htmlPanelGrid.getChildren().add(deletedEditOutput);
+        
+        SelectBooleanCheckbox deletedEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        deletedEditInput.setId("deletedEditInput");
+        deletedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.deleted}", Boolean.class));
+        deletedEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(deletedEditInput);
+        
+        Message deletedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        deletedEditInputMessage.setId("deletedEditInputMessage");
+        deletedEditInputMessage.setFor("deletedEditInput");
+        deletedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(deletedEditInputMessage);
+        
+        OutputLabel creationDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        creationDateEditOutput.setFor("creationDateEditInput");
+        creationDateEditOutput.setId("creationDateEditOutput");
+        creationDateEditOutput.setValue("Creation Date:");
+        htmlPanelGrid.getChildren().add(creationDateEditOutput);
+        
+        Calendar creationDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        creationDateEditInput.setId("creationDateEditInput");
+        creationDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.creationDate}", Date.class));
+        creationDateEditInput.setNavigator(true);
+        creationDateEditInput.setEffect("slideDown");
+        creationDateEditInput.setPattern("dd/MM/yyyy");
+        creationDateEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(creationDateEditInput);
+        
+        Message creationDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        creationDateEditInputMessage.setId("creationDateEditInputMessage");
+        creationDateEditInputMessage.setFor("creationDateEditInput");
+        creationDateEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(creationDateEditInputMessage);
+        
+        OutputLabel updateDateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        updateDateEditOutput.setFor("updateDateEditInput");
+        updateDateEditOutput.setId("updateDateEditOutput");
+        updateDateEditOutput.setValue("Update Date:");
+        htmlPanelGrid.getChildren().add(updateDateEditOutput);
+        
+        Calendar updateDateEditInput = (Calendar) application.createComponent(Calendar.COMPONENT_TYPE);
+        updateDateEditInput.setId("updateDateEditInput");
+        updateDateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.updateDate}", Date.class));
+        updateDateEditInput.setNavigator(true);
+        updateDateEditInput.setEffect("slideDown");
+        updateDateEditInput.setPattern("dd/MM/yyyy");
+        updateDateEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(updateDateEditInput);
+        
+        Message updateDateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        updateDateEditInputMessage.setId("updateDateEditInputMessage");
+        updateDateEditInputMessage.setFor("updateDateEditInput");
+        updateDateEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(updateDateEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
     public HtmlPanelGrid LocationBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
         HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-        
-        HtmlOutputText deletedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        deletedLabel.setId("deletedLabel");
-        deletedLabel.setValue("Deleted:");
-        htmlPanelGrid.getChildren().add(deletedLabel);
-        
-        HtmlOutputText deletedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        deletedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.deleted}", String.class));
-        htmlPanelGrid.getChildren().add(deletedValue);
-        
-        HtmlOutputText creationDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        creationDateLabel.setId("creationDateLabel");
-        creationDateLabel.setValue("Creation Date:");
-        htmlPanelGrid.getChildren().add(creationDateLabel);
-        
-        HtmlOutputText creationDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        creationDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.creationDate}", Date.class));
-        DateTimeConverter creationDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        creationDateValueConverter.setPattern("dd/MM/yyyy");
-        creationDateValue.setConverter(creationDateValueConverter);
-        htmlPanelGrid.getChildren().add(creationDateValue);
-        
-        HtmlOutputText updateDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updateDateLabel.setId("updateDateLabel");
-        updateDateLabel.setValue("Update Date:");
-        htmlPanelGrid.getChildren().add(updateDateLabel);
-        
-        HtmlOutputText updateDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        updateDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.updateDate}", Date.class));
-        DateTimeConverter updateDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
-        updateDateValueConverter.setPattern("dd/MM/yyyy");
-        updateDateValue.setConverter(updateDateValueConverter);
-        htmlPanelGrid.getChildren().add(updateDateValue);
         
         HtmlOutputText parentLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         parentLabel.setId("parentLabel");
@@ -755,6 +721,39 @@ privileged aspect LocationBean_Roo_ManagedBean {
         labelKeyValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(labelKeyValue);
         
+        HtmlOutputText deletedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        deletedLabel.setId("deletedLabel");
+        deletedLabel.setValue("Deleted:");
+        htmlPanelGrid.getChildren().add(deletedLabel);
+        
+        HtmlOutputText deletedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        deletedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.deleted}", String.class));
+        htmlPanelGrid.getChildren().add(deletedValue);
+        
+        HtmlOutputText creationDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        creationDateLabel.setId("creationDateLabel");
+        creationDateLabel.setValue("Creation Date:");
+        htmlPanelGrid.getChildren().add(creationDateLabel);
+        
+        HtmlOutputText creationDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        creationDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.creationDate}", Date.class));
+        DateTimeConverter creationDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        creationDateValueConverter.setPattern("dd/MM/yyyy");
+        creationDateValue.setConverter(creationDateValueConverter);
+        htmlPanelGrid.getChildren().add(creationDateValue);
+        
+        HtmlOutputText updateDateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        updateDateLabel.setId("updateDateLabel");
+        updateDateLabel.setValue("Update Date:");
+        htmlPanelGrid.getChildren().add(updateDateLabel);
+        
+        HtmlOutputText updateDateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        updateDateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{locationBean.location.updateDate}", Date.class));
+        DateTimeConverter updateDateValueConverter = (DateTimeConverter) application.createConverter(DateTimeConverter.CONVERTER_ID);
+        updateDateValueConverter.setPattern("dd/MM/yyyy");
+        updateDateValue.setConverter(updateDateValueConverter);
+        htmlPanelGrid.getChildren().add(updateDateValue);
+        
         return htmlPanelGrid;
     }
     
@@ -772,7 +771,7 @@ privileged aspect LocationBean_Roo_ManagedBean {
     public List<Location> LocationBean.completeParent(String query) {
         List<Location> suggestions = new ArrayList<Location>();
         for (Location location : locationService.findAllLocations()) {
-            String locationStr = String.valueOf(location.getCreationDate() +  " "  + location.getUpdateDate() +  " "  + location.getName() +  " "  + location.getCode());
+            String locationStr = String.valueOf(location.getName() +  " "  + location.getCode() +  " "  + location.getLatitude() +  " "  + location.getLongitude());
             if (locationStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(location);
             }

@@ -103,4 +103,28 @@ privileged aspect Person_Roo_JavaBean {
         this.emails = emails;
     }
     
+    public boolean Person.isDeleted() {
+        return this.deleted;
+    }
+    
+    public void Person.setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+    
+    public Date Person.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void Person.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public Date Person.getUpdateDate() {
+        return this.updateDate;
+    }
+    
+    public void Person.setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+    
 }

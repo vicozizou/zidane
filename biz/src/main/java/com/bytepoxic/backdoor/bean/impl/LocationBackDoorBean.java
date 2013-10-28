@@ -129,9 +129,5 @@ public class LocationBackDoorBean extends AbstractBackDoor {
 	@Override
 	public void handleComment(String line) {
 	}
-	
-	@Override
-	public Object instanceTarget() {
-		return new Location();
-	}
+
 }

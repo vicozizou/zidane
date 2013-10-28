@@ -3,11 +3,16 @@
 
 package com.bytepoxic.core.web;
 
-import com.bytepoxic.core.dao.PersonDAO;
 import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppUser;
-import com.bytepoxic.core.model.Person;
+import com.bytepoxic.core.model.Email;
+import com.bytepoxic.core.model.Gender;
+import com.bytepoxic.core.model.IdentificationType;
+import com.bytepoxic.core.model.Nationality;
+import com.bytepoxic.core.model.Phone;
+import com.bytepoxic.core.model.Place;
 import com.bytepoxic.core.model.UserStatus;
+import com.bytepoxic.core.service.LocationService;
 import com.bytepoxic.core.service.UserService;
 import com.bytepoxic.core.web.AppUserBean;
 import com.bytepoxic.core.web.util.MessageFactory;
@@ -34,7 +39,7 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     UserService AppUserBean.userService;
     
     @Autowired
-    PersonDAO AppUserBean.personDAO;
+    LocationService AppUserBean.locationService;
     
     private String AppUserBean.name = "AppUsers";
     
@@ -54,16 +59,20 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     private boolean AppUserBean.createDialogVisible = false;
     
+    private List<Phone> AppUserBean.selectedPhones;
+    
+    private List<Email> AppUserBean.selectedEmails;
+    
     private List<AppRole> AppUserBean.selectedRoles;
     
     @PostConstruct
     public void AppUserBean.init() {
         columns = new ArrayList<String>();
+        columns.add("names");
+        columns.add("surnames");
+        columns.add("birthday");
+        columns.add("identification");
         columns.add("creationDate");
-        columns.add("updateDate");
-        columns.add("username");
-        columns.add("password");
-        columns.add("loginAttempts");
     }
     
     public String AppUserBean.getName() {
@@ -137,15 +146,79 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         this.appUser = appUser;
     }
     
-    public List<Person> AppUserBean.completePerson(String query) {
-        List<Person> suggestions = new ArrayList<Person>();
-        for (Person person : personDAO.findAll()) {
-            String personStr = String.valueOf(person.getCreationDate() +  " "  + person.getUpdateDate() +  " "  + person.getNames() +  " "  + person.getSurnames());
-            if (personStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(person);
+    public List<Gender> AppUserBean.completeGender(String query) {
+        List<Gender> suggestions = new ArrayList<Gender>();
+        for (Gender gender : Gender.values()) {
+            if (gender.name().toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(gender);
             }
         }
         return suggestions;
+    }
+    
+    public List<IdentificationType> AppUserBean.completeIdentificationType(String query) {
+        List<IdentificationType> suggestions = new ArrayList<IdentificationType>();
+        for (IdentificationType identificationType : IdentificationType.values()) {
+            if (identificationType.name().toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(identificationType);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<Nationality> AppUserBean.completeNationality(String query) {
+        List<Nationality> suggestions = new ArrayList<Nationality>();
+        for (Nationality nationality : locationService.findAllNationalitys()) {
+            String nationalityStr = String.valueOf(nationality.getLabelKey() +  " "  + nationality.getName());
+            if (nationalityStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(nationality);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<Place> AppUserBean.completeHomePlace(String query) {
+        List<Place> suggestions = new ArrayList<Place>();
+        for (Place place : locationService.findAllPlaces()) {
+            String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
+            if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(place);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<Place> AppUserBean.completeWorkPlace(String query) {
+        List<Place> suggestions = new ArrayList<Place>();
+        for (Place place : locationService.findAllPlaces()) {
+            String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
+            if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(place);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<Phone> AppUserBean.getSelectedPhones() {
+        return selectedPhones;
+    }
+    
+    public void AppUserBean.setSelectedPhones(List<Phone> selectedPhones) {
+        if (selectedPhones != null) {
+            appUser.setPhones(new HashSet<Phone>(selectedPhones));
+        }
+        this.selectedPhones = selectedPhones;
+    }
+    
+    public List<Email> AppUserBean.getSelectedEmails() {
+        return selectedEmails;
+    }
+    
+    public void AppUserBean.setSelectedEmails(List<Email> selectedEmails) {
+        if (selectedEmails != null) {
+            appUser.setEmails(new HashSet<Email>(selectedEmails));
+        }
+        this.selectedEmails = selectedEmails;
     }
     
     public List<AppRole> AppUserBean.getSelectedRoles() {
@@ -170,6 +243,12 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     }
     
     public String AppUserBean.onEdit() {
+        if (appUser != null && appUser.getPhones() != null) {
+            selectedPhones = new ArrayList<Phone>(appUser.getPhones());
+        }
+        if (appUser != null && appUser.getEmails() != null) {
+            selectedEmails = new ArrayList<Email>(appUser.getEmails());
+        }
         if (appUser != null && appUser.getRoles() != null) {
             selectedRoles = new ArrayList<AppRole>(appUser.getRoles());
         }
@@ -225,6 +304,8 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     public void AppUserBean.reset() {
         appUser = null;
+        selectedPhones = null;
+        selectedEmails = null;
         selectedRoles = null;
         createDialogVisible = false;
     }

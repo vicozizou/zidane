@@ -16,7 +16,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -127,7 +126,7 @@ privileged aspect UserTrackBean_Roo_ManagedBean {
     
     public HtmlPanelGrid UserTrackBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -145,7 +144,7 @@ privileged aspect UserTrackBean_Roo_ManagedBean {
         trackedCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{userTrackBean.completeTracked}", List.class, new Class[] { String.class }));
         trackedCreateInput.setDropdown(true);
         trackedCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "tracked", String.class));
-        trackedCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{tracked.creationDate} #{tracked.updateDate} #{tracked.username} #{tracked.password}", String.class));
+        trackedCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{tracked.names} #{tracked.surnames} #{tracked.birthday} #{tracked.identification}", String.class));
         trackedCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{tracked}", AppUser.class));
         trackedCreateInput.setConverter(new AppUserConverter());
         trackedCreateInput.setRequired(false);
@@ -203,7 +202,7 @@ privileged aspect UserTrackBean_Roo_ManagedBean {
     
     public HtmlPanelGrid UserTrackBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -221,7 +220,7 @@ privileged aspect UserTrackBean_Roo_ManagedBean {
         trackedEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{userTrackBean.completeTracked}", List.class, new Class[] { String.class }));
         trackedEditInput.setDropdown(true);
         trackedEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "tracked", String.class));
-        trackedEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{tracked.creationDate} #{tracked.updateDate} #{tracked.username} #{tracked.password}", String.class));
+        trackedEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{tracked.names} #{tracked.surnames} #{tracked.birthday} #{tracked.identification}", String.class));
         trackedEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{tracked}", AppUser.class));
         trackedEditInput.setConverter(new AppUserConverter());
         trackedEditInput.setRequired(false);
@@ -279,7 +278,7 @@ privileged aspect UserTrackBean_Roo_ManagedBean {
     
     public HtmlPanelGrid UserTrackBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Application application = facesContext.getApplication();
+        javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
         ELContext elContext = facesContext.getELContext();
         
@@ -333,7 +332,7 @@ privileged aspect UserTrackBean_Roo_ManagedBean {
     public List<AppUser> UserTrackBean.completeTracked(String query) {
         List<AppUser> suggestions = new ArrayList<AppUser>();
         for (AppUser appUser : userService.findAllAppUsers()) {
-            String appUserStr = String.valueOf(appUser.getCreationDate() +  " "  + appUser.getUpdateDate() +  " "  + appUser.getUsername() +  " "  + appUser.getPassword());
+            String appUserStr = String.valueOf(appUser.getNames() +  " "  + appUser.getSurnames() +  " "  + appUser.getBirthday() +  " "  + appUser.getIdentification());
             if (appUserStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(appUser);
             }

@@ -18,6 +18,4 @@ public interface BackDoorBean {
 	int getFieldsCount();
 
 	String getDelimiter();
-	
-	Object instanceTarget();
 }

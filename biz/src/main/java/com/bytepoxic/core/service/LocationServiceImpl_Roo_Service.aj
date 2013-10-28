@@ -22,40 +22,40 @@ privileged aspect LocationServiceImpl_Roo_Service {
     declare @type: LocationServiceImpl: @Transactional;
     
     @Autowired
-    PlaceDAO LocationServiceImpl.placeDAO;
+    LocationDAO LocationServiceImpl.locationDAO;
     
     @Autowired
     NationalityDAO LocationServiceImpl.nationalityDAO;
     
     @Autowired
-    LocationDAO LocationServiceImpl.locationDAO;
+    PlaceDAO LocationServiceImpl.placeDAO;
     
-    public long LocationServiceImpl.countAllPlaces() {
-        return placeDAO.count();
+    public long LocationServiceImpl.countAllLocations() {
+        return locationDAO.count();
     }
     
-    public void LocationServiceImpl.deletePlace(Place place) {
-        placeDAO.delete(place);
+    public void LocationServiceImpl.deleteLocation(Location location) {
+        locationDAO.delete(location);
     }
     
-    public Place LocationServiceImpl.findPlace(Long id) {
-        return placeDAO.findOne(id);
+    public Location LocationServiceImpl.findLocation(Long id) {
+        return locationDAO.findOne(id);
     }
     
-    public List<Place> LocationServiceImpl.findAllPlaces() {
-        return placeDAO.findAll();
+    public List<Location> LocationServiceImpl.findAllLocations() {
+        return locationDAO.findAll();
     }
     
-    public List<Place> LocationServiceImpl.findPlaceEntries(int firstResult, int maxResults) {
-        return placeDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+    public List<Location> LocationServiceImpl.findLocationEntries(int firstResult, int maxResults) {
+        return locationDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void LocationServiceImpl.savePlace(Place place) {
-        placeDAO.save(place);
+    public void LocationServiceImpl.saveLocation(Location location) {
+        locationDAO.save(location);
     }
     
-    public Place LocationServiceImpl.updatePlace(Place place) {
-        return placeDAO.save(place);
+    public Location LocationServiceImpl.updateLocation(Location location) {
+        return locationDAO.save(location);
     }
     
     public long LocationServiceImpl.countAllNationalitys() {
@@ -86,32 +86,32 @@ privileged aspect LocationServiceImpl_Roo_Service {
         return nationalityDAO.save(nationality);
     }
     
-    public long LocationServiceImpl.countAllLocations() {
-        return locationDAO.count();
+    public long LocationServiceImpl.countAllPlaces() {
+        return placeDAO.count();
     }
     
-    public void LocationServiceImpl.deleteLocation(Location location) {
-        locationDAO.delete(location);
+    public void LocationServiceImpl.deletePlace(Place place) {
+        placeDAO.delete(place);
     }
     
-    public Location LocationServiceImpl.findLocation(Long id) {
-        return locationDAO.findOne(id);
+    public Place LocationServiceImpl.findPlace(Long id) {
+        return placeDAO.findOne(id);
     }
     
-    public List<Location> LocationServiceImpl.findAllLocations() {
-        return locationDAO.findAll();
+    public List<Place> LocationServiceImpl.findAllPlaces() {
+        return placeDAO.findAll();
     }
     
-    public List<Location> LocationServiceImpl.findLocationEntries(int firstResult, int maxResults) {
-        return locationDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+    public List<Place> LocationServiceImpl.findPlaceEntries(int firstResult, int maxResults) {
+        return placeDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public void LocationServiceImpl.saveLocation(Location location) {
-        locationDAO.save(location);
+    public void LocationServiceImpl.savePlace(Place place) {
+        placeDAO.save(place);
     }
     
-    public Location LocationServiceImpl.updateLocation(Location location) {
-        return locationDAO.save(location);
+    public Place LocationServiceImpl.updatePlace(Place place) {
+        return placeDAO.save(place);
     }
     
 }

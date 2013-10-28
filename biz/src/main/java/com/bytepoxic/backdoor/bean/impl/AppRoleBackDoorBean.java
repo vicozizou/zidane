@@ -48,9 +48,4 @@ public class AppRoleBackDoorBean extends AbstractBackDoor {
 			logger.debug(String.format("AppRole parsed: %s", appRole.toString()));
 		}
 	}
-
-	@Override
-	public Object instanceTarget() {
-		return new AppRole();
-	}
 }
