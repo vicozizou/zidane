@@ -10,4 +10,6 @@ privileged aspect AppRoleBean_Roo_Serializable {
     
     declare parents: AppRoleBean implements Serializable;
     
+    private static final long AppRoleBean.serialVersionUID = 1L;
+    
 }

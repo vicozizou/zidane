@@ -145,7 +145,7 @@ privileged aspect UserTrackBean_Roo_ManagedBean {
         trackedCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{userTrackBean.completeTracked}", List.class, new Class[] { String.class }));
         trackedCreateInput.setDropdown(true);
         trackedCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "tracked", String.class));
-        trackedCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{tracked.creationDate} #{tracked.updateDate} #{tracked.names} #{tracked.surnames}", String.class));
+        trackedCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{tracked.creationDate} #{tracked.updateDate} #{tracked.username} #{tracked.password}", String.class));
         trackedCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{tracked}", AppUser.class));
         trackedCreateInput.setConverter(new AppUserConverter());
         trackedCreateInput.setRequired(false);
@@ -221,7 +221,7 @@ privileged aspect UserTrackBean_Roo_ManagedBean {
         trackedEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{userTrackBean.completeTracked}", List.class, new Class[] { String.class }));
         trackedEditInput.setDropdown(true);
         trackedEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "tracked", String.class));
-        trackedEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{tracked.creationDate} #{tracked.updateDate} #{tracked.names} #{tracked.surnames}", String.class));
+        trackedEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{tracked.creationDate} #{tracked.updateDate} #{tracked.username} #{tracked.password}", String.class));
         trackedEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{tracked}", AppUser.class));
         trackedEditInput.setConverter(new AppUserConverter());
         trackedEditInput.setRequired(false);
@@ -333,7 +333,7 @@ privileged aspect UserTrackBean_Roo_ManagedBean {
     public List<AppUser> UserTrackBean.completeTracked(String query) {
         List<AppUser> suggestions = new ArrayList<AppUser>();
         for (AppUser appUser : userService.findAllAppUsers()) {
-            String appUserStr = String.valueOf(appUser.getCreationDate() +  " "  + appUser.getUpdateDate() +  " "  + appUser.getNames() +  " "  + appUser.getSurnames());
+            String appUserStr = String.valueOf(appUser.getCreationDate() +  " "  + appUser.getUpdateDate() +  " "  + appUser.getUsername() +  " "  + appUser.getPassword());
             if (appUserStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(appUser);
             }

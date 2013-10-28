@@ -5,11 +5,20 @@ package com.bytepoxic.core.model;
 
 import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppUser;
+import com.bytepoxic.core.model.Person;
 import com.bytepoxic.core.model.UserStatus;
 import java.util.Date;
 import java.util.Set;
 
 privileged aspect AppUser_Roo_JavaBean {
+    
+    public Person AppUser.getPerson() {
+        return this.person;
+    }
+    
+    public void AppUser.setPerson(Person person) {
+        this.person = person;
+    }
     
     public String AppUser.getUsername() {
         return this.username;

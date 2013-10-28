@@ -7,19 +7,17 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.LengthValidator;
 
-import com.bytepoxic.core.model.AppRole;
-
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.bytepoxic.core.model.AppRole;
+
 @RooSerializable
 @RooJsfManagedBean(entity = AppRole.class, beanName = "appRoleBean")
 public class AppRoleBean {
-	private static final long serialVersionUID = 1L;
-	
 	public HtmlPanelGrid populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Application application = facesContext.getApplication();
@@ -61,7 +59,7 @@ public class AppRoleBean {
         LengthValidator descriptionCreateInputValidator = new LengthValidator();
         descriptionCreateInputValidator.setMaximum(128);
         descriptionCreateInput.addValidator(descriptionCreateInputValidator);
-        descriptionCreateInput.setRequired(true);
+        descriptionCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(descriptionCreateInput);
         
         Message descriptionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -72,7 +70,7 @@ public class AppRoleBean {
         
         return htmlPanelGrid;
     }
-
+	
 	public HtmlPanelGrid populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Application application = facesContext.getApplication();
