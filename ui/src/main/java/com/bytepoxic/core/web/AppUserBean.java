@@ -30,8 +30,277 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 @RooSerializable
+@RequestScoped
 @RooJsfManagedBean(entity = AppUser.class, beanName = "appUserBean")
 public class AppUserBean {
+	@Autowired
+    private UserService userService;
+    
+    @Autowired
+    private LocationService locationService;
+    
+    private String name = "AppUsers";
+    private AppUser appUser;
+    private List<AppUser> allAppUsers;
+    private boolean dataVisible = false;
+    private List<String> columns;
+    private HtmlPanelGrid createPanelGrid;
+    private HtmlPanelGrid editPanelGrid;
+    private HtmlPanelGrid viewPanelGrid;
+    private boolean createDialogVisible = false;
+    private List<Phone> selectedPhones;
+    private List<Email> selectedEmails;
+    private List<AppRole> selectedRoles;
+    
+    @PostConstruct
+    public void init() {
+        columns = new ArrayList<String>();
+        columns.add("names");
+        columns.add("surnames");
+        columns.add("birthday");
+        columns.add("identification");
+        columns.add("creationDate");
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public List<String> getColumns() {
+        return columns;
+    }
+    
+    public List<AppUser> getAllAppUsers() {
+        return allAppUsers;
+    }
+    
+    public void setAllAppUsers(List<AppUser> allAppUsers) {
+        this.allAppUsers = allAppUsers;
+    }
+    
+    public String findAllAppUsers() {
+        allAppUsers = userService.findAllAppUsers();
+        dataVisible = !allAppUsers.isEmpty();
+        return null;
+    }
+    
+    public boolean isDataVisible() {
+        return dataVisible;
+    }
+    
+    public void setDataVisible(boolean dataVisible) {
+        this.dataVisible = dataVisible;
+    }
+    
+    public HtmlPanelGrid getCreatePanelGrid() {
+        if (createPanelGrid == null) {
+            createPanelGrid = populateCreatePanel();
+        }
+        return createPanelGrid;
+    }
+    
+    public void setCreatePanelGrid(HtmlPanelGrid createPanelGrid) {
+        this.createPanelGrid = createPanelGrid;
+    }
+    
+    public HtmlPanelGrid getEditPanelGrid() {
+        if (editPanelGrid == null) {
+            editPanelGrid = populateEditPanel();
+        }
+        return editPanelGrid;
+    }
+    
+    public void setEditPanelGrid(HtmlPanelGrid editPanelGrid) {
+        this.editPanelGrid = editPanelGrid;
+    }
+    
+    public HtmlPanelGrid getViewPanelGrid() {
+        return populateViewPanel();
+    }
+    
+    public void setViewPanelGrid(HtmlPanelGrid viewPanelGrid) {
+        this.viewPanelGrid = viewPanelGrid;
+    }
+    
+    public AppUser getAppUser() {
+        if (appUser == null) {
+            appUser = new AppUser();
+        }
+        return appUser;
+    }
+    
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+    
+    public List<Gender> completeGender(String query) {
+        List<Gender> suggestions = new ArrayList<Gender>();
+        for (Gender gender : Gender.values()) {
+            if (gender.name().toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(gender);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<IdentificationType> completeIdentificationType(String query) {
+        List<IdentificationType> suggestions = new ArrayList<IdentificationType>();
+        for (IdentificationType identificationType : IdentificationType.values()) {
+            if (identificationType.name().toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(identificationType);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<Nationality> completeNationality(String query) {
+        List<Nationality> suggestions = new ArrayList<Nationality>();
+        for (Nationality nationality : locationService.findAllNationalitys()) {
+            String nationalityStr = String.valueOf(nationality.getLabelKey() +  " "  + nationality.getName());
+            if (nationalityStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(nationality);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<Place> completeHomePlace(String query) {
+        List<Place> suggestions = new ArrayList<Place>();
+        for (Place place : locationService.findAllPlaces()) {
+            String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
+            if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(place);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<Place> completeWorkPlace(String query) {
+        List<Place> suggestions = new ArrayList<Place>();
+        for (Place place : locationService.findAllPlaces()) {
+            String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
+            if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(place);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<Phone> getSelectedPhones() {
+        return selectedPhones;
+    }
+    
+    public void setSelectedPhones(List<Phone> selectedPhones) {
+        if (selectedPhones != null) {
+            appUser.setPhones(new HashSet<Phone>(selectedPhones));
+        }
+        this.selectedPhones = selectedPhones;
+    }
+    
+    public List<Email> getSelectedEmails() {
+        return selectedEmails;
+    }
+    
+    public void setSelectedEmails(List<Email> selectedEmails) {
+        if (selectedEmails != null) {
+            appUser.setEmails(new HashSet<Email>(selectedEmails));
+        }
+        this.selectedEmails = selectedEmails;
+    }
+    
+    public List<AppRole> getSelectedRoles() {
+        return selectedRoles;
+    }
+    
+    public void setSelectedRoles(List<AppRole> selectedRoles) {
+        if (selectedRoles != null) {
+            appUser.setRoles(new HashSet<AppRole>(selectedRoles));
+        }
+        this.selectedRoles = selectedRoles;
+    }
+    
+    public List<UserStatus> completeUserStatus(String query) {
+        List<UserStatus> suggestions = new ArrayList<UserStatus>();
+        for (UserStatus userStatus : UserStatus.values()) {
+            if (userStatus.name().toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(userStatus);
+            }
+        }
+        return suggestions;
+    }
+    
+    public String onEdit() {
+        if (appUser != null && appUser.getPhones() != null) {
+            selectedPhones = new ArrayList<Phone>(appUser.getPhones());
+        }
+        if (appUser != null && appUser.getEmails() != null) {
+            selectedEmails = new ArrayList<Email>(appUser.getEmails());
+        }
+        if (appUser != null && appUser.getRoles() != null) {
+            selectedRoles = new ArrayList<AppRole>(appUser.getRoles());
+        }
+        return null;
+    }
+    
+    public boolean isCreateDialogVisible() {
+        return createDialogVisible;
+    }
+    
+    public void setCreateDialogVisible(boolean createDialogVisible) {
+        this.createDialogVisible = createDialogVisible;
+    }
+    
+    public String displayList() {
+        createDialogVisible = false;
+        findAllAppUsers();
+        return "appUser";
+    }
+    
+    public String displayCreateDialog() {
+        appUser = new AppUser();
+        createDialogVisible = true;
+        return "appUser";
+    }
+    
+    public String persist() {
+        String message = "";
+        if (appUser.getId() != null) {
+            userService.updateAppUser(appUser);
+            message = "message_successfully_updated";
+        } else {
+            userService.saveAppUser(appUser);
+            message = "message_successfully_created";
+        }
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("createDialogWidget.hide()");
+        context.execute("editDialogWidget.hide()");
+        
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "AppUser");
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        reset();
+        return findAllAppUsers();
+    }
+    
+    public String delete() {
+        userService.deleteAppUser(appUser);
+        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "AppUser");
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        reset();
+        return findAllAppUsers();
+    }
+    
+    public void reset() {
+        appUser = null;
+        selectedPhones = null;
+        selectedEmails = null;
+        selectedRoles = null;
+        createDialogVisible = false;
+    }
+    
+    public void handleDialogClose(CloseEvent event) {
+        reset();
+    }
+	
 	public HtmlPanelGrid populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Application application = facesContext.getApplication();
@@ -916,5 +1185,30 @@ public class AppUserBean {
         htmlPanelGrid.getChildren().add(daysToExpireValue);
         
         return htmlPanelGrid;
+    }
+	
+	public void AppUserBean.setSelectedPhones(List<Phone> selectedPhones) {
+        if (selectedPhones != null) {
+            appUser.setPhones(new HashSet<Phone>(selectedPhones));
+        }
+        this.selectedPhones = selectedPhones;
+    }
+    
+    public void AppUserBean.setSelectedEmails(List<Email> selectedEmails) {
+        if (selectedEmails != null) {
+            appUser.setEmails(new HashSet<Email>(selectedEmails));
+        }
+        this.selectedEmails = selectedEmails;
+    }
+    
+    public void AppUserBean.setSelectedRoles(List<AppRole> selectedRoles) {
+        if (selectedRoles != null) {
+            appUser.setRoles(new HashSet<AppRole>(selectedRoles));
+        }
+        this.selectedRoles = selectedRoles;
+    }
+    
+    public void AppUserBean.handleDialogClose(CloseEvent event) {
+        reset();
     }
 }

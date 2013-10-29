@@ -4,30 +4,14 @@
 package com.bytepoxic.core.web;
 
 import com.bytepoxic.core.model.AppRole;
-import com.bytepoxic.core.model.AppUser;
 import com.bytepoxic.core.model.Email;
-import com.bytepoxic.core.model.Gender;
-import com.bytepoxic.core.model.IdentificationType;
-import com.bytepoxic.core.model.Nationality;
 import com.bytepoxic.core.model.Phone;
-import com.bytepoxic.core.model.Place;
-import com.bytepoxic.core.model.UserStatus;
-import com.bytepoxic.core.service.LocationService;
-import com.bytepoxic.core.service.UserService;
 import com.bytepoxic.core.web.AppUserBean;
-import com.bytepoxic.core.web.util.MessageFactory;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.html.HtmlPanelGrid;
-import javax.faces.context.FacesContext;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 
 privileged aspect AppUserBean_Roo_ManagedBean {
     
@@ -35,183 +19,11 @@ privileged aspect AppUserBean_Roo_ManagedBean {
     
     declare @type: AppUserBean: @SessionScoped;
     
-    @Autowired
-    UserService AppUserBean.userService;
-    
-    @Autowired
-    LocationService AppUserBean.locationService;
-    
-    private String AppUserBean.name = "AppUsers";
-    
-    private AppUser AppUserBean.appUser;
-    
-    private List<AppUser> AppUserBean.allAppUsers;
-    
-    private boolean AppUserBean.dataVisible = false;
-    
-    private List<String> AppUserBean.columns;
-    
-    private HtmlPanelGrid AppUserBean.createPanelGrid;
-    
-    private HtmlPanelGrid AppUserBean.editPanelGrid;
-    
-    private HtmlPanelGrid AppUserBean.viewPanelGrid;
-    
-    private boolean AppUserBean.createDialogVisible = false;
-    
-    private List<Phone> AppUserBean.selectedPhones;
-    
-    private List<Email> AppUserBean.selectedEmails;
-    
-    private List<AppRole> AppUserBean.selectedRoles;
-    
-    @PostConstruct
-    public void AppUserBean.init() {
-        columns = new ArrayList<String>();
-        columns.add("names");
-        columns.add("surnames");
-        columns.add("birthday");
-        columns.add("identification");
-        columns.add("creationDate");
-    }
-    
-    public String AppUserBean.getName() {
-        return name;
-    }
-    
-    public List<String> AppUserBean.getColumns() {
-        return columns;
-    }
-    
-    public List<AppUser> AppUserBean.getAllAppUsers() {
-        return allAppUsers;
-    }
-    
-    public void AppUserBean.setAllAppUsers(List<AppUser> allAppUsers) {
-        this.allAppUsers = allAppUsers;
-    }
-    
-    public String AppUserBean.findAllAppUsers() {
-        allAppUsers = userService.findAllAppUsers();
-        dataVisible = !allAppUsers.isEmpty();
-        return null;
-    }
-    
-    public boolean AppUserBean.isDataVisible() {
-        return dataVisible;
-    }
-    
-    public void AppUserBean.setDataVisible(boolean dataVisible) {
-        this.dataVisible = dataVisible;
-    }
-    
-    public HtmlPanelGrid AppUserBean.getCreatePanelGrid() {
-        if (createPanelGrid == null) {
-            createPanelGrid = populateCreatePanel();
-        }
-        return createPanelGrid;
-    }
-    
-    public void AppUserBean.setCreatePanelGrid(HtmlPanelGrid createPanelGrid) {
-        this.createPanelGrid = createPanelGrid;
-    }
-    
-    public HtmlPanelGrid AppUserBean.getEditPanelGrid() {
-        if (editPanelGrid == null) {
-            editPanelGrid = populateEditPanel();
-        }
-        return editPanelGrid;
-    }
-    
-    public void AppUserBean.setEditPanelGrid(HtmlPanelGrid editPanelGrid) {
-        this.editPanelGrid = editPanelGrid;
-    }
-    
-    public HtmlPanelGrid AppUserBean.getViewPanelGrid() {
-        return populateViewPanel();
-    }
-    
-    public void AppUserBean.setViewPanelGrid(HtmlPanelGrid viewPanelGrid) {
-        this.viewPanelGrid = viewPanelGrid;
-    }
-    
-    public AppUser AppUserBean.getAppUser() {
-        if (appUser == null) {
-            appUser = new AppUser();
-        }
-        return appUser;
-    }
-    
-    public void AppUserBean.setAppUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-    
-    public List<Gender> AppUserBean.completeGender(String query) {
-        List<Gender> suggestions = new ArrayList<Gender>();
-        for (Gender gender : Gender.values()) {
-            if (gender.name().toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(gender);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<IdentificationType> AppUserBean.completeIdentificationType(String query) {
-        List<IdentificationType> suggestions = new ArrayList<IdentificationType>();
-        for (IdentificationType identificationType : IdentificationType.values()) {
-            if (identificationType.name().toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(identificationType);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<Nationality> AppUserBean.completeNationality(String query) {
-        List<Nationality> suggestions = new ArrayList<Nationality>();
-        for (Nationality nationality : locationService.findAllNationalitys()) {
-            String nationalityStr = String.valueOf(nationality.getLabelKey() +  " "  + nationality.getName());
-            if (nationalityStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(nationality);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<Place> AppUserBean.completeHomePlace(String query) {
-        List<Place> suggestions = new ArrayList<Place>();
-        for (Place place : locationService.findAllPlaces()) {
-            String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
-            if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(place);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<Place> AppUserBean.completeWorkPlace(String query) {
-        List<Place> suggestions = new ArrayList<Place>();
-        for (Place place : locationService.findAllPlaces()) {
-            String placeStr = String.valueOf(place.getName() +  " "  + place.getPrimaryAddress() +  " "  + place.getSecondaryAddress() +  " "  + place.getLatitude());
-            if (placeStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(place);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<Phone> AppUserBean.getSelectedPhones() {
-        return selectedPhones;
-    }
-    
     public void AppUserBean.setSelectedPhones(List<Phone> selectedPhones) {
         if (selectedPhones != null) {
             appUser.setPhones(new HashSet<Phone>(selectedPhones));
         }
         this.selectedPhones = selectedPhones;
-    }
-    
-    public List<Email> AppUserBean.getSelectedEmails() {
-        return selectedEmails;
     }
     
     public void AppUserBean.setSelectedEmails(List<Email> selectedEmails) {
@@ -221,93 +33,11 @@ privileged aspect AppUserBean_Roo_ManagedBean {
         this.selectedEmails = selectedEmails;
     }
     
-    public List<AppRole> AppUserBean.getSelectedRoles() {
-        return selectedRoles;
-    }
-    
     public void AppUserBean.setSelectedRoles(List<AppRole> selectedRoles) {
         if (selectedRoles != null) {
             appUser.setRoles(new HashSet<AppRole>(selectedRoles));
         }
         this.selectedRoles = selectedRoles;
-    }
-    
-    public List<UserStatus> AppUserBean.completeUserStatus(String query) {
-        List<UserStatus> suggestions = new ArrayList<UserStatus>();
-        for (UserStatus userStatus : UserStatus.values()) {
-            if (userStatus.name().toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(userStatus);
-            }
-        }
-        return suggestions;
-    }
-    
-    public String AppUserBean.onEdit() {
-        if (appUser != null && appUser.getPhones() != null) {
-            selectedPhones = new ArrayList<Phone>(appUser.getPhones());
-        }
-        if (appUser != null && appUser.getEmails() != null) {
-            selectedEmails = new ArrayList<Email>(appUser.getEmails());
-        }
-        if (appUser != null && appUser.getRoles() != null) {
-            selectedRoles = new ArrayList<AppRole>(appUser.getRoles());
-        }
-        return null;
-    }
-    
-    public boolean AppUserBean.isCreateDialogVisible() {
-        return createDialogVisible;
-    }
-    
-    public void AppUserBean.setCreateDialogVisible(boolean createDialogVisible) {
-        this.createDialogVisible = createDialogVisible;
-    }
-    
-    public String AppUserBean.displayList() {
-        createDialogVisible = false;
-        findAllAppUsers();
-        return "appUser";
-    }
-    
-    public String AppUserBean.displayCreateDialog() {
-        appUser = new AppUser();
-        createDialogVisible = true;
-        return "appUser";
-    }
-    
-    public String AppUserBean.persist() {
-        String message = "";
-        if (appUser.getId() != null) {
-            userService.updateAppUser(appUser);
-            message = "message_successfully_updated";
-        } else {
-            userService.saveAppUser(appUser);
-            message = "message_successfully_created";
-        }
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("createDialogWidget.hide()");
-        context.execute("editDialogWidget.hide()");
-        
-        FacesMessage facesMessage = MessageFactory.getMessage(message, "AppUser");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-        reset();
-        return findAllAppUsers();
-    }
-    
-    public String AppUserBean.delete() {
-        userService.deleteAppUser(appUser);
-        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "AppUser");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-        reset();
-        return findAllAppUsers();
-    }
-    
-    public void AppUserBean.reset() {
-        appUser = null;
-        selectedPhones = null;
-        selectedEmails = null;
-        selectedRoles = null;
-        createDialogVisible = false;
     }
     
     public void AppUserBean.handleDialogClose(CloseEvent event) {
