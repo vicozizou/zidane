@@ -25,10 +25,10 @@ privileged aspect UserServiceImpl_Roo_Service {
     AppRoleDAO UserServiceImpl.appRoleDAO;
     
     @Autowired
-    UserTrackDAO UserServiceImpl.userTrackDAO;
+    AppUserDAO UserServiceImpl.appUserDAO;
     
     @Autowired
-    AppUserDAO UserServiceImpl.appUserDAO;
+    UserTrackDAO UserServiceImpl.userTrackDAO;
     
     public long UserServiceImpl.countAllAppRoles() {
         return appRoleDAO.count();
@@ -58,34 +58,6 @@ privileged aspect UserServiceImpl_Roo_Service {
         return appRoleDAO.save(appRole);
     }
     
-    public long UserServiceImpl.countAllUserTracks() {
-        return userTrackDAO.count();
-    }
-    
-    public void UserServiceImpl.deleteUserTrack(UserTrack userTrack) {
-        userTrackDAO.delete(userTrack);
-    }
-    
-    public UserTrack UserServiceImpl.findUserTrack(Long id) {
-        return userTrackDAO.findOne(id);
-    }
-    
-    public List<UserTrack> UserServiceImpl.findAllUserTracks() {
-        return userTrackDAO.findAll();
-    }
-    
-    public List<UserTrack> UserServiceImpl.findUserTrackEntries(int firstResult, int maxResults) {
-        return userTrackDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
-    }
-    
-    public void UserServiceImpl.saveUserTrack(UserTrack userTrack) {
-        userTrackDAO.save(userTrack);
-    }
-    
-    public UserTrack UserServiceImpl.updateUserTrack(UserTrack userTrack) {
-        return userTrackDAO.save(userTrack);
-    }
-    
     public long UserServiceImpl.countAllAppUsers() {
         return appUserDAO.count();
     }
@@ -112,6 +84,34 @@ privileged aspect UserServiceImpl_Roo_Service {
     
     public AppUser UserServiceImpl.updateAppUser(AppUser appUser) {
         return appUserDAO.save(appUser);
+    }
+    
+    public long UserServiceImpl.countAllUserTracks() {
+        return userTrackDAO.count();
+    }
+    
+    public void UserServiceImpl.deleteUserTrack(UserTrack userTrack) {
+        userTrackDAO.delete(userTrack);
+    }
+    
+    public UserTrack UserServiceImpl.findUserTrack(Long id) {
+        return userTrackDAO.findOne(id);
+    }
+    
+    public List<UserTrack> UserServiceImpl.findAllUserTracks() {
+        return userTrackDAO.findAll();
+    }
+    
+    public List<UserTrack> UserServiceImpl.findUserTrackEntries(int firstResult, int maxResults) {
+        return userTrackDAO.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+    }
+    
+    public void UserServiceImpl.saveUserTrack(UserTrack userTrack) {
+        userTrackDAO.save(userTrack);
+    }
+    
+    public UserTrack UserServiceImpl.updateUserTrack(UserTrack userTrack) {
+        return userTrackDAO.save(userTrack);
     }
     
 }

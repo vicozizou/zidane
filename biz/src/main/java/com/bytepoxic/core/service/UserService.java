@@ -7,6 +7,7 @@ import org.springframework.roo.addon.layers.service.RooService;
 
 import com.bytepoxic.core.model.AppRole;
 import com.bytepoxic.core.model.AppUser;
+import com.bytepoxic.core.model.TrackingType;
 import com.bytepoxic.core.model.UserTrack;
 import com.bytepoxic.core.throwing.ServiceCoreException;
 
@@ -22,4 +23,8 @@ public interface UserService {
 	List<UserTrack> findUserTracksByUser(AppUser appUser) throws ServiceCoreException;
 	List<UserTrack> findUserTracksByUserAndDates(AppUser appUser, Date fromDate, Date toDate) throws ServiceCoreException;
 	List<UserTrack> findUserTracksByDates(Date fromDate, Date toDate) throws ServiceCoreException;
+	
+	void trackUser(AppUser appUser, TrackingType type) throws ServiceCoreException;
+	void trackUserSignin(AppUser appUser) throws ServiceCoreException;
+	void trackUserSignout(AppUser appUser) throws ServiceCoreException;
 }
